@@ -20,7 +20,9 @@ const headers = { "Content-Type": "application/json" };
 export const getPortfolioAssets = () => async (dispatch) => {
   try {
     dispatch({ type: PORTFOLIO_LIST_REQUEST });
-    const { data } = await axios.get(`/api/portfolio`);
+    const { data } = await axios.get(
+      `https://investenzo-api.onrender.com/api/portfolio`
+    );
     dispatch({
       type: PORTFOLIO_LIST_SUCCESS,
       payload: data,
@@ -40,14 +42,17 @@ export const getPortfolioAssets = () => async (dispatch) => {
 export const addAssetToPortfolio = (body, assetId) => async (dispatch) => {
   try {
     dispatch({ type: PORTFOLIO_ASSET_ADD_REQUEST });
-    const data = await axios.put("/api/portfolio/assets", {
-      name: body.name,
-      ticker: body.ticker,
-      sharesAmount: body.sharesAmount,
-      spent: body.spent,
-      assets: assetId,
-      headers: headers,
-    });
+    const data = await axios.put(
+      "https://investenzo-api.onrender.com/api/portfolio/assets",
+      {
+        name: body.name,
+        ticker: body.ticker,
+        sharesAmount: body.sharesAmount,
+        spent: body.spent,
+        assets: assetId,
+        headers: headers,
+      }
+    );
     dispatch({
       type: PORTFOLIO_ASSET_ADD_SUCCESS,
       payload: data,
@@ -62,9 +67,12 @@ export const deletePortfolioAssets = (selected) => async (dispatch) => {
   try {
     dispatch({ type: PORTFOLIO_DELETE_ASSETS_REQUEST });
 
-    const { data } = await axios.delete("/api/portfolio/assets", {
-      data: { selected },
-    });
+    const { data } = await axios.delete(
+      "https://investenzo-api.onrender.com/api/portfolio/assets",
+      {
+        data: { selected },
+      }
+    );
     dispatch({
       type: PORTFOLIO_DELETE_ASSETS_SUCCESS,
       payload: data,
@@ -85,11 +93,14 @@ export const editPortfolioAsset = (body) => async (dispatch) => {
   try {
     dispatch({ type: PORTFOLIO_ASSET_EDIT_REQUEST });
 
-    const { data } = await axios.put(`/api/portfolio/assets/${body.id}`, {
-      name: body.name,
-      sharesAmount: body.sharesAmount,
-      spent: body.spent,
-    });
+    const { data } = await axios.put(
+      `https://investenzo-api.onrender.com/api/portfolio/assets/${body.id}`,
+      {
+        name: body.name,
+        sharesAmount: body.sharesAmount,
+        spent: body.spent,
+      }
+    );
     dispatch({
       type: PORTFOLIO_ASSET_EDIT_SUCCESS,
       payload: data,

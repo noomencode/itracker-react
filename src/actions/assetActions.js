@@ -13,11 +13,14 @@ export const createAsset = (body) => async (dispatch) => {
   try {
     dispatch({ type: ASSET_ADD_REQUEST });
 
-    const assetData = await axios.post("/api/assets", {
-      name: body.name,
-      ticker: body.ticker,
-      headers: headers,
-    });
+    const assetData = await axios.post(
+      "https://investenzo-api.onrender.com/api/assets",
+      {
+        name: body.name,
+        ticker: body.ticker,
+        headers: headers,
+      }
+    );
     dispatch({ type: ASSET_ADD_SUCCESS, payload: assetData });
     dispatch(addAssetToPortfolio(body, assetData.data._id));
   } catch (error) {
