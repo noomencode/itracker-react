@@ -21,7 +21,8 @@ export const login = (email, password) => async (dispatch) => {
     const { data } = await axios.post(
       "https://investenzo-api.onrender.com/api/users/login",
       { email, password },
-      config
+      // config,
+      { withCredentials: true }
     );
 
     dispatch({
