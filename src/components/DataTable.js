@@ -506,7 +506,7 @@ const EnhancedTable = () => {
                           color: row.profitEUR > 0 ? "secondary.main" : "error",
                           // fontWeight: 600,
                         }}
-                        label={row.profitEUR}
+                        label={`${row.profitEUR} €`}
                         variant="outlined"
                       ></Chip>
                     </TableCell>

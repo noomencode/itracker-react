@@ -36,7 +36,7 @@ const PortfolioPerformance = () => {
               </ListItemIcon>
               <ListItemText
                 primary={"Current worth"}
-                secondary={`${totalWorth} EUR`}
+                secondary={`${totalWorth.toFixed(2)} EUR`}
                 primaryTypographyProps={{ variant: "h6" }}
                 secondaryTypographyProps={{ variant: "h5" }}
               ></ListItemText>
@@ -47,7 +47,7 @@ const PortfolioPerformance = () => {
               </ListItemIcon>
               <ListItemText
                 primary={"Expenses"}
-                secondary={`${totalSpent} EUR`}
+                secondary={`${totalSpent.toFixed(2)} EUR`}
                 primaryTypographyProps={{ variant: "h6" }}
                 secondaryTypographyProps={{ variant: "h5" }}
               ></ListItemText>

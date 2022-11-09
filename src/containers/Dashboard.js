@@ -7,6 +7,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getPortfolioAssets } from "../actions/portfolioActions";
 import PortfolioEmpty from "../components/PortfolioEmpty";
+import StockScroller from "../components/StockScroller";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
@@ -19,6 +20,7 @@ const Dashboard = () => {
 
   return (
     <>
+      <StockScroller />
       {!loading ? (
         <Box sx={{ margin: 2 }}>
           <Grid container spacing={1}>
