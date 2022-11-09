@@ -21,7 +21,8 @@ export const getPortfolioAssets = () => async (dispatch) => {
   try {
     dispatch({ type: PORTFOLIO_LIST_REQUEST });
     const { data } = await axios.get(
-      `https://investenzo-api.onrender.com/api/portfolio`
+      `https://investenzo-api.onrender.com/api/portfolio`,
+      { withCredentials: true }
     );
     dispatch({
       type: PORTFOLIO_LIST_SUCCESS,
@@ -51,7 +52,8 @@ export const addAssetToPortfolio = (body, assetId) => async (dispatch) => {
         spent: body.spent,
         assets: assetId,
         headers: headers,
-      }
+      },
+      { withCredentials: true }
     );
     dispatch({
       type: PORTFOLIO_ASSET_ADD_SUCCESS,
