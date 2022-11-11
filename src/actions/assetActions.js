@@ -1,4 +1,7 @@
 import {
+  TOPASSET_GET_REQUEST,
+  TOPASSET_GET_SUCCESS,
+  TOPASSET_GET_FAIL,
   ASSET_ADD_FAIL,
   ASSET_ADD_REQUEST,
   ASSET_ADD_SUCCESS,
@@ -7,20 +10,25 @@ import {
 import axios from "axios";
 import { addAssetToPortfolio } from "./portfolioActions";
 
-const headers = { "Content-Type": "application/json" };
+export const getTopAssets = () => async (dispatch) => {
+  try {
+    dispatch({ type: ASSET_ADD_REQUEST });
+
+    const assetData = await axios.get("/api/assets/top");
+    dispatch({ type: ASSET_ADD_SUCCESS, payload: assetData });
+  } catch (error) {
+    dispatch({ type: ASSET_ADD_FAIL });
+  }
+};
 
 export const createAsset = (body) => async (dispatch) => {
   try {
     dispatch({ type: ASSET_ADD_REQUEST });
 
-    const assetData = await axios.post(
-      "https://investenzo-api.onrender.com/api/assets",
-      {
-        name: body.name,
-        ticker: body.ticker,
-        headers: headers,
-      }
-    );
+    const assetData = await axios.post("/api/assets", {
+      name: body.name,
+      ticker: body.ticker,
+    });
     dispatch({ type: ASSET_ADD_SUCCESS, payload: assetData });
     dispatch(addAssetToPortfolio(body, assetData.data._id));
   } catch (error) {

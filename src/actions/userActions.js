@@ -12,18 +12,10 @@ export const login = (email, password) => async (dispatch) => {
       type: USER_LOGIN_REQUEST,
     });
 
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
-
     const { data } = await axios.post(
       // "https://weary-peplum-hare.cyclic.app/api/users/login",
       "/api/users/login",
-      { email, password },
-      // config,
-      { withCredentials: true }
+      { email, password }
     );
 
     dispatch({

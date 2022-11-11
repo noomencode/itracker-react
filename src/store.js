@@ -1,7 +1,11 @@
 import { createStore, combineReducers, applyMiddleware } from "redux";
 import thunk from "redux-thunk";
 import { composeWithDevTools } from "redux-devtools-extension";
-import { assetDialogReducer, assetReducer } from "./reducers/assetReducers";
+import {
+  assetDialogReducer,
+  assetReducer,
+  topAssetsReducer,
+} from "./reducers/assetReducers";
 import {
   portfolioAssetReducer,
   portfolioPerformanceReducer,
@@ -12,6 +16,7 @@ import { userLoginReducer } from "./reducers/userReducers";
 
 const reducer = combineReducers({
   assetDialog: assetDialogReducer,
+  topAssets: topAssetsReducer,
   assetAdd: assetReducer,
   portfolio: portfolioPerformanceReducer,
   portfolioAssetCUD: portfolioAssetCUDReducer,
