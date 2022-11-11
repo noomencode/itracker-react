@@ -21,7 +21,8 @@ export const getPortfolioAssets = () => async (dispatch) => {
   try {
     dispatch({ type: PORTFOLIO_LIST_REQUEST });
     const { data } = await axios.get(
-      `https://weary-peplum-hare.cyclic.app/api/portfolio`,
+      // `https://weary-peplum-hare.cyclic.app/api/portfolio`,
+      "https://investenzo-api.onrender.com/api/portfolio",
       { withCredentials: true }
     );
     dispatch({
