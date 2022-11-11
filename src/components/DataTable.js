@@ -67,6 +67,12 @@ const headCells = [
     label: "Name",
   },
   {
+    id: "worth",
+    numeric: true,
+    disablePadding: false,
+    label: "Worth",
+  },
+  {
     id: "profit",
     numeric: true,
     disablePadding: false,
@@ -488,6 +494,7 @@ const EnhancedTable = () => {
                     >
                       {row.name}
                     </TableCell>
+                    <TableCell align="right">{row.worth}</TableCell>
                     <TableCell align="right">
                       <Chip
                         color={row.profit > 0 ? "secondary" : "error"}
@@ -528,7 +535,7 @@ const EnhancedTable = () => {
                         variant="outlined"
                       ></Chip>
                     </TableCell>
-                    {/* <TableCell align="right">{row.worth}</TableCell>
+                    {/* 
                     <TableCell align="right">{row.spent}</TableCell>
                     <TableCell align="right">{row.sharesAmount}</TableCell> */}
                     <TableCell align="right" sx={{ color: "text.secondary" }}>

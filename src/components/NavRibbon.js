@@ -16,7 +16,7 @@ const NavRibbon = () => {
   return (
     <Box sx={{ width: "100%", bgcolor: "primary", boxShadow: 3 }}>
       <Tabs
-        textColor="white"
+        textColor="inherit"
         indicatorColor="secondary"
         value={
           tabValues.includes(location.pathname) ? location.pathname : false

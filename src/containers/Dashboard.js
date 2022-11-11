@@ -16,7 +16,7 @@ const Dashboard = () => {
     (state) => state.portfolioList
   );
   useEffect(() => {
-    dispatch(getPortfolioAssets()).then(dispatch(getTopAssets()));
+    dispatch(getTopAssets()).then(dispatch(getPortfolioAssets()));
   }, [dispatch]);
 
   return (

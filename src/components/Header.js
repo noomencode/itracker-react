@@ -75,7 +75,7 @@ const Header = () => {
             ) : (
               <Box>
                 <Button color="inherit" component={Link} to="/login">
-                  <Typography component="div" sx={{ pr: 1 }}>
+                  <Typography component="span" sx={{ pr: 1 }}>
                     Sign in
                   </Typography>
                   <LoginIcon />

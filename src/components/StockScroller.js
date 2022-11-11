@@ -48,18 +48,21 @@ const MuiListItemText = styled(ListItemText)(({ theme }) => ({
 
 const secondary = (currentprice, changeprice, change) => {
   return (
-    <Stack direction="row">
-      <Typography variant="h6" component="p" color="text.primary">
-        {`${currentprice}`}
+    //<Stack direction="row">
+    <>
+      <Typography variant="h6" component="span" color="text.primary">
+        {`${currentprice} `}
       </Typography>
       <Typography
         variant="h6"
-        component="p"
+        sx={{ pl: 0.5 }}
+        component="span"
         color={changeprice > 0 ? "secondary.main" : "error.main"}
       >
-        {` ${changeprice > 0 ? "+" : ""}${changeprice}(${change})`}
+        {` ${changeprice > 0 ? "+" : ""}${changeprice} (${change})`}
       </Typography>
-    </Stack>
+    </>
+    //</Stack>
   );
 };
 
@@ -69,12 +72,13 @@ const StockScroller = (props) => {
   return (
     <Box sx={{ maxWidth: "100%", marginTop: 2 }}>
       <Stack direction="row" spacing={2} sx={{ justifyContent: "center" }}>
-        {topAssets.map((asset) => {
+        {topAssets.map((asset, index) => {
           return (
             <Item
+              key={index}
               variant="outlined"
               label={
-                <ListItem sx={{ padding: 0 }}>
+                <ListItem sx={{ padding: 0 }} key={index}>
                   <ListItemIcon sx={{ minWidth: 0, color: "secondary.main" }}>
                     <MovingIcon />
                   </ListItemIcon>
