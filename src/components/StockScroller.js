@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useSelector } from "react-redux";
 import Box from "@mui/material/Box";
 import Chip from "@mui/material/Chip";
 import Stack from "@mui/material/Stack";
@@ -63,13 +64,7 @@ const secondary = (currentprice, changeprice, change) => {
 };
 
 const StockScroller = (props) => {
-  const topAssets = [
-    { name: "S&P 500", price: 3670, priceChange: -100, change: "-0.36" },
-    { name: "Nasdaq 100", price: 3670, priceChange: -100, change: "-0.36" },
-    { name: "Treasury 5Y", price: 3670, priceChange: -100, change: "-0.36" },
-    { name: "Apple", price: 3670, priceChange: -100, change: "-0.36" },
-    { name: "Tesla", price: 3670, priceChange: -100, change: "-0.36" },
-  ];
+  const { topAssets } = useSelector((state) => state.topAssets);
 
   return (
     <Box sx={{ maxWidth: "100%", marginTop: 2 }}>
@@ -86,9 +81,9 @@ const StockScroller = (props) => {
                   <MuiListItemText
                     primary={asset.name}
                     secondary={secondary(
-                      asset.price,
-                      asset.priceChange,
-                      asset.change
+                      asset.price.toFixed(2),
+                      (asset.price * (asset.dailyChange / 100)).toFixed(2),
+                      asset.dailyChange
                     )}
                   />
                 </ListItem>
