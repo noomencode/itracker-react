@@ -16,31 +16,34 @@ const Dashboard = () => {
     (state) => state.portfolioList
   );
   useEffect(() => {
-    dispatch(getPortfolioAssets()).then(dispatch(getTopAssets()));
+    dispatch(getPortfolioAssets());
+    dispatch(getTopAssets());
   }, [dispatch]);
 
   return (
     <>
-      <StockScroller />
       {!loading ? (
-        <Box sx={{ margin: 2 }}>
-          <Grid container spacing={1}>
-            <Grid item lg={9} xs={12}>
-              {!loading && !error && portfolioAssets.length ? (
-                <AssetList />
-              ) : (
-                <PortfolioEmpty component={"AssetList"} />
-              )}
+        <>
+          <StockScroller />
+          <Box sx={{ margin: 2 }}>
+            <Grid container spacing={1}>
+              <Grid item lg={9} xs={12}>
+                {!loading && !error && portfolioAssets.length ? (
+                  <AssetList />
+                ) : (
+                  <PortfolioEmpty component={"AssetList"} />
+                )}
+              </Grid>
+              <Grid item lg={3} xs={12}>
+                {!error && portfolioAssets.length ? (
+                  <PortfolioPerformance />
+                ) : (
+                  <PortfolioEmpty component={"Graphs"} />
+                )}
+              </Grid>
             </Grid>
-            <Grid item lg={3} xs={12}>
-              {!error && portfolioAssets.length ? (
-                <PortfolioPerformance />
-              ) : (
-                <PortfolioEmpty component={"Graphs"} />
-              )}
-            </Grid>
-          </Grid>
-        </Box>
+          </Box>
+        </>
       ) : (
         <Loading open={loading} />
       )}
