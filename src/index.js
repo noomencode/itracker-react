@@ -5,6 +5,11 @@ import store from "./store";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
+import axios from "axios";
+
+axios.defaults.baseURL = "https://investenzo-api.onrender.com";
+axios.defaults.withCredentials = true;
+axios.defaults.headers.post["Content-Type"] = "application/json";
 
 ReactDOM.render(
   <Provider store={store}>

@@ -96,14 +96,11 @@ export const editPortfolioAsset = (body) => async (dispatch) => {
   try {
     dispatch({ type: PORTFOLIO_ASSET_EDIT_REQUEST });
 
-    const { data } = await axios.put(
-      `https://investenzo-api.onrender.com/api/portfolio/assets/${body.id}`,
-      {
-        name: body.name,
-        sharesAmount: body.sharesAmount,
-        spent: body.spent,
-      }
-    );
+    const { data } = await axios.put(`/api/portfolio/assets/${body.id}`, {
+      name: body.name,
+      sharesAmount: body.sharesAmount,
+      spent: body.spent,
+    });
     dispatch({
       type: PORTFOLIO_ASSET_EDIT_SUCCESS,
       payload: data,
