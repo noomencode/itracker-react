@@ -12,12 +12,12 @@ import { addAssetToPortfolio } from "./portfolioActions";
 
 export const getTopAssets = () => async (dispatch) => {
   try {
-    dispatch({ type: ASSET_ADD_REQUEST });
+    dispatch({ type: TOPASSET_GET_REQUEST });
 
-    const assetData = await axios.get("/api/assets/top");
-    dispatch({ type: ASSET_ADD_SUCCESS, payload: assetData });
+    const { data } = await axios.get("/api/assets/top");
+    dispatch({ type: TOPASSET_GET_SUCCESS, payload: data });
   } catch (error) {
-    dispatch({ type: ASSET_ADD_FAIL });
+    dispatch({ type: TOPASSET_GET_FAIL });
   }
 };
 

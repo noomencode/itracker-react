@@ -6,6 +6,7 @@ import Box from "@mui/material/Box";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getPortfolioAssets } from "../actions/portfolioActions";
+import { getTopAssets } from "../actions/assetActions";
 import PortfolioEmpty from "../components/PortfolioEmpty";
 import StockScroller from "../components/StockScroller";
 
@@ -15,7 +16,7 @@ const Dashboard = () => {
     (state) => state.portfolioList
   );
   useEffect(() => {
-    dispatch(getPortfolioAssets());
+    dispatch(getPortfolioAssets()).then(dispatch(getTopAssets()));
   }, [dispatch]);
 
   return (

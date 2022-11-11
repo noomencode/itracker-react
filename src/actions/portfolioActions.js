@@ -22,7 +22,7 @@ export const getPortfolioAssets = () => async (dispatch) => {
     dispatch({ type: PORTFOLIO_LIST_REQUEST });
     const { data } = await axios.get(
       // `https://weary-peplum-hare.cyclic.app/api/portfolio`,
-      "https://investenzo-api.onrender.com/api/portfolio"
+      "/api/portfolio"
     );
     dispatch({
       type: PORTFOLIO_LIST_SUCCESS,
@@ -44,7 +44,7 @@ export const addAssetToPortfolio = (body, assetId) => async (dispatch) => {
   try {
     dispatch({ type: PORTFOLIO_ASSET_ADD_REQUEST });
     const data = await axios.put(
-      "https://investenzo-api.onrender.com/api/portfolio/assets",
+      "/api/portfolio/assets",
       {
         name: body.name,
         ticker: body.ticker,
@@ -69,12 +69,9 @@ export const deletePortfolioAssets = (selected) => async (dispatch) => {
   try {
     dispatch({ type: PORTFOLIO_DELETE_ASSETS_REQUEST });
 
-    const { data } = await axios.delete(
-      "https://investenzo-api.onrender.com/api/portfolio/assets",
-      {
-        data: { selected },
-      }
-    );
+    const { data } = await axios.delete("/api/portfolio/assets", {
+      data: { selected },
+    });
     dispatch({
       type: PORTFOLIO_DELETE_ASSETS_SUCCESS,
       payload: data,
