@@ -7,8 +7,9 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import axios from "axios";
 
+const { REACT_APP_BASE_URL } = process.env;
 //axios.defaults.baseURL = "http://localhost:5000";
-axios.defaults.baseURL = "https://investenzo-api.onrender.com";
+axios.defaults.baseURL = REACT_APP_BASE_URL;
 axios.defaults.withCredentials = true;
 axios.defaults.headers.post["Content-Type"] = "application/json";
 
