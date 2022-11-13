@@ -21,7 +21,7 @@ const Dashboard = () => {
 
   return (
     <>
-      {!loading ? (
+      {!loading && portfolioAssets?.length ? (
         <>
           <StockScroller />
           <Box sx={{ margin: 2 }}>

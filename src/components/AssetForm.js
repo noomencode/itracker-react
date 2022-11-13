@@ -1,5 +1,6 @@
 import { Card, Box, TextField, Button, Typography, Grid } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
+import StockField from "./StockField";
 import { useDispatch } from "react-redux";
 import { editPortfolioAsset } from "../actions/portfolioActions";
 import { createAsset } from "../actions/assetActions";
@@ -38,8 +39,9 @@ const AssetForm = (props) => {
           Add new asset
         </Typography>
         <Grid container spacing={2}>
-          <Grid item lg={2} xs={12}>
-            <TextField
+          <Grid item lg={4} xs={4}>
+            <StockField />
+            {/* <TextField
               color="secondary"
               size="small"
               variant="outlined"
@@ -50,7 +52,7 @@ const AssetForm = (props) => {
               id="name"
               label="Name"
               name="name"
-            ></TextField>
+            ></TextField> */}
           </Grid>
           <Grid item lg={2} xs={12}>
             <TextField

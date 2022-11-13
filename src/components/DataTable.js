@@ -85,13 +85,13 @@ const headCells = [
     label: "Profit (EUR)",
   },
   {
-    id: "currentPrice",
+    id: "avgPurchasePrice",
     numeric: true,
     disablePadding: false,
     label: "Purchase price",
   },
   {
-    id: "avgPurchasePrice",
+    id: "currentPrice",
     numeric: true,
     disablePadding: false,
     label: "Price",
@@ -335,21 +335,22 @@ const EnhancedTable = () => {
   let updatedTimestamp;
 
   const rows = assets.map((myAsset) => {
-    //console.log(myAsset);
     const { spent, sharesAmount, name, ticker, _id } = myAsset;
     const { price, dailyChange, updatedAt } = myAsset.asset;
     updatedTimestamp = updatedAt;
     return {
       name: name,
       ticker: ticker,
-      profit: (((price * sharesAmount - spent) / spent) * 100).toFixed(2),
-      profitEUR: (price * sharesAmount - spent).toFixed(2),
-      currentPrice: price,
-      avgPurchasePrice: (spent / sharesAmount).toFixed(2),
-      dailyChange: dailyChange,
-      worth: (price * sharesAmount).toFixed(2),
-      spent: spent,
-      sharesAmount: sharesAmount,
+      profit: parseFloat(
+        (((price * sharesAmount - spent) / spent) * 100).toFixed(2)
+      ),
+      profitEUR: parseFloat((price * sharesAmount - spent).toFixed(2)),
+      currentPrice: parseFloat(price),
+      avgPurchasePrice: parseFloat((spent / sharesAmount).toFixed(2)),
+      dailyChange: parseFloat(dailyChange),
+      worth: parseFloat((price * sharesAmount).toFixed(2)),
+      spent: parseFloat(spent),
+      sharesAmount: parseFloat(sharesAmount),
       portfolioPercentage: 100,
       id: _id,
     };
@@ -383,7 +384,6 @@ const EnhancedTable = () => {
     const selectedIndex = selected.findIndex((r) => {
       return r.name === name;
     });
-    console.log(selectedIndex);
     let newSelected = [];
 
     if (selectedIndex === -1) {
@@ -495,6 +495,7 @@ const EnhancedTable = () => {
                       {row.name}
                     </TableCell>
                     <TableCell align="right">{row.worth}</TableCell>
+
                     <TableCell align="right">
                       <Chip
                         color={row.profit > 0 ? "secondary" : "error"}
