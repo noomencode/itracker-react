@@ -1,6 +1,7 @@
 import * as React from "react";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
+import Box from "@mui/material/Box";
 import axios from "axios";
 
 export default function StockField() {
@@ -54,13 +55,21 @@ export default function StockField() {
       isOptionEqualToValue={(option, value) =>
         option.shortname === value.shortname
       }
-      getOptionLabel={(option) => `${option.shortname} (${option.symbol})`}
+      getOptionLabel={(option) => option.shortname || option.longname}
+      renderOption={(props, option) => (
+        <Box component="li" {...props}>
+          <span>{`${option.shortname || option.longname} (${
+            option.symbol
+          })`}</span>
+        </Box>
+      )}
       value={value}
       options={options}
       loading={loading}
       renderInput={(params) => (
         <TextField
           required
+          color="secondary"
           id="name"
           label="Name"
           name="name"

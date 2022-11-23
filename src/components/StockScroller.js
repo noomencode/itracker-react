@@ -12,6 +12,7 @@ import Typography from "@mui/material/Typography";
 import ListItemText from "@mui/material/ListItemText";
 import { styled, keyframes } from "@mui/material/styles";
 import { fontSize } from "@mui/system";
+import Marquee from "react-fast-marquee";
 
 const Item = styled(Chip)(({ theme }) => ({
   // backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -23,17 +24,17 @@ const Item = styled(Chip)(({ theme }) => ({
   //textAlign: "center",
   height: "3em",
   //color: theme.palette.secondary,
-  animationName: myAnimation,
-  animationDuration: "3s",
-  animationFillMode: "forwards",
+  // animationName: myAnimation,
+  // animationDuration: "3s",
+  // animationFillMode: "forwards",
   //animationIterationCount: "infinite",
 }));
 
 //COOL CSS TEXT ANIMATION : https://www.youtube.com/watch?v=YiSzx0Cb8_8&t=0s
-const myAnimation = keyframes`
-    0% { left: -30px; opacity: 0; }
-    100% { left: 0; opacity: 1;  }
-`;
+// const myAnimation = keyframes`
+//     0% { left: -30px; opacity: 0; }
+//     100% { left: 0; opacity: 1;  }
+// `;
 
 const MuiListItemText = styled(ListItemText)(({ theme }) => ({
   "& .MuiListItemText-primary": {
@@ -71,31 +72,33 @@ const StockScroller = (props) => {
 
   return (
     <Box sx={{ maxWidth: "100%", marginTop: 2 }}>
-      <Stack direction="row" spacing={2} sx={{ justifyContent: "center" }}>
-        {topAssets.map((asset, index) => {
-          return (
-            <Item
-              key={index}
-              variant="outlined"
-              label={
-                <ListItem sx={{ padding: 0 }} key={index}>
-                  <ListItemIcon sx={{ minWidth: 0, color: "secondary.main" }}>
-                    <MovingIcon />
-                  </ListItemIcon>
-                  <MuiListItemText
-                    primary={asset.name}
-                    secondary={secondary(
-                      asset.price.toFixed(2),
-                      (asset.price * (asset.dailyChange / 100)).toFixed(2),
-                      asset.dailyChange
-                    )}
-                  />
-                </ListItem>
-              }
-            ></Item>
-          );
-        })}
-      </Stack>
+      <Marquee gradient={false} style={{ overflow: "hidden" }}>
+        <Stack direction="row" spacing={2} sx={{ justifyContent: "center" }}>
+          {topAssets.map((asset, index) => {
+            return (
+              <Item
+                key={index}
+                variant="outlined"
+                label={
+                  <ListItem sx={{ padding: 0 }} key={index}>
+                    <ListItemIcon sx={{ minWidth: 0, color: "secondary.main" }}>
+                      <MovingIcon />
+                    </ListItemIcon>
+                    <MuiListItemText
+                      primary={asset.name}
+                      secondary={secondary(
+                        asset.price.toFixed(2),
+                        (asset.price * (asset.dailyChange / 100)).toFixed(2),
+                        asset.dailyChange
+                      )}
+                    />
+                  </ListItem>
+                }
+              ></Item>
+            );
+          })}
+        </Stack>
+      </Marquee>
     </Box>
   );
 };
