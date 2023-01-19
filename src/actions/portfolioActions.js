@@ -15,8 +15,6 @@ import {
 } from "../constants/portfolioConstants";
 import axios from "axios";
 
-const headers = { "Content-Type": "application/json" };
-
 export const getPortfolioAssets = () => async (dispatch) => {
   try {
     dispatch({ type: PORTFOLIO_LIST_REQUEST });
