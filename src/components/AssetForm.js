@@ -1,11 +1,28 @@
-import { Card, Box, TextField, Button, Typography, Grid } from "@mui/material";
+import * as React from "react";
+import {
+  Card,
+  Box,
+  TextField,
+  Select,
+  MenuItem,
+  Button,
+  Typography,
+  Grid,
+} from "@mui/material";
+import { Dayjs } from "dayjs";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import AddIcon from "@mui/icons-material/Add";
 import StockField from "./StockField";
 import { useDispatch } from "react-redux";
 import { editPortfolioAsset } from "../actions/portfolioActions";
+import { createTransaction } from "../actions/transactionActions";
 import { createAsset } from "../actions/assetActions";
 
 const AssetForm = (props) => {
+  const [value, setValue] = React.useState(new Date());
+
   const dispatch = useDispatch();
   const { handleClose, editMode, selected } = props;
   const handleSubmit = async (event) => {
@@ -19,6 +36,8 @@ const AssetForm = (props) => {
       id: editMode ? selected[0].id : undefined,
     };
     if (editMode) {
+      //TESTING TRANSACTION CREATION
+      //dispatch(createTransaction(body))
       dispatch(editPortfolioAsset(body));
     } else {
       dispatch(createAsset(body));
@@ -96,6 +115,49 @@ const AssetForm = (props) => {
               id="spent"
               name="spent"
             ></TextField>
+          </Grid>
+          <Grid item lg={1} xs={2}>
+            <Select
+              color="secondary"
+              size="small"
+              variant="outlined"
+              label="Type of transaction"
+              id="transaction-type"
+              defaultValue="Buy"
+              disabled={!editMode}
+            >
+              <MenuItem value={"Buy"}>Buy</MenuItem>
+              <MenuItem value={"Sell"}>Sell</MenuItem>
+            </Select>
+          </Grid>
+          <Grid item lg={2} xs={12}>
+            <TextField
+              color="secondary"
+              disabled
+              size="small"
+              label="Estimated price"
+              variant="outlined"
+              id="price"
+              name="price"
+            ></TextField>
+          </Grid>
+          <Grid item lg={2} xs={12}>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DatePicker
+                color="secondary"
+                size="small"
+                label="Date of transaction"
+                value={value}
+                onChange={(newValue) => {
+                  setValue(newValue);
+                }}
+                renderInput={(params) => <TextField {...params} />}
+                variant="outlined"
+                required
+                id="transactionDate"
+                name="transactionDate"
+              ></DatePicker>
+            </LocalizationProvider>
           </Grid>
           <Grid item lg={2} xs={12}>
             <Button

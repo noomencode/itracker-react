@@ -13,7 +13,7 @@ export const createTransaction = (body) => async (dispatch) => {
       ticker: body.ticker,
       date: body.date,
       type: body.type,
-      amount: body.amount,
+      amount: body.sharesAmount,
       price: body.price,
     });
     dispatch({ type: TRANSACTION_ADD_SUCCESS, payload: transaction });

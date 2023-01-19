@@ -49,7 +49,6 @@ export const addAssetToPortfolio = (body, assetId) => async (dispatch) => {
         sharesAmount: body.sharesAmount,
         spent: body.spent,
         assets: assetId,
-        headers: headers,
       },
       { withCredentials: true }
     );
