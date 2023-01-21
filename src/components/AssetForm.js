@@ -19,28 +19,62 @@ import { useDispatch } from "react-redux";
 import { editPortfolioAsset } from "../actions/portfolioActions";
 import { createTransaction } from "../actions/transactionActions";
 import { createAsset } from "../actions/assetActions";
+import { SettingsInputComponentOutlined } from "@mui/icons-material";
 
 const AssetForm = (props) => {
-  const [value, setValue] = React.useState(new Date());
-
   const dispatch = useDispatch();
   const { handleClose, editMode, selected } = props;
+
+  const [date, setDate] = React.useState(new Date());
+  const [newAsset, setNewAsset] = React.useState(null);
+  const [amount, setAmount] = React.useState(
+    editMode && selected?.length ? selected[0].sharesAmount : ""
+  );
+  const [transactionAmount, setTransactionAmount] = React.useState(null);
+
+  const [spent, setSpent] = React.useState(
+    editMode && selected?.length ? selected[0].spent : ""
+  );
+
+  const [transactionExpense, setTransactionExpense] = React.useState(null);
+  const [price, setPrice] = React.useState(spent / amount);
+  const [type, setType] = React.useState("Buy");
+
+  React.useEffect(() => {
+    setPrice(spent / amount);
+  }, [amount, spent]);
+
+  // React.useEffect(()=>{
+  //   setAmount()
+  // },[transactionAmount,transactionExpense])
+
+  const handleNewAsset = (asset) => {
+    setNewAsset(asset);
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
+
     const body = {
-      name: data.get("name"),
-      ticker: data.get("ticker"),
-      sharesAmount: data.get("sharesAmount"),
-      spent: data.get("spent"),
+      name: selected[0]?.name || newAsset.shortname,
+      ticker: selected[0]?.ticker || newAsset.symbol,
+      sharesAmount: amount,
+      transactionAmount: transactionAmount,
+      spent: spent,
+      transactionExpense: transactionExpense,
+      price: price,
+      type: type,
+      date: date,
       id: editMode ? selected[0].id : undefined,
     };
     if (editMode) {
+      console.log(body);
       //TESTING TRANSACTION CREATION
-      //dispatch(createTransaction(body))
-      dispatch(editPortfolioAsset(body));
+      dispatch(createTransaction(body));
+      //dispatch(editPortfolioAsset(body));
     } else {
-      dispatch(createAsset(body));
+      console.log("add", body);
+      //dispatch(createAsset(body));
     }
     handleClose();
   };
@@ -55,36 +89,47 @@ const AssetForm = (props) => {
         onSubmit={handleSubmit}
       >
         <Typography variant="h6" color="text.primary" gutterBottom>
-          Add new asset
+          {editMode ? "Edit asset" : "Add new asset"}
         </Typography>
         <Grid container spacing={2}>
-          <Grid item lg={4} xs={4}>
-            <StockField />
-            {/* <TextField
-              color="secondary"
-              size="small"
-              variant="outlined"
-              required
-              defaultValue={
-                editMode && selected?.length ? selected[0].name : ""
-              }
-              id="name"
-              label="Name"
-              name="name"
-            ></TextField> */}
+          <Grid item lg={4} xs={8}>
+            {editMode ? (
+              <TextField
+                fullWidth={true}
+                color="secondary"
+                size="small"
+                variant="outlined"
+                required
+                defaultValue={
+                  editMode && selected?.length ? selected[0].name : ""
+                }
+                id="name"
+                label="Name"
+                name="name"
+              ></TextField>
+            ) : (
+              <StockField handleNewAsset={handleNewAsset} />
+            )}
           </Grid>
-          <Grid item lg={2} xs={12}>
+          <Grid item lg={1} xs={3}>
             <TextField
               color="secondary"
               size="small"
               label="Ticker"
-              defaultValue={
-                editMode && selected?.length ? selected[0].ticker : ""
+              // defaultValue={
+              //   editMode && selected?.length ? selected[0].ticker : ""
+              // }
+              value={
+                newAsset?.symbol
+                  ? newAsset.symbol
+                  : editMode && selected?.length
+                  ? selected[0].ticker
+                  : ""
               }
               variant="outlined"
               id="ticker"
               name="ticker"
-              disabled={editMode}
+              disabled={true}
               required
             ></TextField>
           </Grid>
@@ -94,10 +139,16 @@ const AssetForm = (props) => {
               size="small"
               label="Number of shares"
               variant="outlined"
+              helperText={editMode ? `Total: ${amount}` : ""}
+              onChange={(e) => {
+                if (editMode) {
+                  setTransactionAmount(e.currentTarget.value);
+                } else {
+                  setAmount(e.currentTarget.value);
+                }
+              }}
               required
-              defaultValue={
-                editMode && selected?.length ? selected[0].sharesAmount : ""
-              }
+              value={editMode ? transactionAmount : amount}
               id="sharesAmount"
               name="sharesAmount"
             ></TextField>
@@ -107,49 +158,59 @@ const AssetForm = (props) => {
               color="secondary"
               size="small"
               label="Amount invested"
+              helperText={editMode ? `Total: ${spent}` : ""}
               variant="outlined"
+              value={spent}
+              onChange={(e) => setSpent(e.currentTarget.value)}
               required
-              defaultValue={
-                editMode && selected?.length ? selected[0].spent : ""
-              }
               id="spent"
               name="spent"
             ></TextField>
-          </Grid>
-          <Grid item lg={1} xs={2}>
-            <Select
-              color="secondary"
-              size="small"
-              variant="outlined"
-              label="Type of transaction"
-              id="transaction-type"
-              defaultValue="Buy"
-              disabled={!editMode}
-            >
-              <MenuItem value={"Buy"}>Buy</MenuItem>
-              <MenuItem value={"Sell"}>Sell</MenuItem>
-            </Select>
           </Grid>
           <Grid item lg={2} xs={12}>
             <TextField
               color="secondary"
               disabled
+              value={price.toFixed(2)}
               size="small"
               label="Estimated price"
+              helperText={
+                editMode ? `Overall average: ${price.toFixed(2)}` : ""
+              }
               variant="outlined"
+              //onChange={(e) => setPrice(e.currentTarget.value.toFixed(2))}
               id="price"
               name="price"
             ></TextField>
           </Grid>
+          <Grid item lg={1} xs={2}>
+            <TextField
+              color="secondary"
+              select
+              fullWidth={true}
+              size="small"
+              variant="outlined"
+              label="Type of transaction"
+              //helperText="Type of transaction"
+              id="transaction-type"
+              value={type}
+              onChange={(e) => setType(e.currentTarget.value)}
+              disabled={!editMode}
+            >
+              <MenuItem value={"Buy"}>Buy</MenuItem>
+              <MenuItem value={"Sell"}>Sell</MenuItem>
+            </TextField>
+          </Grid>
+
           <Grid item lg={2} xs={12}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DatePicker
                 color="secondary"
                 size="small"
                 label="Date of transaction"
-                value={value}
+                value={date}
                 onChange={(newValue) => {
-                  setValue(newValue);
+                  setDate(newValue);
                 }}
                 renderInput={(params) => <TextField {...params} />}
                 variant="outlined"

@@ -4,7 +4,9 @@ import Autocomplete from "@mui/material/Autocomplete";
 import Box from "@mui/material/Box";
 import axios from "axios";
 
-export default function StockField() {
+export default function StockField(props) {
+  const { handleNewAsset } = props;
+
   const [open, setOpen] = React.useState(false);
   const [options, setOptions] = React.useState([]);
   const [inputValue, setInputValue] = React.useState("");
@@ -16,7 +18,6 @@ export default function StockField() {
 
     if (inputValue !== "" && active) {
       const timeoutId = setTimeout(async () => {
-        console.log(inputValue);
         const searchResult = await axios.post("/api/assets/search", {
           query: inputValue,
         });
@@ -51,6 +52,7 @@ export default function StockField() {
       onChange={(event, newValue) => {
         setOptions(newValue ? [newValue, ...options] : options);
         setValue(newValue);
+        handleNewAsset(newValue);
       }}
       isOptionEqualToValue={(option, value) =>
         option.shortname === value.shortname
