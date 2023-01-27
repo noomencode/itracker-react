@@ -13,8 +13,9 @@ export const createTransaction = (body) => async (dispatch) => {
       ticker: body.ticker,
       date: body.date,
       type: body.type,
-      amount: body.sharesAmount,
+      amount: body.transactionAmount,
       price: body.price,
+      expense: body.transactionExpense,
     });
     dispatch({ type: TRANSACTION_ADD_SUCCESS, payload: transaction });
   } catch (error) {

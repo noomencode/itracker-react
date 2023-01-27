@@ -28,21 +28,28 @@ const AssetForm = (props) => {
   const [date, setDate] = React.useState(new Date());
   const [newAsset, setNewAsset] = React.useState(null);
   const [amount, setAmount] = React.useState(
-    editMode && selected?.length ? selected[0].sharesAmount : ""
+    editMode && selected?.length ? parseFloat(selected[0].sharesAmount) : 0
   );
-  const [transactionAmount, setTransactionAmount] = React.useState(null);
+  const [transactionAmount, setTransactionAmount] = React.useState(0);
 
   const [spent, setSpent] = React.useState(
-    editMode && selected?.length ? selected[0].spent : ""
+    editMode && selected?.length ? parseFloat(selected[0].spent) : 0
   );
 
-  const [transactionExpense, setTransactionExpense] = React.useState(null);
+  const [transactionExpense, setTransactionExpense] = React.useState(0);
   const [price, setPrice] = React.useState(spent / amount);
+  const [transactionPrice, setTransactionPrice] = React.useState(0);
   const [type, setType] = React.useState("Buy");
 
   React.useEffect(() => {
-    setPrice(spent / amount);
+    setPrice(parseFloat((spent / amount).toFixed(2)));
   }, [amount, spent]);
+
+  React.useEffect(() => {
+    setTransactionPrice(
+      parseFloat((transactionExpense / transactionAmount).toFixed(2))
+    );
+  }, [transactionAmount, transactionExpense]);
 
   // React.useEffect(()=>{
   //   setAmount()
@@ -58,23 +65,23 @@ const AssetForm = (props) => {
     const body = {
       name: selected[0]?.name || newAsset.shortname,
       ticker: selected[0]?.ticker || newAsset.symbol,
-      sharesAmount: amount,
+      sharesAmount: editMode ? amount + transactionAmount : amount,
       transactionAmount: transactionAmount,
-      spent: spent,
+      spent: editMode ? spent + transactionExpense : spent,
       transactionExpense: transactionExpense,
-      price: price,
+      price: transactionPrice,
       type: type,
       date: date,
       id: editMode ? selected[0].id : undefined,
     };
     if (editMode) {
-      console.log(body);
       //TESTING TRANSACTION CREATION
       dispatch(createTransaction(body));
       //dispatch(editPortfolioAsset(body));
     } else {
-      console.log("add", body);
-      //dispatch(createAsset(body));
+      //console.log("add", body);
+      dispatch(createTransaction(body));
+      dispatch(createAsset(body));
     }
     handleClose();
   };
@@ -116,9 +123,6 @@ const AssetForm = (props) => {
               color="secondary"
               size="small"
               label="Ticker"
-              // defaultValue={
-              //   editMode && selected?.length ? selected[0].ticker : ""
-              // }
               value={
                 newAsset?.symbol
                   ? newAsset.symbol
@@ -137,18 +141,32 @@ const AssetForm = (props) => {
             <TextField
               color="secondary"
               size="small"
+              type="number"
+              min={0}
               label="Number of shares"
               variant="outlined"
-              helperText={editMode ? `Total: ${amount}` : ""}
+              helperText={
+                editMode
+                  ? `Total: ${
+                      transactionAmount > 0
+                        ? (
+                            parseFloat(amount) + parseFloat(transactionAmount)
+                          ).toFixed(2)
+                        : parseFloat(amount).toFixed(2)
+                    } shares`
+                  : ""
+              }
               onChange={(e) => {
                 if (editMode) {
-                  setTransactionAmount(e.currentTarget.value);
+                  setTransactionAmount(parseFloat(e.currentTarget.value));
                 } else {
-                  setAmount(e.currentTarget.value);
+                  setAmount(parseFloat(e.currentTarget.value));
                 }
               }}
               required
-              value={editMode ? transactionAmount : amount}
+              value={
+                editMode ? parseFloat(transactionAmount) : parseFloat(amount)
+              }
               id="sharesAmount"
               name="sharesAmount"
             ></TextField>
@@ -156,12 +174,32 @@ const AssetForm = (props) => {
           <Grid item lg={2} xs={12}>
             <TextField
               color="secondary"
+              type="number"
+              min={0}
               size="small"
               label="Amount invested"
-              helperText={editMode ? `Total: ${spent}` : ""}
+              helperText={
+                editMode
+                  ? `Total: ${
+                      transactionExpense > 0
+                        ? (
+                            parseFloat(spent) + parseFloat(transactionExpense)
+                          ).toFixed(2)
+                        : parseFloat(spent).toFixed(2)
+                    }  €`
+                  : ""
+              }
               variant="outlined"
-              value={spent}
-              onChange={(e) => setSpent(e.currentTarget.value)}
+              value={
+                editMode ? parseFloat(transactionExpense) : parseFloat(spent)
+              }
+              onChange={(e) => {
+                if (editMode) {
+                  setTransactionExpense(parseFloat(e.currentTarget.value));
+                } else {
+                  setSpent(parseFloat(e.currentTarget.value));
+                }
+              }}
               required
               id="spent"
               name="spent"
@@ -171,14 +209,22 @@ const AssetForm = (props) => {
             <TextField
               color="secondary"
               disabled
-              value={price.toFixed(2)}
+              value={
+                editMode
+                  ? parseFloat(transactionPrice).toFixed(2)
+                  : parseFloat(price).toFixed(2)
+              }
               size="small"
               label="Estimated price"
               helperText={
-                editMode ? `Overall average: ${price.toFixed(2)}` : ""
+                editMode
+                  ? `New average: ${(
+                      (transactionExpense + spent) /
+                      (amount + transactionAmount)
+                    ).toFixed(2)}`
+                  : ""
               }
               variant="outlined"
-              //onChange={(e) => setPrice(e.currentTarget.value.toFixed(2))}
               id="price"
               name="price"
             ></TextField>
@@ -191,7 +237,6 @@ const AssetForm = (props) => {
               size="small"
               variant="outlined"
               label="Type of transaction"
-              //helperText="Type of transaction"
               id="transaction-type"
               value={type}
               onChange={(e) => setType(e.currentTarget.value)}
