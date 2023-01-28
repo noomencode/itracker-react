@@ -51,7 +51,8 @@ const theme = createTheme({
       fontSize: "1.6rem",
     },
     span: {
-      fontSize: "1rem",
+      fontSize: "0.9rem",
+      fontWeight: "100",
     },
   },
   components: {
