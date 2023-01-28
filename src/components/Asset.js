@@ -83,77 +83,71 @@ export default function AssetDialog({ ticker }) {
           onClose={handleClose}
           sx={{ fontWeight: 800, fontSize: 25 }}
         >
-          <Typography variant="h3" component="h3">
-            {name}
-          </Typography>
+          {name}
         </BootstrapDialogTitle>
         <DialogContent dividers>
-          <BootstrapDialogTitle>
-            <Typography variant="h5" component="h5">
-              Asset information
-            </Typography>
-          </BootstrapDialogTitle>
-          <DialogContent dividers>
+          <Typography sx={{ fontWeight: 600, fontSize: 18 }}>
+            Asset information
+          </Typography>
+          <DialogContent>
             <Typography
-              variant="h6"
+              variant="span"
               component="h6"
               gutterBottom
             >{`Current price: ${price} EUR`}</Typography>
             <Typography
-              variant="h6"
+              variant="span"
               component="h6"
               gutterBottom
             >{`Average purchase price: ${avgPurchasePrice} EUR`}</Typography>
             <Typography
-              variant="h6"
+              variant="span"
               component="h6"
               sx={{
-                color: profit > 0 ? "green " : "red",
+                color: profit > 0 ? "secondary.main" : "error.main",
               }}
               gutterBottom
             >{`Current profit: ${profit} EUR`}</Typography>
             <Typography
-              variant="h6"
+              variant="span"
               component="h6"
               gutterBottom
               sx={{
-                color: dailyChange > 0 ? "green " : "red",
+                color: dailyChange > 0 ? "secondary.main" : "error.main",
               }}
             >
               {`Daily change: ${dailyChange} %`}
             </Typography>
             <Typography
-              variant="h6"
+              variant="span"
               component="h6"
               gutterBottom
             >{`Shares owned: ${sharesAmount}`}</Typography>
             <Typography
-              variant="h6"
+              variant="span"
               component="h6"
               gutterBottom
             >{`Shares worth: ${sharesWorth} EUR`}</Typography>
             <Typography
-              variant="h6"
+              variant="span"
               component="h6"
               gutterBottom
             >{`Total cost: ${spent} EUR`}</Typography>
           </DialogContent>
-          <BootstrapDialogTitle>
-            <Typography variant="h5" component="h5">
-              Fundamentals and ratios
-            </Typography>
-          </BootstrapDialogTitle>
-          <DialogContent dividers>
-            <Typography variant="h6" component="h6" gutterBottom>
+          <Typography sx={{ fontWeight: 600, fontSize: 18 }}>
+            Fundamentals and ratios
+          </Typography>
+          <DialogContent>
+            <Typography variant="span" component="h6" gutterBottom>
               {`Trailing P/E: ${trailingPE}`}
             </Typography>
-            <Typography variant="h6" component="h6" gutterBottom>
+            <Typography variant="span" component="h6" gutterBottom>
               {`Price to Book: ${priceToBook}`}
             </Typography>
-            <Typography variant="h6" component="h6" gutterBottom>
+            <Typography variant="span" component="h6" gutterBottom>
               {`52 week low: ${fiftyTwoWeekLow}`}
             </Typography>
-            <Typography variant="h6" component="h6" gutterBottom>
+            <Typography variant="span" component="h6" gutterBottom>
               {`52 week high: ${fiftyTwoWeekHigh}`}
             </Typography>
           </DialogContent>
