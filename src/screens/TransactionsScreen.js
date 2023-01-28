@@ -1,12 +1,11 @@
 import React from "react";
 import { Typography } from "@mui/material";
+import Transactions from "../containers/Transactions";
 
 const TransactionsScreen = () => {
   return (
     <>
-      <Typography variant="h5" color="primary" gutterBottom>
-        Transactions
-      </Typography>
+      <Transactions />
     </>
   );
 };
