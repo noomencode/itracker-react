@@ -59,7 +59,7 @@ export default function StockField(props) {
       }
       getOptionLabel={(option) => option.shortname || option.longname}
       renderOption={(props, option) => (
-        <Box component="li" {...props}>
+        <Box component="li" {...props} key={option.key}>
           <span>{`${option.shortname || option.longname} (${
             option.symbol
           })`}</span>

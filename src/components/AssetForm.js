@@ -3,7 +3,6 @@ import {
   Card,
   Box,
   TextField,
-  Select,
   MenuItem,
   Button,
   Typography,
@@ -69,17 +68,15 @@ const AssetForm = (props) => {
       transactionAmount: transactionAmount,
       spent: editMode ? spent + transactionExpense : spent,
       transactionExpense: transactionExpense,
-      price: transactionPrice,
+      price: editMode ? transactionPrice : price,
       type: type,
       date: date,
       id: editMode ? selected[0].id : undefined,
     };
     if (editMode) {
-      //TESTING TRANSACTION CREATION
       dispatch(createTransaction(body));
-      //dispatch(editPortfolioAsset(body));
+      dispatch(editPortfolioAsset(body));
     } else {
-      //console.log("add", body);
       dispatch(createTransaction(body));
       dispatch(createAsset(body));
     }
@@ -99,10 +96,10 @@ const AssetForm = (props) => {
           {editMode ? "Edit asset" : "Add new asset"}
         </Typography>
         <Grid container spacing={2}>
-          <Grid item lg={4} xs={8}>
+          <Grid item lg={3} xs={12}>
             {editMode ? (
               <TextField
-                fullWidth={true}
+                //fullWidth={true}
                 color="secondary"
                 size="small"
                 variant="outlined"
@@ -118,7 +115,7 @@ const AssetForm = (props) => {
               <StockField handleNewAsset={handleNewAsset} />
             )}
           </Grid>
-          <Grid item lg={1} xs={3}>
+          <Grid item lg={2} xs={12}>
             <TextField
               color="secondary"
               size="small"
@@ -208,11 +205,16 @@ const AssetForm = (props) => {
           <Grid item lg={2} xs={12}>
             <TextField
               color="secondary"
+              fullWidth={true}
               disabled
               value={
                 editMode
-                  ? parseFloat(transactionPrice).toFixed(2)
-                  : parseFloat(price).toFixed(2)
+                  ? transactionPrice > 0
+                    ? parseFloat(transactionPrice).toFixed(2)
+                    : ""
+                  : price > 0
+                  ? parseFloat(price).toFixed(2)
+                  : ""
               }
               size="small"
               label="Estimated price"
@@ -229,7 +231,7 @@ const AssetForm = (props) => {
               name="price"
             ></TextField>
           </Grid>
-          <Grid item lg={1} xs={2}>
+          <Grid item lg={1} xs={12}>
             <TextField
               color="secondary"
               select
