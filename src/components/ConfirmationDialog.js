@@ -24,14 +24,14 @@ export default function ConfirmationDialog(props) {
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            <Typography variant="h6" component="h6">
+            <Typography variant="h6" component="span">
               Are you sure you wish to delete the following assets:
             </Typography>
           </DialogContentText>
-          {selectedAssets.map((a) => {
+          {selectedAssets.map((a, index) => {
             return (
-              <DialogContentText>
-                <Typography variant="h6" component="h6" fontWeight={600}>
+              <DialogContentText key={index}>
+                <Typography variant="h6" component="span" fontWeight={600}>
                   {a.name}
                 </Typography>
               </DialogContentText>
@@ -40,12 +40,12 @@ export default function ConfirmationDialog(props) {
         </DialogContent>
         <DialogActions>
           <Button color={"secondary"} onClick={handleDialogClose}>
-            <Typography variant="h6" component="h6">
+            <Typography variant="h6" component="span">
               Cancel
             </Typography>
           </Button>
           <Button color={"secondary"} onClick={handleConfirm} autoFocus>
-            <Typography variant="h6" component="h6">
+            <Typography variant="h6" component="span">
               Confirm
             </Typography>
           </Button>
