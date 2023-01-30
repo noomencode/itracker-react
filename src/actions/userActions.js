@@ -25,6 +25,7 @@ export const login = (email, password) => async (dispatch) => {
 
     // ADD USER TO SESSION HERE...
     sessionStorage.setItem("userInfo", JSON.stringify(data));
+    sessionStorage.setItem("token", JSON.stringify(data.token));
   } catch (error) {
     dispatch({
       type: USER_LOGIN_FAIL,

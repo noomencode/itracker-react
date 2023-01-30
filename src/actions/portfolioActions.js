@@ -15,12 +15,21 @@ import {
 } from "../constants/portfolioConstants";
 import axios from "axios";
 
-export const getPortfolioAssets = () => async (dispatch) => {
+export const getPortfolioAssets = () => async (dispatch, getState) => {
+  const {
+    userLogin: { userInfo },
+  } = getState();
+  const config = {
+    headers: {
+      Authorization: `Bearer ${userInfo.token}`,
+    },
+  };
   try {
     dispatch({ type: PORTFOLIO_LIST_REQUEST });
     const { data } = await axios.get(
       // `https://weary-peplum-hare.cyclic.app/api/portfolio`,
-      "/api/portfolio"
+      "/api/portfolio",
+      config
     );
     dispatch({
       type: PORTFOLIO_LIST_SUCCESS,
