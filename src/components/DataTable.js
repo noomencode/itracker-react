@@ -317,7 +317,7 @@ EnhancedTableToolbar.propTypes = {
 
 const EnhancedTable = () => {
   const [order, setOrder] = useState("asc");
-  const [orderBy, setOrderBy] = useState("calories");
+  const [orderBy, setOrderBy] = useState("worth");
   const [selected, setSelected] = useState([]);
   const [page, setPage] = useState(0);
   //const [dense, setDense] = useState(false);

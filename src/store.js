@@ -13,6 +13,7 @@ import {
   portfolioAssetCUDReducer,
 } from "./reducers/portfolioReducers";
 import { userLoginReducer } from "./reducers/userReducers";
+import { transactionReducer } from "./reducers/transactionReducers";
 
 const reducer = combineReducers({
   assetDialog: assetDialogReducer,
@@ -23,6 +24,7 @@ const reducer = combineReducers({
   portfolioAssetDelete: portfolioAssetDeleteReducer,
   userLogin: userLoginReducer,
   portfolioList: portfolioAssetReducer,
+  transactionsList: transactionReducer,
 });
 
 const userInfoFromStorage = sessionStorage.getItem("userInfo")
