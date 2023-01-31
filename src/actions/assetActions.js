@@ -21,14 +21,26 @@ export const getTopAssets = () => async (dispatch) => {
   }
 };
 
-export const createAsset = (body) => async (dispatch) => {
+export const createAsset = (body) => async (dispatch, getState) => {
+  const {
+    userLogin: { userInfo },
+  } = getState();
+  const config = {
+    headers: {
+      Authorization: `Bearer ${userInfo.token}`,
+    },
+  };
   try {
     dispatch({ type: ASSET_ADD_REQUEST });
 
-    const assetData = await axios.post("/api/assets", {
-      name: body.name,
-      ticker: body.ticker,
-    });
+    const assetData = await axios.post(
+      "/api/assets",
+      {
+        name: body.name,
+        ticker: body.ticker,
+      },
+      config
+    );
     dispatch({ type: ASSET_ADD_SUCCESS, payload: assetData });
     dispatch(addAssetToPortfolio(body, assetData.data._id));
   } catch (error) {

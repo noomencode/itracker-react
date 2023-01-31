@@ -47,62 +47,93 @@ export const getPortfolioAssets = () => async (dispatch, getState) => {
   }
 };
 
-export const addAssetToPortfolio = (body, assetId) => async (dispatch) => {
-  try {
-    dispatch({ type: PORTFOLIO_ASSET_ADD_REQUEST });
-    const data = await axios.put(
-      "/api/portfolio/assets",
-      {
-        name: body.name,
-        ticker: body.ticker,
-        sharesAmount: body.sharesAmount,
-        spent: body.spent,
-        assets: assetId,
+export const addAssetToPortfolio =
+  (body, assetId) => async (dispatch, getState) => {
+    const {
+      userLogin: { userInfo },
+    } = getState();
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
       },
-      { withCredentials: true }
-    );
-    dispatch({
-      type: PORTFOLIO_ASSET_ADD_SUCCESS,
-      payload: data,
-    });
-    dispatch(getPortfolioAssets());
-  } catch (error) {
-    dispatch({ type: PORTFOLIO_ASSET_ADD_FAIL });
-  }
-};
+    };
+    try {
+      dispatch({ type: PORTFOLIO_ASSET_ADD_REQUEST });
+      const data = await axios.put(
+        "/api/portfolio/assets",
+        {
+          name: body.name,
+          ticker: body.ticker,
+          sharesAmount: body.sharesAmount,
+          spent: body.spent,
+          assets: assetId,
+        },
+        config
+      );
+      dispatch({
+        type: PORTFOLIO_ASSET_ADD_SUCCESS,
+        payload: data,
+      });
+      dispatch(getPortfolioAssets());
+    } catch (error) {
+      dispatch({ type: PORTFOLIO_ASSET_ADD_FAIL });
+    }
+  };
 
-export const deletePortfolioAssets = (selected) => async (dispatch) => {
-  try {
-    dispatch({ type: PORTFOLIO_DELETE_ASSETS_REQUEST });
+export const deletePortfolioAssets =
+  (selected) => async (dispatch, getState) => {
+    const {
+      userLogin: { userInfo },
+    } = getState();
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+    try {
+      dispatch({ type: PORTFOLIO_DELETE_ASSETS_REQUEST });
 
-    const { data } = await axios.delete("/api/portfolio/assets", {
-      data: { selected },
-    });
-    dispatch({
-      type: PORTFOLIO_DELETE_ASSETS_SUCCESS,
-      payload: data,
-    });
-    dispatch(getPortfolioAssets());
-  } catch (error) {
-    dispatch({
-      type: PORTFOLIO_DELETE_ASSETS_FAIL,
-      payload:
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message,
-    });
-  }
-};
+      const { data } = await axios.delete("/api/portfolio/assets", {
+        data: { selected },
+        config,
+      });
+      dispatch({
+        type: PORTFOLIO_DELETE_ASSETS_SUCCESS,
+        payload: data,
+      });
+      dispatch(getPortfolioAssets());
+    } catch (error) {
+      dispatch({
+        type: PORTFOLIO_DELETE_ASSETS_FAIL,
+        payload:
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message,
+      });
+    }
+  };
 
-export const editPortfolioAsset = (body) => async (dispatch) => {
+export const editPortfolioAsset = (body) => async (dispatch, getState) => {
+  const {
+    userLogin: { userInfo },
+  } = getState();
+  const config = {
+    headers: {
+      Authorization: `Bearer ${userInfo.token}`,
+    },
+  };
   try {
     dispatch({ type: PORTFOLIO_ASSET_EDIT_REQUEST });
 
-    const { data } = await axios.put(`/api/portfolio/assets/${body.id}`, {
-      name: body.name,
-      sharesAmount: body.sharesAmount,
-      spent: body.spent,
-    });
+    const { data } = await axios.put(
+      `/api/portfolio/assets/${body.id}`,
+      {
+        name: body.name,
+        sharesAmount: body.sharesAmount,
+        spent: body.spent,
+      },
+      config
+    );
     dispatch({
       type: PORTFOLIO_ASSET_EDIT_SUCCESS,
       payload: data,
