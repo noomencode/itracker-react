@@ -86,6 +86,7 @@ export const deletePortfolioAssets =
       userLogin: { userInfo },
     } = getState();
     const config = {
+      data: { selected },
       headers: {
         Authorization: `Bearer ${userInfo.token}`,
       },
@@ -93,10 +94,7 @@ export const deletePortfolioAssets =
     try {
       dispatch({ type: PORTFOLIO_DELETE_ASSETS_REQUEST });
 
-      const { data } = await axios.delete("/api/portfolio/assets", {
-        data: { selected },
-        config,
-      });
+      const { data } = await axios.delete("/api/portfolio/assets", config);
       dispatch({
         type: PORTFOLIO_DELETE_ASSETS_SUCCESS,
         payload: data,
