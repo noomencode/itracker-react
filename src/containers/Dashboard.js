@@ -9,6 +9,8 @@ import { getPortfolioAssets } from "../actions/portfolioActions";
 import { getTopAssets } from "../actions/assetActions";
 import PortfolioEmpty from "../components/PortfolioEmpty";
 import StockScroller from "../components/StockScroller";
+import WatchListCompact from "../components/WatchListCompact";
+import Graphs from "../components/Graphs";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
@@ -35,7 +37,11 @@ const Dashboard = () => {
               </Grid>
               <Grid item lg={3} xs={12}>
                 {!error && portfolioAssets.length ? (
-                  <PortfolioPerformance />
+                  <>
+                    <PortfolioPerformance />
+                    <WatchListCompact />
+                    {/* <Graphs /> */}
+                  </>
                 ) : (
                   <PortfolioEmpty component={"Graphs"} />
                 )}

@@ -46,18 +46,6 @@ const headCells = [
     label: "Asset",
   },
   {
-    id: "type",
-    numeric: false,
-    disablePadding: false,
-    label: "Type",
-  },
-  {
-    id: "date",
-    numeric: false,
-    disablePadding: false,
-    label: "Date",
-  },
-  {
     id: "amount",
     numeric: true,
     disablePadding: false,
@@ -68,6 +56,18 @@ const headCells = [
     numeric: true,
     disablePadding: false,
     label: "Price",
+  },
+  {
+    id: "date",
+    numeric: true,
+    disablePadding: false,
+    label: "Date",
+  },
+  {
+    id: "type",
+    numeric: true,
+    disablePadding: false,
+    label: "Type",
   },
 ];
 
@@ -185,8 +185,8 @@ EnhancedTableToolbar.propTypes = {
 
 export default function TransactionsTable(props) {
   const { rows } = props;
-  const [order, setOrder] = React.useState("asc");
-  const [orderBy, setOrderBy] = React.useState("calories");
+  const [order, setOrder] = React.useState("desc");
+  const [orderBy, setOrderBy] = React.useState("date");
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
@@ -254,7 +254,7 @@ export default function TransactionsTable(props) {
           <Table
             sx={{ minWidth: 750 }}
             aria-labelledby="tableTitle"
-            size={dense ? "small" : "medium"}
+            size="large"
           >
             <EnhancedTableHead
               numSelected={selected.length}
@@ -280,7 +280,7 @@ export default function TransactionsTable(props) {
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
-                      key={row.name}
+                      key={row.key}
                       selected={isItemSelected}
                     >
                       <TableCell padding="checkbox">
@@ -298,12 +298,12 @@ export default function TransactionsTable(props) {
                         scope="row"
                         padding="none"
                       >
-                        {row.name}
+                        {row.asset}
                       </TableCell>
-                      <TableCell align="right">{row.calories}</TableCell>
-                      <TableCell align="right">{row.fat}</TableCell>
-                      <TableCell align="right">{row.carbs}</TableCell>
-                      <TableCell align="right">{row.protein}</TableCell>
+                      <TableCell align="right">{row.amount}</TableCell>
+                      <TableCell align="right">{row.price}</TableCell>
+                      <TableCell align="right">{row.date}</TableCell>
+                      <TableCell align="right">{row.type}</TableCell>
                     </TableRow>
                   );
                 })}
@@ -329,10 +329,10 @@ export default function TransactionsTable(props) {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
-      <FormControlLabel
+      {/* <FormControlLabel
         control={<Switch checked={dense} onChange={handleChangeDense} />}
         label="Dense padding"
-      />
+      /> */}
     </Box>
   );
 }

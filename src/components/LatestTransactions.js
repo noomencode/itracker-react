@@ -1,11 +1,9 @@
 import { Card, CardContent, Typography, Divider } from "@mui/material";
-import TransactionsTable from "./TransactionsTable";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getTransactions } from "../actions/transactionActions";
 
-const TransactionsList = () => {
-  const dispatch = useDispatch();
+const LatestTransactions = () => {
   const { transactions } = useSelector((state) => state.transactionsList);
   let rows;
 
@@ -25,23 +23,18 @@ const TransactionsList = () => {
     console.log(rows);
   }
 
-  useEffect(() => {
-    dispatch(getTransactions());
-  }, [dispatch]);
-
   return (
     <>
       <Card>
         <CardContent>
           <Typography variant="h5" color="text.primary" gutterBottom>
-            Transactions
+            Latest transactions
           </Typography>
           <Divider />
         </CardContent>
-        {rows?.length ? <TransactionsTable rows={rows} /> : null}
       </Card>
     </>
   );
 };
 
-export default TransactionsList;
+export default LatestTransactions;

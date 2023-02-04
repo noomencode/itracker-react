@@ -67,10 +67,16 @@ const headCells = [
     label: "Name",
   },
   {
-    id: "worth",
+    id: "currentPrice",
     numeric: true,
     disablePadding: false,
-    label: "Worth",
+    label: "Price",
+  },
+  {
+    id: "dailyChange",
+    numeric: true,
+    disablePadding: false,
+    label: "Change %",
   },
   {
     id: "profit",
@@ -85,22 +91,16 @@ const headCells = [
     label: "Profit (EUR)",
   },
   {
+    id: "worth",
+    numeric: true,
+    disablePadding: false,
+    label: "Worth",
+  },
+  {
     id: "avgPurchasePrice",
     numeric: true,
     disablePadding: false,
     label: "Purchase price",
-  },
-  {
-    id: "currentPrice",
-    numeric: true,
-    disablePadding: false,
-    label: "Price",
-  },
-  {
-    id: "dailyChange",
-    numeric: true,
-    disablePadding: false,
-    label: "Change %",
   },
   {
     id: "portfolioPercentage",
@@ -316,12 +316,12 @@ EnhancedTableToolbar.propTypes = {
 };
 
 const EnhancedTable = () => {
-  const [order, setOrder] = useState("asc");
+  const [order, setOrder] = useState("desc");
   const [orderBy, setOrderBy] = useState("worth");
   const [selected, setSelected] = useState([]);
   const [page, setPage] = useState(0);
   //const [dense, setDense] = useState(false);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [rowsPerPage, setRowsPerPage] = useState(25);
 
   const { dialog } = useSelector((state) => state.assetDialog);
 
@@ -482,20 +482,44 @@ const EnhancedTable = () => {
                       scope="row"
                       padding="normal"
                       sx={{
-                        // fontWeight: 600,
-                        cursor: "pointer",
-                        "&:hover": {
-                          color: "secondary.main",
-                        },
+                        fontSize: "0.9em",
+                        fontWeight: 600,
+                        // cursor: "pointer",
+                        // "&:hover": {
+                        //   color: "secondary.main",
+                        // },
                       }}
                       onClick={(event) =>
                         dispatch(handleAssetDialog(true, row.ticker))
                       }
                     >
-                      {row.name}
-                    </TableCell>
-                    <TableCell align="right">{row.worth}</TableCell>
+                      <Chip
+                        sx={{
+                          fontSize: "0.9em",
+                          fontWeight: 600,
+                          cursor: "pointer",
 
+                          "&:hover": {
+                            backgroundColor: "secondary.main",
+                          },
+                        }}
+                        label={row.name}
+                        variant="outlined"
+                      ></Chip>
+                    </TableCell>
+                    <TableCell align="right">{row.currentPrice}</TableCell>
+                    <TableCell align="right">
+                      <Chip
+                        color={row.dailyChange > 0 ? "secondary" : "error"}
+                        sx={{
+                          color:
+                            row.dailyChange > 0 ? "secondary.main" : "error",
+                          // fontWeight: 600,
+                        }}
+                        label={`${row.dailyChange} %`}
+                        variant="outlined"
+                      ></Chip>
+                    </TableCell>
                     <TableCell align="right">
                       <Chip
                         color={row.profit > 0 ? "secondary" : "error"}
@@ -519,22 +543,10 @@ const EnhancedTable = () => {
                       ></Chip>
                     </TableCell>
                     <TableCell sx={{ color: "text.secondary" }} align="right">
-                      {row.avgPurchasePrice}
+                      {row.worth}
                     </TableCell>
                     <TableCell sx={{ color: "text.secondary" }} align="right">
-                      {row.currentPrice}
-                    </TableCell>
-                    <TableCell align="right">
-                      <Chip
-                        color={row.dailyChange > 0 ? "secondary" : "error"}
-                        sx={{
-                          color:
-                            row.dailyChange > 0 ? "secondary.main" : "error",
-                          // fontWeight: 600,
-                        }}
-                        label={`${row.dailyChange} %`}
-                        variant="outlined"
-                      ></Chip>
+                      {row.avgPurchasePrice}
                     </TableCell>
                     {/* 
                     <TableCell align="right">{row.spent}</TableCell>

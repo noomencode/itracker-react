@@ -19,7 +19,7 @@ const Item = styled(Chip)(({ theme }) => ({
   ...theme.typography.body2,
   //   opacity: 0,
   position: "relative",
-  borderRadius: 0,
+  // borderRadius: 0,
   padding: theme.spacing(1),
   //textAlign: "center",
   height: "3em",
@@ -72,7 +72,7 @@ const StockScroller = (props) => {
 
   return (
     <Box sx={{ maxWidth: "100%", marginTop: 2 }}>
-      <Marquee gradient={false} style={{ overflow: "hidden" }}>
+      <Marquee speed={75} gradient={false} style={{ overflow: "hidden" }}>
         <Stack direction="row" spacing={2} sx={{ justifyContent: "center" }}>
           {topAssets.map((asset, index) => {
             return (
