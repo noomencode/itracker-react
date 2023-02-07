@@ -50,8 +50,8 @@ export const getTransactions = () => async (dispatch, getState) => {
   try {
     dispatch({ type: TRANSACTION_INFO_REQUEST });
 
-    const transaction = await axios.get("/api/transactions", config);
-    dispatch({ type: TRANSACTION_INFO_SUCCESS, payload: transaction });
+    const { data } = await axios.get("/api/transactions", config);
+    dispatch({ type: TRANSACTION_INFO_SUCCESS, payload: data });
   } catch (error) {
     dispatch({ type: TRANSACTION_INFO_FAIL });
   }

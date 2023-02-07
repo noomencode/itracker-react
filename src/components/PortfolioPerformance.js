@@ -12,15 +12,29 @@ import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import PercentIcon from "@mui/icons-material/Percent";
+import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import PortfolioHistory from "./PortfolioHistory";
 
 const PortfolioPerformance = () => {
   const { totalWorth, totalSpent } = useSelector((state) => state.portfolio);
+  const { history } = useSelector(
+    (state) => state.portfolioList.portfolioAssets[0]
+  );
+  console.log(history);
   const profit = (totalWorth - totalSpent).toFixed(2);
   const portfolioYield = (
     ((totalWorth - totalSpent) / totalWorth) *
     100
   ).toFixed(2);
 
+  const annualYield = (
+    ((totalWorth - history[0].worth - (totalSpent - history[0].expenses)) /
+      history[0].worth) *
+    100
+  ).toFixed(2);
+
+  console.log(annualYield);
   return (
     <React.Fragment>
       <Card sx={{ marginBottom: 1 }}>
@@ -80,16 +94,34 @@ const PortfolioPerformance = () => {
                 />
               </ListItemIcon>
               <ListItemText
-                primary={"Yield"}
+                primary={"Total yield"}
                 secondary={`${portfolioYield} %`}
                 primaryTypographyProps={{ variant: "h6" }}
                 secondaryTypographyProps={{ variant: "h5" }}
               ></ListItemText>
             </ListItem>
+            <ListItem disablePadding>
+              <ListItemIcon>
+                <PercentIcon
+                  sx={
+                    portfolioYield > 0
+                      ? { color: "secondary.main" }
+                      : { color: "error.main" }
+                  }
+                />
+              </ListItemIcon>
+              <ListItemText
+                primary={"Annual yield"}
+                secondary={`${annualYield} %`}
+                primaryTypographyProps={{ variant: "h6" }}
+                secondaryTypographyProps={{ variant: "h5" }}
+              ></ListItemText>
+            </ListItem>
+            {history?.length ? <PortfolioHistory history={history} /> : null}
           </List>
         </CardContent>
       </Card>
-      <Graphs />
+      {/* <Graphs /> */}
     </React.Fragment>
   );
 };
