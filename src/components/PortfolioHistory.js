@@ -1,19 +1,11 @@
 import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Card, CardContent, Typography, Divider } from "@mui/material";
-import Graphs from "../components/Graphs";
-import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import CardTravelIcon from "@mui/icons-material/CardTravel";
-import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import PercentIcon from "@mui/icons-material/Percent";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
-import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import KeyboardDoubleArrowDownIcon from "@mui/icons-material/KeyboardDoubleArrowDown";
 import KeyboardDoubleArrowUpIcon from "@mui/icons-material/KeyboardDoubleArrowUp";
 
