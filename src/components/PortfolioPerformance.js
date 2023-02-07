@@ -14,6 +14,7 @@ import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import PercentIcon from "@mui/icons-material/Percent";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import PortfolioHistory from "./PortfolioHistory";
 
 const PortfolioPerformance = () => {
   const { totalWorth, totalSpent } = useSelector((state) => state.portfolio);
@@ -116,19 +117,7 @@ const PortfolioPerformance = () => {
                 secondaryTypographyProps={{ variant: "h5" }}
               ></ListItemText>
             </ListItem>
-            <ListItem disablePadding>
-              <ListItemIcon>
-                <AccessTimeIcon />
-              </ListItemIcon>
-              <ListItemText
-                primary={"History"}
-                secondary={<ArrowDropDownIcon />}
-                primaryTypographyProps={{
-                  variant: "h6",
-                }}
-                //secondaryTypographyProps={{ variant: "h5" }}
-              ></ListItemText>
-            </ListItem>
+            {history?.length ? <PortfolioHistory history={history} /> : null}
           </List>
         </CardContent>
       </Card>
