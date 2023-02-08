@@ -76,7 +76,7 @@ const headCells = [
     id: "dailyChange",
     numeric: true,
     disablePadding: false,
-    label: "Change %",
+    label: "Change",
   },
   {
     id: "profit",
@@ -94,7 +94,13 @@ const headCells = [
     id: "worth",
     numeric: true,
     disablePadding: false,
-    label: "Worth",
+    label: "Value",
+  },
+  {
+    id: "spent",
+    numeric: true,
+    disablePadding: false,
+    label: "Expense",
   },
   {
     id: "avgPurchasePrice",
@@ -107,6 +113,12 @@ const headCells = [
     numeric: true,
     disablePadding: false,
     label: "% of portfolio",
+  },
+  {
+    id: "analystRating",
+    numeric: false,
+    disablePadding: false,
+    label: "Analyst rating",
   },
 ];
 
@@ -126,7 +138,7 @@ function EnhancedTableHead(props) {
   return (
     <TableHead>
       <TableRow>
-        <TableCell padding="checkbox">
+        <TableCell padding="checkbox" sx={{ padding: 0 }}>
           <Checkbox
             color="secondary"
             indeterminate={numSelected > 0 && numSelected < rowCount}
@@ -143,6 +155,7 @@ function EnhancedTableHead(props) {
             align={headCell.numeric ? "right" : "left"}
             padding={headCell.disablePadding ? "none" : "normal"}
             sortDirection={orderBy === headCell.id ? order : false}
+            sx={{ fontSize: "0.8em", padding: { xs: "0px 8px", lg: 2 } }}
             // sx={{ fontWeight: 600 }}
           >
             <TableSortLabel
@@ -336,7 +349,8 @@ const EnhancedTable = () => {
 
   const rows = assets.map((myAsset) => {
     const { spent, sharesAmount, name, ticker, _id } = myAsset;
-    const { price, dailyChange, updatedAt } = myAsset.asset;
+    const { price, dailyChange, updatedAt, averageAnalystRating } =
+      myAsset.asset;
     updatedTimestamp = updatedAt;
     return {
       name: name,
@@ -345,13 +359,14 @@ const EnhancedTable = () => {
         (((price * sharesAmount - spent) / spent) * 100).toFixed(2)
       ),
       profitEUR: parseFloat((price * sharesAmount - spent).toFixed(2)),
-      currentPrice: parseFloat(price),
+      currentPrice: parseFloat(price).toFixed(2),
       avgPurchasePrice: parseFloat((spent / sharesAmount).toFixed(2)),
       dailyChange: parseFloat(dailyChange),
       worth: parseFloat((price * sharesAmount).toFixed(2)),
       spent: parseFloat(spent),
       sharesAmount: parseFloat(sharesAmount),
       portfolioPercentage: 100,
+      averageAnalystRating: averageAnalystRating || "N/A",
       id: _id,
     };
   });
@@ -435,10 +450,11 @@ const EnhancedTable = () => {
 
       <TableContainer>
         <Table
-          sx={{ minWidth: 750 }}
+          //sx={{ minWidth: 750 }}
+          //table-layout="auto"
           aria-labelledby="tableTitle"
           //size={dense ? "small" : "medium"}
-          size={"medium"}
+          size="medium"
         >
           <EnhancedTableHead
             numSelected={selected.length}
@@ -466,7 +482,7 @@ const EnhancedTable = () => {
                     key={row.name}
                     selected={isItemSelected}
                   >
-                    <TableCell padding="checkbox">
+                    <TableCell padding="checkbox" sx={{ padding: 0 }}>
                       <Checkbox
                         onClick={(event) => handleClick(event, row)}
                         color="secondary"
@@ -482,12 +498,12 @@ const EnhancedTable = () => {
                       scope="row"
                       padding="normal"
                       sx={{
-                        fontSize: "0.9em",
+                        fontSize: { xs: "0.7em", lg: "0.9em" },
                         fontWeight: 600,
-                        // cursor: "pointer",
-                        // "&:hover": {
-                        //   color: "secondary.main",
-                        // },
+                        maxWidth: { xs: 145, md: "100%", lg: "100%" },
+                        padding: 0,
+                        //maxWidth: 145,
+                        //width: 155,
                       }}
                       onClick={(event) =>
                         dispatch(handleAssetDialog(true, row.ticker))
@@ -498,7 +514,7 @@ const EnhancedTable = () => {
                           fontSize: "0.9em",
                           fontWeight: 600,
                           cursor: "pointer",
-
+                          width: "100%",
                           "&:hover": {
                             backgroundColor: "secondary.main",
                           },
@@ -507,52 +523,121 @@ const EnhancedTable = () => {
                         variant="outlined"
                       ></Chip>
                     </TableCell>
-                    <TableCell align="right">{row.currentPrice}</TableCell>
-                    <TableCell align="right">
+                    <TableCell
+                      align="right"
+                      sx={{
+                        padding: { xs: "0px 8px", lg: 2 },
+                        //paddingRight: { xs: 1, lg: 2 },
+                      }}
+                    >
+                      <Chip label={row.currentPrice} variant="outlined"></Chip>
+                    </TableCell>
+                    <TableCell
+                      align="right"
+                      sx={{
+                        width: "100px",
+                        //padding: { xs: "0 1", lg: 2 },
+                        //paddingRight: { xs: 1, lg: 2 },
+                      }}
+                    >
                       <Chip
                         color={row.dailyChange > 0 ? "secondary" : "error"}
                         sx={{
                           color:
                             row.dailyChange > 0 ? "secondary.main" : "error",
+                          //width: "100%",
                           // fontWeight: 600,
                         }}
                         label={`${row.dailyChange} %`}
                         variant="outlined"
                       ></Chip>
                     </TableCell>
-                    <TableCell align="right">
+                    <TableCell
+                      align="right"
+                      sx={{ width: "5%", padding: { xs: 0, lg: 2 } }}
+                    >
                       <Chip
                         color={row.profit > 0 ? "secondary" : "error"}
                         sx={{
                           color: row.profit > 0 ? "secondary.main" : "error",
-                          // fontWeight: 600,
+                          //width: "100%",
                         }}
                         label={`${row.profit} %`}
                         variant="outlined"
                       ></Chip>
                     </TableCell>
-                    <TableCell align="right">
+                    <TableCell
+                      align="right"
+                      sx={{ width: "10%", padding: { xs: 0, lg: 2 } }}
+                    >
                       <Chip
                         color={row.profitEUR > 0 ? "secondary" : "error"}
                         sx={{
                           color: row.profitEUR > 0 ? "secondary.main" : "error",
-                          // fontWeight: 600,
+                          //width: "100%",
                         }}
                         label={`${row.profitEUR} €`}
                         variant="outlined"
                       ></Chip>
                     </TableCell>
-                    <TableCell sx={{ color: "text.secondary" }} align="right">
-                      {row.worth}
+                    <TableCell
+                      sx={{
+                        color: "text.secondary",
+                        padding: { xs: 0, lg: 2 },
+                      }}
+                      align="right"
+                    >
+                      <Chip label={`${row.worth} €`} variant="outlined"></Chip>
                     </TableCell>
-                    <TableCell sx={{ color: "text.secondary" }} align="right">
-                      {row.avgPurchasePrice}
+                    <TableCell
+                      sx={{
+                        color: "text.secondary",
+                        padding: { xs: 0, lg: 2 },
+                      }}
+                      align="right"
+                    >
+                      <Chip label={`${row.spent} €`} variant="outlined"></Chip>
                     </TableCell>
-                    {/* 
-                    <TableCell align="right">{row.spent}</TableCell>
-                    <TableCell align="right">{row.sharesAmount}</TableCell> */}
-                    <TableCell align="right" sx={{ color: "text.secondary" }}>
-                      {parseFloat((row.worth / totalWorth) * 100).toFixed(0)} %
+                    <TableCell
+                      sx={{
+                        color: "text.secondary",
+                        padding: { xs: 0, lg: 2 },
+                      }}
+                      align="right"
+                    >
+                      <Chip
+                        label={row.avgPurchasePrice}
+                        variant="outlined"
+                      ></Chip>
+                    </TableCell>
+
+                    <TableCell
+                      align="right"
+                      sx={{
+                        color: "text.secondary",
+                        padding: { xs: 0, lg: 2 },
+                      }}
+                    >
+                      <Chip
+                        label={`${parseFloat(
+                          (row.worth / totalWorth) * 100
+                        ).toFixed(0)}%`}
+                        variant="outlined"
+                      ></Chip>
+                    </TableCell>
+                    <TableCell
+                      sx={{
+                        color: "text.secondary",
+                        padding: { xs: 0, lg: 2 },
+                        width: 150,
+                      }}
+                      align="right"
+                    >
+                      <Chip
+                        label={row.averageAnalystRating}
+                        variant="outlined"
+                        sx={{ width: "100%" }}
+                      ></Chip>
                     </TableCell>
                   </TableRow>
                 );
@@ -587,11 +672,6 @@ const EnhancedTable = () => {
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
-      {/* </Paper> */}
-      {/* <FormControlLabel
-        control={<Switch checked={dense} onChange={handleChangeDense} />}
-        label="Dense padding"
-      /> */}
       {dialog.dialogOpen ? <Asset ticker={dialog.ticker} /> : ""}
     </Box>
   );
