@@ -501,6 +501,7 @@ const EnhancedTable = () => {
                         fontSize: { xs: "0.7em", lg: "0.9em" },
                         fontWeight: 600,
                         maxWidth: { xs: 145, md: "100%", lg: "100%" },
+                        width: "20%",
                         padding: 0,
                         //maxWidth: 145,
                         //width: 155,
@@ -535,7 +536,7 @@ const EnhancedTable = () => {
                     <TableCell
                       align="right"
                       sx={{
-                        width: "100px",
+                        width: "5%",
                         //padding: { xs: "0 1", lg: 2 },
                         //paddingRight: { xs: 1, lg: 2 },
                       }}
@@ -545,7 +546,7 @@ const EnhancedTable = () => {
                         sx={{
                           color:
                             row.dailyChange > 0 ? "secondary.main" : "error",
-                          //width: "100%",
+                          width: "100%",
                           // fontWeight: 600,
                         }}
                         label={`${row.dailyChange} %`}
@@ -560,7 +561,7 @@ const EnhancedTable = () => {
                         color={row.profit > 0 ? "secondary" : "error"}
                         sx={{
                           color: row.profit > 0 ? "secondary.main" : "error",
-                          //width: "100%",
+                          width: "100%",
                         }}
                         label={`${row.profit} %`}
                         variant="outlined"
@@ -574,7 +575,7 @@ const EnhancedTable = () => {
                         color={row.profitEUR > 0 ? "secondary" : "error"}
                         sx={{
                           color: row.profitEUR > 0 ? "secondary.main" : "error",
-                          //width: "100%",
+                          width: "100%",
                         }}
                         label={`${row.profitEUR} €`}
                         variant="outlined"
@@ -584,30 +585,42 @@ const EnhancedTable = () => {
                       sx={{
                         color: "text.secondary",
                         padding: { xs: 0, lg: 2 },
+                        width: "10%",
                       }}
                       align="right"
                     >
-                      <Chip label={`${row.worth} €`} variant="outlined"></Chip>
+                      <Chip
+                        label={`${row.worth} €`}
+                        variant="outlined"
+                        sx={{ width: "100%" }}
+                      ></Chip>
                     </TableCell>
                     <TableCell
                       sx={{
                         color: "text.secondary",
                         padding: { xs: 0, lg: 2 },
+                        width: "10%",
                       }}
                       align="right"
                     >
-                      <Chip label={`${row.spent} €`} variant="outlined"></Chip>
+                      <Chip
+                        label={`${row.spent} €`}
+                        variant="outlined"
+                        sx={{ width: "100%" }}
+                      ></Chip>
                     </TableCell>
                     <TableCell
                       sx={{
                         color: "text.secondary",
                         padding: { xs: 0, lg: 2 },
+                        width: "5%",
                       }}
                       align="right"
                     >
                       <Chip
                         label={row.avgPurchasePrice}
                         variant="outlined"
+                        sx={{ width: "100%" }}
                       ></Chip>
                     </TableCell>
 
@@ -616,6 +629,7 @@ const EnhancedTable = () => {
                       sx={{
                         color: "text.secondary",
                         padding: { xs: 0, lg: 2 },
+                        width: "5%",
                       }}
                     >
                       <Chip
@@ -623,13 +637,14 @@ const EnhancedTable = () => {
                           (row.worth / totalWorth) * 100
                         ).toFixed(0)}%`}
                         variant="outlined"
+                        sx={{ width: "100%" }}
                       ></Chip>
                     </TableCell>
                     <TableCell
                       sx={{
                         color: "text.secondary",
                         padding: { xs: 0, lg: 2 },
-                        width: 150,
+                        width: "15%",
                       }}
                       align="right"
                     >
