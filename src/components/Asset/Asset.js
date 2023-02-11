@@ -16,7 +16,7 @@ import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import PercentIcon from "@mui/icons-material/Percent";
 import LeaderboardIcon from "@mui/icons-material/Leaderboard";
-import { handleAssetDialog } from "../actions/assetActions";
+import { handleAssetDialog } from "../../actions/assetActions";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {

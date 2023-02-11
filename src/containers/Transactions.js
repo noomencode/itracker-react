@@ -1,5 +1,5 @@
 import React from "react";
-import TransactionsList from "../components/TransactionsList";
+import TransactionsList from "../components/Transaction/TransactionsList";
 import StockScroller from "../components/StockScroller";
 import { Grid } from "@mui/material";
 import Box from "@mui/material/Box";

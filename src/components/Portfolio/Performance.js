@@ -1,7 +1,7 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Card, CardContent, Typography, Divider } from "@mui/material";
-import Graphs from "../components/Graphs";
+import Graphs from "../Graphs";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
@@ -14,25 +14,28 @@ import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import PercentIcon from "@mui/icons-material/Percent";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
-import PortfolioHistory from "./PortfolioHistory";
+import History from "./History";
 
-const PortfolioPerformance = () => {
-  const { totalWorth, totalSpent } = useSelector((state) => state.portfolio);
-  const { history } = useSelector(
-    (state) => state.portfolioList.portfolioAssets[0]
-  );
-  console.log(history);
+const Performance = (props) => {
+  // const { totalWorth, totalSpent } = useSelector((state) => state.portfolio);
+  // const { history } = useSelector(
+  //   (state) => state.portfolioList.portfolioAssets[0]
+  // );
+  const { totalWorth, totalSpent } = props.portfolio;
+  const history = props.history;
   const profit = (totalWorth - totalSpent).toFixed(2);
   const portfolioYield = (
     ((totalWorth - totalSpent) / totalWorth) *
     100
   ).toFixed(2);
 
-  const annualYield = (
-    ((totalWorth - history[0].worth - (totalSpent - history[0].expenses)) /
-      history[0].worth) *
-    100
-  ).toFixed(2);
+  const annualYield = history?.length
+    ? (
+        ((totalWorth - history[0].worth - (totalSpent - history[0].expenses)) /
+          history[0].worth) *
+        100
+      ).toFixed(2)
+    : "N/A";
 
   console.log(annualYield);
   return (
@@ -117,7 +120,6 @@ const PortfolioPerformance = () => {
                 secondaryTypographyProps={{ variant: "h5" }}
               ></ListItemText>
             </ListItem>
-            {history?.length ? <PortfolioHistory history={history} /> : null}
           </List>
         </CardContent>
       </Card>
@@ -126,4 +128,4 @@ const PortfolioPerformance = () => {
   );
 };
 
-export default PortfolioPerformance;
+export default Performance;

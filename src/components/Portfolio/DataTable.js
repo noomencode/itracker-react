@@ -22,12 +22,12 @@ import FilterListIcon from "@mui/icons-material/FilterList";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { visuallyHidden } from "@mui/utils";
-import { handleAssetDialog } from "../actions/assetActions";
-import Asset from "../components/Asset";
-import ConfirmationDialog from "./ConfirmationDialog";
-import AssetForm from "./AssetForm";
-import Message from "./Message";
-import { deletePortfolioAssets } from "../actions/portfolioActions";
+import { handleAssetDialog } from "../../actions/assetActions";
+import Asset from "../Asset/Asset";
+import ConfirmationDialog from "../ConfirmationDialog";
+import AssetForm from "../Asset/AssetForm";
+import Message from "../Message";
+import { deletePortfolioAssets } from "../../actions/portfolioActions";
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {

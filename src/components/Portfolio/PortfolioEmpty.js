@@ -1,5 +1,5 @@
 import React from "react";
-import AssetForm from "./AssetForm";
+import AssetForm from "../Asset/AssetForm";
 import { Card, CardContent, Typography, Divider } from "@mui/material";
 
 const PortfolioEmpty = ({ component }) => {

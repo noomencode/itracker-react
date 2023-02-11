@@ -13,11 +13,11 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import AddIcon from "@mui/icons-material/Add";
-import StockField from "./StockField";
+import StockField from "../StockField";
 import { useDispatch } from "react-redux";
-import { editPortfolioAsset } from "../actions/portfolioActions";
-import { createTransaction } from "../actions/transactionActions";
-import { createAsset } from "../actions/assetActions";
+import { editPortfolioAsset } from "../../actions/portfolioActions";
+import { createTransaction } from "../../actions/transactionActions";
+import { createAsset } from "../../actions/assetActions";
 import { SettingsInputComponentOutlined } from "@mui/icons-material";
 
 const AssetForm = (props) => {
