@@ -5,9 +5,19 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import KeyboardDoubleArrowDownIcon from "@mui/icons-material/KeyboardDoubleArrowDown";
 import KeyboardDoubleArrowUpIcon from "@mui/icons-material/KeyboardDoubleArrowUp";
+import AllocationChart from "./AllocationChart";
 
-const Allocation = () => {
+const Allocation = (props) => {
   const [open, setOpen] = useState(false);
+  const portfolio = props.portfolio;
+  const portfolioAssets = props.assets[0];
+
+  // const calculateAllocation = () => {
+  //   let data = [{ name: "Region", "Baltics": 0, "Europe": 0, "USA": 0}]
+  //   portfolioAssets.assets.map((a)=> {
+  //     a.asset.region
+  //   });
+  // }
 
   return (
     <React.Fragment>
@@ -36,7 +46,15 @@ const Allocation = () => {
               />
             )}
           </Typography>
-          {open ? <Divider sx={{ mb: 1 }} /> : null}
+          {open ? (
+            <>
+              <Divider sx={{ mb: 1 }} />
+              {/* {portfolioAssets.assets.map((a) => {
+                return a.asset.region;
+              })} */}
+              <AllocationChart />
+            </>
+          ) : null}
         </CardContent>
       </Card>
     </React.Fragment>

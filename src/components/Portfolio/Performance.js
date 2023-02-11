@@ -37,7 +37,6 @@ const Performance = (props) => {
       ).toFixed(2)
     : "N/A";
 
-  console.log(annualYield);
   return (
     <React.Fragment>
       <Card sx={{ marginBottom: 1 }}>

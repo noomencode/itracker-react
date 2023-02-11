@@ -1,7 +1,7 @@
 import { Card, CardContent, Typography, Divider } from "@mui/material";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getTransactions } from "../actions/transactionActions";
+import { getTransactions } from "../../actions/transactionActions";
 
 const LatestTransactions = () => {
   const { transactions } = useSelector((state) => state.transactionsList);

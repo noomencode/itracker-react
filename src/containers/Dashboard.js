@@ -34,18 +34,21 @@ const Dashboard = () => {
           <Box sx={{ margin: 2 }}>
             <Grid container spacing={1}>
               <Grid item lg={9} xs={12}>
-                {!loading && !error && portfolioAssets.length ? (
+                {!loading && !error && portfolioAssets?.length ? (
                   <AssetList />
                 ) : (
                   <PortfolioEmpty component={"AssetList"} />
                 )}
               </Grid>
               <Grid item lg={3} xs={12}>
-                {!loading && !error && portfolioAssets.length ? (
+                {!loading && !error && portfolioAssets?.length ? (
                   <>
                     <Performance portfolio={portfolio} history={history} />
                     {history?.length ? <History history={history} /> : null}
-                    <Allocation />
+                    <Allocation
+                      portfolio={portfolio}
+                      assets={portfolioAssets}
+                    />
                     <WatchListCompact />
                     {/* <Graphs /> */}
                   </>

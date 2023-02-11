@@ -4,7 +4,7 @@ import StockScroller from "../components/StockScroller";
 import { Grid } from "@mui/material";
 import Box from "@mui/material/Box";
 import Loading from "../components/Loading";
-import LatestTransactions from "../components/LatestTransactions";
+import LatestTransactions from "../components/Transaction/LatestTransactions";
 
 const Transactions = () => {
   return (
