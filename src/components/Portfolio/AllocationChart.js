@@ -5,89 +5,183 @@ import {
   XAxis,
   YAxis,
   LabelList,
-  CartesianGrid,
-  Tooltip,
-  Legend,
   ResponsiveContainer,
 } from "recharts";
 import Typography from "@mui/material/Typography";
-import { render } from "@testing-library/react";
+import Divider from "@mui/material/Divider";
 
-const data = [
-  {
-    name: "Region",
-    BALTICS: 25,
-    USA: 25,
-    EUROPE: 50,
-  },
-];
+const getRandomColor = () => {
+  var colors = [
+    "#1D639D",
+    "#7BB1D3",
+    "#2468A2",
+    "#3F95B5",
+    "#28739E",
+    "#4B9FD1",
+    "#006F9C",
+    "#7FBFD6",
+    "#00708A",
+    "#009DD6",
+    "#00A2D1",
+    "#007AA5",
+    "#009EBF",
+    "#007FB5",
+    "#4F9CBD",
+    "#0A2468",
+    "#1068A2",
+    "#3F91B5",
+    "#3F95BD",
+    "#3F9DBF",
+    "#70B5D1",
+    "#3F91A2",
+    "#007B9E",
+    "#0A5BA5",
+    "#7F9DBF",
+    "#0A5B91",
+    "#0A7FB5",
+    "#007091",
+    "#0A5BA5",
+    "#0A70A5",
+    "#0A5B91",
+    "#7F95A5",
+    "#0A7091",
+    "#3F9EBF",
+    "#0A70A2",
+    "#0A70A5",
+    "#0A6891",
+    "#7F95A2",
+    "#4F91A2",
+    "#3F95BF",
+    "#3F95A5",
+    "#3F9EBF",
+    "#0A6891",
+    "#7FB5BF",
+    "#00708A",
+    "#0A5BA5",
+    "#0A7091",
+    "#7FB5A2",
+    "#4F9DA2",
+    "#3F91A2",
+    "#3F9D91",
+    "#3F95BF",
+    "#7FBF9E",
+    "#7F9E91",
+    "#0A7FBF",
+    "#0A70A2",
+    "#7FB5A5",
+    "#7FBF91",
+    "#0A70A5",
+    "#0A5BA5",
+    "#7F9E91",
+    "#0A5B91",
+    "#0A70A5",
+    "#7F9D91",
+    "#3F9D91",
+    "#3F9EBF",
+    "#0A7FBF",
+    "#0A6891",
+    "#0A7091",
+    "#7F95A5",
+    "#4F9D91",
+    "#7FBF91",
+    "#7FB5A5",
+    "#0A70A2",
+    "#7FB5BF",
+    "#7F9DA2",
+    "#7F9E91",
+    "#7FB5A2",
+    "#7F9D91",
+    "#7FBF9E",
+    "#3F95A2",
+    "#3F95BF",
+    "#7FBF91",
+    "#7FB5BF",
+    "#7F9E91",
+    "#7F9D91",
+    "#0A70A5",
+    "#3F95A5",
+  ];
+  var randomIndex = Math.floor(Math.random() * colors.length);
+  return colors[randomIndex];
+};
 
+const generateBar = (sortedArray) => {
+  const result = sortedArray.map((dataObj, i) =>
+    Object.keys(dataObj)
+      .filter((propName) => {
+        return propName !== "name";
+      })
+      .map((trackName) => {
+        if (i === 0) {
+          return (
+            <Bar
+              dataKey={trackName}
+              stackId="stack"
+              fill={getRandomColor()}
+              name={`${trackName}`}
+            >
+              <LabelList
+                dataKey={trackName}
+                name={trackName}
+                content={renderCustomizedLabel}
+                position="middle"
+              />
+            </Bar>
+          );
+        }
+      })
+  );
+  return result;
+};
 const renderCustomizedLabel = (props) => {
   const { x, y, width, height, value, name } = props;
 
-  console.log("customlabel", props);
   return (
-    // <Typography variant="h6">
     <g>
+      <foreignObject x={x} y={y - height / 2} width={"100%"} height={height}>
+        <Typography
+          variant="span"
+          sx={{ fontStyle: "italic" }}
+        >{`${name}`}</Typography>
+      </foreignObject>
       <foreignObject
-        x={x + width / 3}
+        x={x + 10}
         y={y + height / 3}
-        width={width}
+        width={"100%"}
         height={height}
       >
-        <Typography variant="span">{`${name} ${value}%`}</Typography>
+        <Typography
+          variant="span"
+          sx={{ fontWeight: 600 }}
+        >{`${value}%`}</Typography>
       </foreignObject>
     </g>
-    // </Typography>
   );
 };
 
-const renderLabel = (props) => {
-  return `${props}%`;
-};
-
-function AllocationChart() {
+function AllocationChart(props) {
+  const { data } = props;
   return (
-    <ResponsiveContainer width="100%" height={100}>
-      <BarChart
-        width={400}
-        height={150}
-        data={data}
-        layout="vertical"
-        margin={{
-          top: 20,
-          right: 30,
-          left: 20,
-          bottom: 5,
-        }}
-      >
-        {/* <CartesianGrid strokeDasharray="3 3" /> */}
-        <XAxis type="number" domain={[0, 100]} hide={true} />
-        <YAxis dataKey="name" type="category" hide={true} />
-        {/* <Customized></Customized> */}
-        {/* <Tooltip /> */}
-        {/* <Legend /> */}
-        <Bar dataKey="BALTICS" stackId="a" fill="#8884d8">
-          <LabelList
-            dataKey="BALTICS"
-            name="Baltics"
-            content={renderCustomizedLabel}
-            position="middle"
-          />
-        </Bar>
-        <Bar dataKey="EUROPE" stackId="a" fill="#82ca9d">
-          <LabelList
-            dataKey="EUROPE"
-            name="Europe"
-            content={renderCustomizedLabel}
-            position="middle"
-          />
-        </Bar>
-        <Bar dataKey="USA" stackId="a" fill="#10ca2d">
-          <LabelList dataKey="USA" position="middle" formatter={renderLabel} />
-        </Bar>
-      </BarChart>
-    </ResponsiveContainer>
+    <React.Fragment>
+      <Typography variant="h6">{props.title}</Typography>
+      <Divider sx={{ mb: 2 }} />
+      <ResponsiveContainer width="100%" height={100}>
+        <BarChart
+          data={data}
+          layout="vertical"
+          margin={{
+            top: 20,
+            right: 25,
+            left: 25,
+            bottom: 5,
+          }}
+        >
+          <XAxis type="number" domain={[0, 100]} hide={true} />
+          <YAxis dataKey="name" type="category" hide={true} />
+          {generateBar(data)}
+        </BarChart>
+      </ResponsiveContainer>
+    </React.Fragment>
   );
 }
 

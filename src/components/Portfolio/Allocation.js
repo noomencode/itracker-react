@@ -12,12 +12,30 @@ const Allocation = (props) => {
   const portfolio = props.portfolio;
   const portfolioAssets = props.assets[0];
 
-  // const calculateAllocation = () => {
-  //   let data = [{ name: "Region", "Baltics": 0, "Europe": 0, "USA": 0}]
-  //   portfolioAssets.assets.map((a)=> {
-  //     a.asset.region
-  //   });
-  // }
+  const calculateAllocation = (category) => {
+    const assetsAmount = portfolioAssets.assets.length;
+    const totalValue = portfolio.totalWorth;
+    const data = [];
+
+    portfolioAssets.assets.forEach((ass) => {
+      const assetValue = ass.sharesAmount * ass.asset.price;
+      console.log(assetValue);
+      data.name = category;
+      if (data[ass.asset[category]]) {
+        data[ass.asset[category]] += assetValue;
+      } else {
+        data[ass.asset[category]] = assetValue;
+      }
+    });
+    Object.keys(data).forEach((key) => {
+      if (key !== "name") {
+        data[key] = parseFloat(((data[key] / totalValue) * 100).toFixed(1));
+      }
+    });
+    const dataInPercentages = [];
+    dataInPercentages.push({ ...data });
+    return dataInPercentages;
+  };
 
   return (
     <React.Fragment>
@@ -49,10 +67,14 @@ const Allocation = (props) => {
           {open ? (
             <>
               <Divider sx={{ mb: 1 }} />
-              {/* {portfolioAssets.assets.map((a) => {
-                return a.asset.region;
-              })} */}
-              <AllocationChart />
+              <AllocationChart
+                title="Region"
+                data={calculateAllocation("region")}
+              />
+              <AllocationChart
+                title="Type"
+                data={calculateAllocation("type")}
+              />
             </>
           ) : null}
         </CardContent>
