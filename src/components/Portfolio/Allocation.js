@@ -75,6 +75,10 @@ const Allocation = (props) => {
                 title="Type"
                 data={calculateAllocation("type")}
               />
+              <AllocationChart
+                title="Characteristics"
+                data={calculateAllocation("customType")}
+              />
             </>
           ) : null}
         </CardContent>
