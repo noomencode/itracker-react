@@ -7,6 +7,7 @@ import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import Chip from "@mui/material/Chip";
+import { Menu, MenuItem } from "@mui/material";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
@@ -194,10 +195,25 @@ const EnhancedTableToolbar = (props) => {
   const [error, setError] = useState({ isError: false, message: "" });
   const dispatch = useDispatch();
 
+  const [menuAnchorEl, setMenuAnchorEl] = useState(null);
+
+  const handleMenuOpen = (event) => {
+    setMenuAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setMenuAnchorEl(null);
+  };
+
+  const handleMenuItemClick = (mode) => {
+    handleAssetFormClick(mode);
+    handleMenuClose();
+  };
+
   const handleAssetFormClick = (mode) => {
     if (mode === "edit" && selected.length && selected.length < 2) {
       setError({ isError: false, message: "" });
-      setAssetForm({ editMode: !assetForm.editMode, open: !assetForm.open });
+      setAssetForm({ editMode: true, open: !assetForm.open });
     } else if (mode !== "edit") {
       setError({ isError: false, message: "" });
       setAssetForm({ editMode: false, open: !assetForm.open });
@@ -252,14 +268,28 @@ const EnhancedTableToolbar = (props) => {
           }),
         }}
       >
-        <Tooltip title="New asset">
-          <IconButton
-            color="secondary"
-            onClick={() => handleAssetFormClick("new")}
+        <IconButton color="secondary" onClick={handleMenuOpen}>
+          <AddCircleIcon />
+        </IconButton>
+        <Menu
+          anchorEl={menuAnchorEl}
+          open={Boolean(menuAnchorEl)}
+          onClose={handleMenuClose}
+        >
+          <MenuItem
+            value="Add new asset"
+            onClick={() => handleMenuItemClick("new")}
           >
-            <AddCircleIcon />
-          </IconButton>
-        </Tooltip>
+            Add new asset
+          </MenuItem>
+          <MenuItem
+            value="Add new transaction"
+            onClick={() => handleMenuItemClick("transaction")}
+          >
+            Add new transaction
+          </MenuItem>
+        </Menu>
+
         <Tooltip title="Edit list">
           <IconButton
             color="secondary"

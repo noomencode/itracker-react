@@ -64,6 +64,7 @@ export const addAssetToPortfolio =
         {
           name: body.name,
           ticker: body.ticker,
+          customType: body.customType,
           sharesAmount: body.sharesAmount,
           spent: body.spent,
           assets: assetId,
@@ -127,6 +128,7 @@ export const editPortfolioAsset = (body) => async (dispatch, getState) => {
       `/api/portfolio/assets/${body.id}`,
       {
         name: body.name,
+        customType: body.customType,
         sharesAmount: body.sharesAmount,
         spent: body.spent,
       },
