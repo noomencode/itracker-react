@@ -6,11 +6,13 @@ import Collapse from "@mui/material/Collapse";
 const Message = (props) => {
   const { severity, message } = props;
   const [open, setOpen] = React.useState(true);
-  // React.useEffect(() => {
-  //   setTimeout(() => {
-  //     setOpen(false);
-  //   }, 1000);
-  // }, [open]);
+  React.useEffect(() => {
+    if (severity === "success") {
+      setTimeout(() => {
+        setOpen(false);
+      }, 5000);
+    }
+  }, [open, severity]);
   return (
     <>
       <Collapse in={open}>

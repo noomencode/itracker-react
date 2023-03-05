@@ -56,6 +56,18 @@ const theme = createTheme({
     },
   },
   components: {
+    MuiAlert: {
+      styleOverrides: {
+        standardSuccess: {
+          backgroundColor: "#009c7a",
+          color: "#fff",
+        },
+        standardError: {
+          backgroundColor: "#fb5d89",
+          color: "#fff",
+        },
+      },
+    },
     // MuiInputLabel: {
     //   styleOverrides: {
     //     // root: {

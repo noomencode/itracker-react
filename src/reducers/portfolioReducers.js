@@ -34,30 +34,47 @@ export const portfolioAssetCUDReducer = (state = {}, action) => {
   switch (action.type) {
     case PORTFOLIO_ASSET_ADD_REQUEST:
     case PORTFOLIO_ASSET_EDIT_REQUEST:
-      return { loading: true };
-    case PORTFOLIO_ASSET_ADD_SUCCESS:
-    case PORTFOLIO_ASSET_EDIT_SUCCESS:
-      return { loading: false, assetAddPayload: action.payload };
-    case PORTFOLIO_ASSET_ADD_FAIL:
-    case PORTFOLIO_ASSET_EDIT_FAIL:
-      return { loading: false, error: action.payload };
-    default:
-      return state;
-  }
-};
-
-export const portfolioAssetDeleteReducer = (state = {}, action) => {
-  switch (action.type) {
     case PORTFOLIO_DELETE_ASSETS_REQUEST:
       return { loading: true };
+    case PORTFOLIO_ASSET_ADD_SUCCESS:
+      return {
+        loading: false,
+        type: "create",
+        assetCUDPayload: action.payload,
+      };
+    case PORTFOLIO_ASSET_EDIT_SUCCESS:
+      return {
+        loading: false,
+        type: "update",
+        assetCUDPayload: action.payload,
+      };
     case PORTFOLIO_DELETE_ASSETS_SUCCESS:
-      return { loading: false, deletePayload: action.payload };
+      return {
+        loading: false,
+        type: "delete",
+        assetCUDPayload: action.payload,
+      };
+    case PORTFOLIO_ASSET_ADD_FAIL:
+    case PORTFOLIO_ASSET_EDIT_FAIL:
     case PORTFOLIO_DELETE_ASSETS_FAIL:
       return { loading: false, error: action.payload };
     default:
       return state;
   }
 };
+
+// export const portfolioAssetDeleteReducer = (state = {}, action) => {
+//   switch (action.type) {
+//     case PORTFOLIO_DELETE_ASSETS_REQUEST:
+//       return { loading: true };
+//     case PORTFOLIO_DELETE_ASSETS_SUCCESS:
+//       return { loading: false, deletePayload: action.payload };
+//     case PORTFOLIO_DELETE_ASSETS_FAIL:
+//       return { loading: false, error: action.payload };
+//     default:
+//       return state;
+//   }
+// };
 
 export const portfolioPerformanceReducer = (
   state = { totalWorth: 0, totalSpent: 0 },

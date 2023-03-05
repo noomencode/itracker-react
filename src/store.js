@@ -21,7 +21,7 @@ const reducer = combineReducers({
   assetAdd: assetReducer,
   portfolio: portfolioPerformanceReducer,
   portfolioAssetCUD: portfolioAssetCUDReducer,
-  portfolioAssetDelete: portfolioAssetDeleteReducer,
+  // portfolioAssetDelete: portfolioAssetDeleteReducer,
   userLogin: userLoginReducer,
   portfolioList: portfolioAssetReducer,
   transactionsList: transactionReducer,

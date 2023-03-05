@@ -13,6 +13,7 @@ import PortfolioEmpty from "../components/Portfolio/PortfolioEmpty";
 import StockScroller from "../components/StockScroller";
 import WatchListCompact from "../components/WatchListCompact";
 import Graphs from "../components/Graphs";
+import Message from "../components/Message";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
@@ -24,6 +25,38 @@ const Dashboard = () => {
   const { portfolioAssets, loading, error } = useSelector(
     (state) => state.portfolioList
   );
+
+  const renderMessage = (type) => {
+    switch (type) {
+      case "create":
+        return (
+          <Message severity="success" message="Asset added successfully." />
+        );
+      case "update":
+        return (
+          <Message severity="success" message="Asset updated successfully." />
+        );
+      case "delete":
+        return (
+          <Message severity="success" message="Asset deleted successfully." />
+        );
+      case "error":
+        return (
+          <Message
+            severity="error"
+            message="There was an error with your request"
+          />
+        );
+      default:
+        return null;
+    }
+  };
+
+  const {
+    loading: CUDloading,
+    error: CUDerror,
+    type: CUDtype,
+  } = useSelector((state) => state.portfolioAssetCUD);
   const portfolio = useSelector((state) => state.portfolio);
   const { history } = portfolioAssets?.length ? portfolioAssets[0] : [];
   return (
@@ -34,6 +67,10 @@ const Dashboard = () => {
           <Box sx={{ margin: 2 }}>
             <Grid container spacing={1}>
               <Grid item lg={9} xs={12}>
+                {CUDloading === false && !CUDerror
+                  ? renderMessage(CUDtype)
+                  : null}
+                {CUDerror ? renderMessage("error") : null}
                 {!loading && !error && portfolioAssets?.length ? (
                   <AssetList />
                 ) : (
