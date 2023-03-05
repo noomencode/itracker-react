@@ -23,7 +23,7 @@ const AddAsset = (props) => {
   const [spent, setSpent] = React.useState(0);
   const [shares, setShares] = React.useState(0);
   const [newAsset, setNewAsset] = React.useState(null);
-  const [customType, setCustomType] = React.useState("Not Applicable");
+  const [customType, setCustomType] = React.useState("N/A");
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -91,7 +91,7 @@ const AddAsset = (props) => {
               <MenuItem value="Speculation">Speculation</MenuItem>
               <MenuItem value="Dividend">Dividend</MenuItem>
               <MenuItem value="Index">Index</MenuItem>
-              <MenuItem value="Not Applicable">Not Applicable</MenuItem>
+              <MenuItem value="N/A">N/A</MenuItem>
             </TextField>
           </Grid>
           <Grid item lg={2} xs={12}>

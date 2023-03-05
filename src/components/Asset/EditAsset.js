@@ -25,7 +25,7 @@ const EditAsset = (props) => {
   });
   const [name, setName] = React.useState(selected[0]?.name);
   const [customType, setCustomType] = React.useState(
-    selected[0]?.customType ? selected[0]?.customType : "Not Applicable"
+    selected[0]?.customType ? selected[0]?.customType : "N/A"
   );
   const [spent, setSpent] = React.useState(selected[0]?.spent);
   const [shares, setShares] = React.useState(selected[0]?.sharesAmount);
@@ -103,7 +103,7 @@ const EditAsset = (props) => {
               <MenuItem value="Dividend">Dividend</MenuItem>
               <MenuItem value="Index">Index</MenuItem>
               <MenuItem value="Value">Value</MenuItem>
-              <MenuItem value="Not Applicable">Not Applicable</MenuItem>
+              <MenuItem value="N/A">N/A</MenuItem>
             </TextField>
           </Grid>
           <Grid item lg={2} xs={12}>

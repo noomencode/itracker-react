@@ -19,11 +19,14 @@ const Allocation = (props) => {
 
     portfolioAssets.assets.forEach((ass) => {
       const assetValue = ass.sharesAmount * ass.asset.price;
-      console.log(assetValue);
       data.name = category;
-      if (data[ass.asset[category]]) {
+      if (category === "customType" && data[ass[category]]) {
+        data[ass[category]] += assetValue;
+      } else if (category === "customType") {
+        data[ass[category]] = assetValue;
+      } else if (data[ass.asset[category]]) {
         data[ass.asset[category]] += assetValue;
-      } else {
+      } else if (category !== "customType") {
         data[ass.asset[category]] = assetValue;
       }
     });

@@ -4,6 +4,7 @@ import {
   Bar,
   XAxis,
   YAxis,
+  Legend,
   LabelList,
   ResponsiveContainer,
 } from "recharts";
@@ -138,18 +139,13 @@ const renderCustomizedLabel = (props) => {
 
   return (
     <g>
-      <foreignObject x={x} y={y - height / 2} width={"100%"} height={height}>
+      {/* <foreignObject x={x} y={y - height / 2} width={"100%"} height={height}>
         <Typography
           variant="span"
           sx={{ fontStyle: "italic" }}
         >{`${name}`}</Typography>
-      </foreignObject>
-      <foreignObject
-        x={x + 10}
-        y={y + height / 3}
-        width={"100%"}
-        height={height}
-      >
+      </foreignObject> */}
+      <foreignObject x={x + 10} y={y} width={"100%"} height={height}>
         <Typography
           variant="span"
           sx={{ fontWeight: 600 }}
@@ -165,7 +161,7 @@ function AllocationChart(props) {
     <React.Fragment>
       <Typography variant="h6">{props.title}</Typography>
       <Divider sx={{ mb: 2 }} />
-      <ResponsiveContainer width="100%" height={100}>
+      <ResponsiveContainer width="100%" height={75}>
         <BarChart
           data={data}
           layout="vertical"
@@ -179,6 +175,7 @@ function AllocationChart(props) {
           <XAxis type="number" domain={[0, 100]} hide={true} />
           <YAxis dataKey="name" type="category" hide={true} />
           {generateBar(data)}
+          <Legend />
         </BarChart>
       </ResponsiveContainer>
     </React.Fragment>
