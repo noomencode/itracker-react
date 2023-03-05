@@ -7,42 +7,36 @@ import {
   Button,
   Typography,
   Grid,
+  IconButton,
 } from "@mui/material";
 import { Dayjs } from "dayjs";
+import CloseIcon from "@mui/icons-material/Close";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import Chip from "@mui/material/Chip";
 import AddIcon from "@mui/icons-material/Add";
-import StockField from "../StockField";
 import { useDispatch } from "react-redux";
-import { editPortfolioAsset } from "../../actions/portfolioActions";
+import Message from "../Message";
 import { createTransaction } from "../../actions/transactionActions";
-import { createAsset } from "../../actions/assetActions";
+import { editPortfolioAsset } from "../../actions/portfolioActions";
 
 const AddTransaction = (props) => {
   const dispatch = useDispatch();
-  const { handleClose, editMode, selected } = props;
+  const { handleClose, selected } = props;
+  const [alert, setAlert] = React.useState({
+    show: false,
+    severity: "",
+    message: "",
+  });
 
   const [date, setDate] = React.useState(new Date());
-  const [newAsset, setNewAsset] = React.useState(null);
-  const [amount, setAmount] = React.useState(
-    editMode && selected?.length ? parseFloat(selected[0].sharesAmount) : 0
-  );
+  const amount = selected?.length ? parseFloat(selected[0].sharesAmount) : 0;
   const [transactionAmount, setTransactionAmount] = React.useState(0);
-
-  const [spent, setSpent] = React.useState(
-    editMode && selected?.length ? parseFloat(selected[0].spent) : 0
-  );
-
+  const spent = selected?.length ? parseFloat(selected[0].spent) : 0;
   const [transactionExpense, setTransactionExpense] = React.useState(0);
-  const [price, setPrice] = React.useState(spent / amount);
   const [transactionPrice, setTransactionPrice] = React.useState(0);
   const [type, setType] = React.useState("Buy");
-
-  React.useEffect(() => {
-    setPrice(parseFloat((spent / amount).toFixed(2)));
-  }, [amount, spent]);
 
   React.useEffect(() => {
     setTransactionPrice(
@@ -50,37 +44,68 @@ const AddTransaction = (props) => {
     );
   }, [transactionAmount, transactionExpense]);
 
-  const handleNewAsset = (asset) => {
-    setNewAsset(asset);
-  };
-
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     const body = {
-      name: selected[0]?.name || newAsset.shortname,
-      ticker: selected[0]?.ticker || newAsset.symbol,
-      sharesAmount: editMode ? amount + transactionAmount : amount,
-      transactionAmount: editMode ? transactionAmount : amount,
-      spent: editMode ? spent + transactionExpense : spent,
-      transactionExpense: editMode ? transactionExpense : spent,
-      price: editMode ? transactionPrice : price,
+      name: selected[0]?.name,
+      ticker: selected[0]?.ticker,
+      sharesAmount:
+        type === "Buy"
+          ? amount + transactionAmount
+          : amount - transactionAmount,
+      transactionAmount: transactionAmount,
+      spent:
+        type === "Buy"
+          ? spent + transactionExpense
+          : spent - transactionExpense,
+      transactionExpense: transactionExpense,
+      price: transactionPrice,
       type: type,
       date: date,
-      id: editMode ? selected[0].id : undefined,
+      id: selected[0]?.id,
     };
-    if (editMode) {
+    if (selected.length) {
       dispatch(createTransaction(body));
       dispatch(editPortfolioAsset(body));
+      //handleClose();
     } else {
-      dispatch(createTransaction(body));
-      dispatch(createAsset(body));
+      setAlert({
+        show: true,
+        severity: "error",
+        message: "You need to have an asset selected",
+      });
     }
-    handleClose();
   };
 
   return (
     <Card>
+      {alert.show ? (
+        <Message severity={alert.severity} message={alert.message} />
+      ) : null}
+      <Box sx={{ m: 2 }}>
+        <Box
+          sx={{ display: "flex", alignItems: "center", flexDirection: "row" }}
+        >
+          <Typography
+            sx={{ mr: 1 }}
+            variant="h5"
+            color="text.primary"
+            gutterBottom
+          >
+            Add transaction
+          </Typography>
+          <Chip
+            sx={{ borderRadius: "4px" }}
+            variant="outlined"
+            label={selected[0]?.name || "You need to select an asset first"}
+          />
+          <Box sx={{ flexGrow: 1 }}></Box>
+          <IconButton onClick={() => handleClose()}>
+            <CloseIcon />
+          </IconButton>
+        </Box>
+      </Box>
       <Box
         component="form"
         sx={{ m: 2 }}
@@ -88,47 +113,7 @@ const AddTransaction = (props) => {
         autoComplete="off"
         onSubmit={handleSubmit}
       >
-        <Typography variant="h6" color="text.primary" gutterBottom>
-          {editMode ? "Edit asset" : "Add new asset"}
-        </Typography>
         <Grid container spacing={2}>
-          <Grid item lg={3} xs={12}>
-            {editMode ? (
-              <TextField
-                sx={{ width: { lg: "100%" } }}
-                color="secondary"
-                size="small"
-                variant="outlined"
-                required
-                defaultValue={
-                  editMode && selected?.length ? selected[0].name : ""
-                }
-                id="name"
-                label="Name"
-                name="name"
-              ></TextField>
-            ) : (
-              <StockField handleNewAsset={handleNewAsset} />
-            )}
-          </Grid>
-          {newAsset?.symbol || selected[0]?.ticker ? (
-            <Grid item lg={1} xs={12}>
-              <Chip
-                //sx={{ width: "100%" }}
-
-                color="secondary"
-                sx={{ borderRadius: "4px", width: { lg: "100%" } }}
-                variant="outlined"
-                label={
-                  newAsset?.symbol
-                    ? newAsset.symbol
-                    : editMode && selected?.length
-                    ? selected[0].ticker
-                    : ""
-                }
-              />
-            </Grid>
-          ) : null}
           <Grid item lg={2} xs={12}>
             <TextField
               sx={{ width: { lg: "100%" } }}
@@ -138,28 +123,22 @@ const AddTransaction = (props) => {
               min={0}
               label="Number of shares"
               variant="outlined"
-              helperText={
-                editMode
-                  ? `Total: ${
-                      transactionAmount > 0
-                        ? (
-                            parseFloat(amount) + parseFloat(transactionAmount)
-                          ).toFixed(2)
-                        : parseFloat(amount).toFixed(2)
-                    } shares`
-                  : ""
-              }
+              helperText={`Total: ${
+                transactionAmount > 0
+                  ? type === "Buy"
+                    ? (
+                        parseFloat(amount) + parseFloat(transactionAmount)
+                      ).toFixed(2)
+                    : (
+                        parseFloat(amount) - parseFloat(transactionAmount)
+                      ).toFixed(2)
+                  : parseFloat(amount).toFixed(2)
+              } shares`}
               onChange={(e) => {
-                if (editMode) {
-                  setTransactionAmount(parseFloat(e.currentTarget.value));
-                } else {
-                  setAmount(parseFloat(e.currentTarget.value));
-                }
+                setTransactionAmount(parseFloat(e.currentTarget.value));
               }}
               required
-              value={
-                editMode ? parseFloat(transactionAmount) : parseFloat(amount)
-              }
+              value={parseFloat(transactionAmount)}
               id="sharesAmount"
               name="sharesAmount"
             ></TextField>
@@ -171,28 +150,22 @@ const AddTransaction = (props) => {
               type="number"
               min={0}
               size="small"
-              label="Amount invested"
-              helperText={
-                editMode
-                  ? `Total: ${
-                      transactionExpense > 0
-                        ? (
-                            parseFloat(spent) + parseFloat(transactionExpense)
-                          ).toFixed(2)
-                        : parseFloat(spent).toFixed(2)
-                    }  €`
-                  : ""
-              }
+              label="Amount"
+              helperText={`Total: ${
+                transactionExpense > 0
+                  ? type === "Buy"
+                    ? (
+                        parseFloat(spent) + parseFloat(transactionExpense)
+                      ).toFixed(2)
+                    : (
+                        parseFloat(spent) - parseFloat(transactionExpense)
+                      ).toFixed(2)
+                  : parseFloat(spent).toFixed(2)
+              } €`}
               variant="outlined"
-              value={
-                editMode ? parseFloat(transactionExpense) : parseFloat(spent)
-              }
+              value={parseFloat(transactionExpense)}
               onChange={(e) => {
-                if (editMode) {
-                  setTransactionExpense(parseFloat(e.currentTarget.value));
-                } else {
-                  setSpent(parseFloat(e.currentTarget.value));
-                }
+                setTransactionExpense(parseFloat(e.currentTarget.value));
               }}
               required
               id="spent"
@@ -205,24 +178,16 @@ const AddTransaction = (props) => {
               sx={{ width: { lg: "100%" } }}
               disabled
               value={
-                editMode
-                  ? transactionPrice > 0
-                    ? parseFloat(transactionPrice).toFixed(2)
-                    : ""
-                  : price > 0
-                  ? parseFloat(price).toFixed(2)
+                transactionPrice > 0
+                  ? parseFloat(transactionPrice).toFixed(2)
                   : ""
               }
               size="small"
               label="Estimated price"
-              helperText={
-                editMode
-                  ? `New average: ${(
-                      (transactionExpense + spent) /
-                      (amount + transactionAmount)
-                    ).toFixed(2)}`
-                  : ""
-              }
+              helperText={`New average: ${(
+                (transactionExpense + spent) /
+                (amount + transactionAmount)
+              ).toFixed(2)}`}
               variant="outlined"
               id="price"
               name="price"
@@ -239,7 +204,6 @@ const AddTransaction = (props) => {
               id="transaction-type"
               value={type}
               onChange={(e) => setType(e.target.value)}
-              disabled={!editMode}
             >
               <MenuItem value={"Buy"}>Buy</MenuItem>
               <MenuItem value={"Sell"}>Sell</MenuItem>
@@ -278,7 +242,7 @@ const AddTransaction = (props) => {
               color="inherit"
               variant="outlined"
             >
-              {editMode ? "Update" : "Add"}
+              Add
             </Button>
           </Grid>
         </Grid>

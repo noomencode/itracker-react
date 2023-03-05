@@ -10,16 +10,25 @@ import {
   IconButton,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-
 import EditIcon from "@mui/icons-material/Edit";
 import { useDispatch } from "react-redux";
 import { editPortfolioAsset } from "../../actions/portfolioActions";
+import Message from "../Message";
 
 const EditAsset = (props) => {
   const { selected, handleClose } = props;
   const dispatch = useDispatch();
+  const [alert, setAlert] = React.useState({
+    show: false,
+    severity: "",
+    message: "",
+  });
   const [name, setName] = React.useState(selected[0]?.name);
-  const [customType, setCustomType] = React.useState("Not Applicable");
+  const [customType, setCustomType] = React.useState(
+    selected[0]?.customType ? selected[0]?.customType : "Not Applicable"
+  );
+  const [spent, setSpent] = React.useState(selected[0]?.spent);
+  const [shares, setShares] = React.useState(selected[0]?.sharesAmount);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -27,14 +36,27 @@ const EditAsset = (props) => {
     const body = {
       name: name,
       customType: customType,
-      id: selected[0].id,
+      spent: spent,
+      sharesAmount: shares,
+      id: selected[0]?.id,
     };
-    dispatch(editPortfolioAsset(body));
-    handleClose();
+    if (selected.length) {
+      dispatch(editPortfolioAsset(body));
+      handleClose();
+    } else {
+      setAlert({
+        show: true,
+        severity: "error",
+        message: "You need to have an asset selected",
+      });
+    }
   };
 
   return (
     <Card>
+      {alert.show ? (
+        <Message severity={alert.severity} message={alert.message} />
+      ) : null}
       <Box sx={{ m: 2, display: "flex", justifyContent: "space-between" }}>
         <Typography variant="h5" color="text.primary" gutterBottom>
           Edit asset
@@ -51,21 +73,21 @@ const EditAsset = (props) => {
         onSubmit={handleSubmit}
       >
         <Grid container spacing={2}>
-          <Grid item lg={6} xs={12}>
+          <Grid item lg={3} xs={12}>
             <TextField
               sx={{ width: { lg: "100%" } }}
               color="secondary"
               size="small"
               variant="outlined"
               required
-              defaultValue={selected[0].name}
+              defaultValue={selected[0]?.name}
               onChange={(e) => setName(e.currentTarget.value)}
               id="name"
               label="Name"
               name="name"
             ></TextField>
           </Grid>
-          <Grid item lg={6} xs={12}>
+          <Grid item lg={3} xs={12}>
             <TextField
               color="secondary"
               select
@@ -80,8 +102,43 @@ const EditAsset = (props) => {
               <MenuItem value="Speculation">Speculation</MenuItem>
               <MenuItem value="Dividend">Dividend</MenuItem>
               <MenuItem value="Index">Index</MenuItem>
+              <MenuItem value="Value">Value</MenuItem>
               <MenuItem value="Not Applicable">Not Applicable</MenuItem>
             </TextField>
+          </Grid>
+          <Grid item lg={2} xs={12}>
+            <TextField
+              color="secondary"
+              size="small"
+              type="number"
+              min={0}
+              label="Number of shares"
+              variant="outlined"
+              onChange={(e) => {
+                setShares(parseFloat(e.currentTarget.value));
+              }}
+              required
+              value={parseFloat(shares).toFixed(2)}
+              id="sharesAmount"
+              name="sharesAmount"
+            ></TextField>
+          </Grid>
+          <Grid item lg={2} xs={12}>
+            <TextField
+              color="secondary"
+              type="number"
+              min={0}
+              size="small"
+              label="Amount invested"
+              variant="outlined"
+              value={parseFloat(spent).toFixed(2)}
+              onChange={(e) => {
+                setSpent(parseFloat(e.currentTarget.value));
+              }}
+              required
+              id="spent"
+              name="spent"
+            ></TextField>
           </Grid>
           <Grid item lg={2} xs={12}>
             <Button

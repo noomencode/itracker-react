@@ -189,7 +189,7 @@ EnhancedTableHead.propTypes = {
 
 const EnhancedTableToolbar = (props) => {
   const { numSelected, selected } = props;
-  const [assetForm, setAssetForm] = useState({ open: false, editMode: false });
+  const [assetForm, setAssetForm] = useState({ open: false, mode: "" });
   const [confirmationDialogVisible, setConfirmationDialogVisible] =
     useState(false);
   const [error, setError] = useState({ isError: false, message: "" });
@@ -213,11 +213,18 @@ const EnhancedTableToolbar = (props) => {
   const handleAssetFormClick = (mode) => {
     if (mode === "edit" && selected.length && selected.length < 2) {
       setError({ isError: false, message: "" });
-      setAssetForm({ editMode: true, open: !assetForm.open });
-    } else if (mode !== "edit") {
+      setAssetForm({ mode: "edit", open: !assetForm.open });
+    } else if (mode === "add") {
       setError({ isError: false, message: "" });
-      setAssetForm({ editMode: false, open: !assetForm.open });
-    } else if (selected.length) {
+      setAssetForm({ mode: "add", open: !assetForm.open });
+    } else if (
+      mode === "transaction" &&
+      selected.length &&
+      selected.length < 2
+    ) {
+      setError({ isError: false, message: "" });
+      setAssetForm({ mode: "transaction", open: !assetForm.open });
+    } else if (selected.length > 1) {
       setError({
         isError: true,
         message: "You can only edit one asset at once",
@@ -278,7 +285,7 @@ const EnhancedTableToolbar = (props) => {
         >
           <MenuItem
             value="Add new asset"
-            onClick={() => handleMenuItemClick("new")}
+            onClick={() => handleMenuItemClick("add")}
           >
             Add new asset
           </MenuItem>
@@ -338,7 +345,7 @@ const EnhancedTableToolbar = (props) => {
       {assetForm.open ? (
         <AssetForm
           handleClose={handleDialogClose}
-          editMode={assetForm.editMode}
+          mode={assetForm.mode}
           selected={selected}
         />
       ) : null}
@@ -378,7 +385,7 @@ const EnhancedTable = () => {
   let updatedTimestamp;
 
   const rows = assets.map((myAsset) => {
-    const { spent, sharesAmount, name, ticker, _id } = myAsset;
+    const { customType, spent, sharesAmount, name, ticker, _id } = myAsset;
     const { price, dailyChange, updatedAt, averageAnalystRating } =
       myAsset.asset;
     updatedTimestamp = updatedAt;
@@ -395,6 +402,7 @@ const EnhancedTable = () => {
       worth: parseFloat((price * sharesAmount).toFixed(2)),
       spent: parseFloat(spent),
       sharesAmount: parseFloat(sharesAmount),
+      customType: customType,
       portfolioPercentage: 100,
       averageAnalystRating: averageAnalystRating || "N/A",
       id: _id,
@@ -415,6 +423,7 @@ const EnhancedTable = () => {
           ticker: n.ticker,
           spent: n.spent,
           sharesAmount: n.sharesAmount,
+          customType: n.customType,
           id: n.id,
         };
       });
@@ -425,7 +434,7 @@ const EnhancedTable = () => {
   };
 
   const handleClick = (event, row) => {
-    const { name, ticker, id, spent, sharesAmount } = row;
+    const { name, ticker, id, spent, sharesAmount, customType } = row;
     const selectedIndex = selected.findIndex((r) => {
       return r.name === name;
     });
@@ -438,6 +447,7 @@ const EnhancedTable = () => {
         id: id,
         sharesAmount: sharesAmount,
         spent: spent,
+        customType: customType,
       });
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
