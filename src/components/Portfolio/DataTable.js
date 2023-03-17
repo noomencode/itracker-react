@@ -1,64 +1,20 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import PropTypes from "prop-types";
-import { alpha } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import Chip from "@mui/material/Chip";
-import { Menu, MenuItem } from "@mui/material";
 import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
-import TableSortLabel from "@mui/material/TableSortLabel";
-import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
-import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 import Checkbox from "@mui/material/Checkbox";
-import DeleteIcon from "@mui/icons-material/Delete";
-import FilterListIcon from "@mui/icons-material/FilterList";
-import ModeEditIcon from "@mui/icons-material/ModeEdit";
-import AddCircleIcon from "@mui/icons-material/AddCircle";
-import { visuallyHidden } from "@mui/utils";
 import { handleAssetDialog } from "../../actions/assetActions";
 import Asset from "../Asset/Asset";
-import ConfirmationDialog from "../ConfirmationDialog";
-import AssetForm from "../Asset/AssetForm";
-import Message from "../Message";
-import { deletePortfolioAssets } from "../../actions/portfolioActions";
-
-function descendingComparator(a, b, orderBy) {
-  if (b[orderBy] < a[orderBy]) {
-    return -1;
-  }
-  if (b[orderBy] > a[orderBy]) {
-    return 1;
-  }
-  return 0;
-}
-
-function getComparator(order, orderBy) {
-  return order === "desc"
-    ? (a, b) => descendingComparator(a, b, orderBy)
-    : (a, b) => -descendingComparator(a, b, orderBy);
-}
-
-// This method is created for cross-browser compatibility, if you don't
-// need to support IE11, you can use Array.prototype.sort() directly
-function stableSort(array, comparator) {
-  const stabilizedThis = array.map((el, index) => [el, index]);
-  stabilizedThis.sort((a, b) => {
-    const order = comparator(a[0], b[0]);
-    if (order !== 0) {
-      return order;
-    }
-    return a[1] - b[1];
-  });
-  return stabilizedThis.map((el) => el[0]);
-}
+import { getComparator } from "../../utilities/sortingFunctions";
+import EnhancedTableHead from "../EnhancedTableHead";
+import DataTableToolbar from "./DataTableToolbar";
 
 const headCells = [
   {
@@ -123,254 +79,11 @@ const headCells = [
   },
 ];
 
-function EnhancedTableHead(props) {
-  const {
-    onSelectAllClick,
-    order,
-    orderBy,
-    numSelected,
-    rowCount,
-    onRequestSort,
-  } = props;
-  const createSortHandler = (property) => (event) => {
-    onRequestSort(event, property);
-  };
-
-  return (
-    <TableHead>
-      <TableRow>
-        <TableCell padding="checkbox" sx={{ padding: 0 }}>
-          <Checkbox
-            color="secondary"
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount}
-            onChange={onSelectAllClick}
-            inputProps={{
-              "aria-label": "select all assets",
-            }}
-          />
-        </TableCell>
-        {headCells.map((headCell) => (
-          <TableCell
-            key={headCell.id}
-            align={headCell.numeric ? "right" : "left"}
-            padding={headCell.disablePadding ? "none" : "normal"}
-            sortDirection={orderBy === headCell.id ? order : false}
-            sx={{ fontSize: "0.8em", padding: { xs: "0px 8px", lg: 2 } }}
-            // sx={{ fontWeight: 600 }}
-          >
-            <TableSortLabel
-              active={orderBy === headCell.id}
-              direction={orderBy === headCell.id ? order : "asc"}
-              onClick={createSortHandler(headCell.id)}
-            >
-              {headCell.label}
-              {orderBy === headCell.id ? (
-                <Box component="span" sx={visuallyHidden}>
-                  {order === "desc" ? "sorted descending" : "sorted ascending"}
-                </Box>
-              ) : null}
-            </TableSortLabel>
-          </TableCell>
-        ))}
-      </TableRow>
-    </TableHead>
-  );
-}
-
-EnhancedTableHead.propTypes = {
-  numSelected: PropTypes.number.isRequired,
-  onRequestSort: PropTypes.func.isRequired,
-  onSelectAllClick: PropTypes.func.isRequired,
-  order: PropTypes.oneOf(["asc", "desc"]).isRequired,
-  orderBy: PropTypes.string.isRequired,
-  rowCount: PropTypes.number.isRequired,
-};
-
-const EnhancedTableToolbar = (props) => {
-  const { numSelected, selected } = props;
-  const [assetForm, setAssetForm] = useState({ open: false, mode: "" });
-  const [confirmationDialogVisible, setConfirmationDialogVisible] =
-    useState(false);
-  const [error, setError] = useState({ isError: false, message: "" });
-  const dispatch = useDispatch();
-
-  const [menuAnchorEl, setMenuAnchorEl] = useState(null);
-
-  const handleMenuOpen = (event) => {
-    setMenuAnchorEl(event.currentTarget);
-  };
-
-  const handleMenuClose = () => {
-    setMenuAnchorEl(null);
-  };
-
-  const handleMenuItemClick = (mode) => {
-    handleAssetFormClick(mode);
-    handleMenuClose();
-  };
-
-  const handleAssetFormClick = (mode) => {
-    if (mode === "edit" && selected.length && selected.length < 2) {
-      setError({ isError: false, message: "" });
-      setAssetForm({ mode: "edit", open: !assetForm.open });
-    } else if (mode === "add") {
-      setError({ isError: false, message: "" });
-      setAssetForm({ mode: "add", open: !assetForm.open });
-    } else if (
-      mode === "transaction" &&
-      selected.length &&
-      selected.length < 2
-    ) {
-      setError({ isError: false, message: "" });
-      setAssetForm({ mode: "transaction", open: !assetForm.open });
-    } else if (selected.length > 1) {
-      setError({
-        isError: true,
-        message: "You can only edit one asset at once",
-      });
-    } else {
-      setError({
-        isError: true,
-        message: "You need to select an asset to edit.",
-      });
-    }
-  };
-
-  const handleDelete = (selected) => {
-    if (selected.length) {
-      setConfirmationDialogVisible(true);
-    }
-  };
-
-  const handleDialogClose = () => {
-    if (confirmationDialogVisible) {
-      setConfirmationDialogVisible(false);
-    }
-    if (assetForm.open) {
-      setAssetForm({ editMode: false, open: false });
-    }
-  };
-
-  const handleSubmit = () => {
-    setConfirmationDialogVisible(false);
-    dispatch(deletePortfolioAssets(selected));
-  };
-
-  return (
-    <Box>
-      {error.isError ? (
-        <Message severity="error" message={error.message} />
-      ) : null}
-      <Toolbar
-        sx={{
-          pl: { sm: 2 },
-          pr: { xs: 1, sm: 1 },
-          ...(numSelected > 0 && {
-            bgcolor: (theme) =>
-              alpha(
-                theme.palette.primary.main,
-                theme.palette.action.activatedOpacity
-              ),
-          }),
-        }}
-      >
-        <IconButton color="secondary" onClick={handleMenuOpen}>
-          <AddCircleIcon />
-        </IconButton>
-        <Menu
-          anchorEl={menuAnchorEl}
-          open={Boolean(menuAnchorEl)}
-          onClose={handleMenuClose}
-        >
-          <MenuItem
-            value="Add new asset"
-            onClick={() => handleMenuItemClick("add")}
-          >
-            Add new asset
-          </MenuItem>
-          <MenuItem
-            value="Add new transaction"
-            onClick={() => handleMenuItemClick("transaction")}
-          >
-            Add new transaction
-          </MenuItem>
-        </Menu>
-
-        <Tooltip title="Edit list">
-          <IconButton
-            color="secondary"
-            onClick={() => handleAssetFormClick("edit")}
-          >
-            <ModeEditIcon />
-          </IconButton>
-        </Tooltip>
-        {/* {numSelected > 0 ? (
-          <Typography
-            sx={{ flex: "1 1 100%" }}
-            color="inherit"
-            variant="subtitle1"
-            component="div"
-          >
-            {numSelected} selected
-          </Typography>
-        ) : (
-          <Typography
-            sx={{ flex: "1 1 100%" }}
-            variant="h6"
-            id="tableTitle"
-            component="div"
-          >
-            Nutrition
-          </Typography>
-        )} */}
-
-        {numSelected > 0 ? (
-          <Tooltip title="Delete">
-            <IconButton
-              color="secondary"
-              onClick={() => handleDelete(selected)}
-            >
-              <DeleteIcon />
-            </IconButton>
-          </Tooltip>
-        ) : (
-          <Tooltip title="Filter list">
-            <IconButton color="secondary">
-              <FilterListIcon />
-            </IconButton>
-          </Tooltip>
-        )}
-      </Toolbar>
-      {assetForm.open ? (
-        <AssetForm
-          handleClose={handleDialogClose}
-          mode={assetForm.mode}
-          selected={selected}
-        />
-      ) : null}
-      {confirmationDialogVisible ? (
-        <ConfirmationDialog
-          handleConfirm={handleSubmit}
-          handleDialogClose={handleDialogClose}
-          dialogOpen={confirmationDialogVisible}
-          selectedAssets={selected}
-        />
-      ) : null}
-    </Box>
-  );
-};
-
-EnhancedTableToolbar.propTypes = {
-  numSelected: PropTypes.number.isRequired,
-};
-
 const EnhancedTable = () => {
   const [order, setOrder] = useState("desc");
   const [orderBy, setOrderBy] = useState("worth");
   const [selected, setSelected] = useState([]);
   const [page, setPage] = useState(0);
-  //const [dense, setDense] = useState(false);
   const [rowsPerPage, setRowsPerPage] = useState(25);
 
   const { dialog } = useSelector((state) => state.assetDialog);
@@ -472,10 +185,6 @@ const EnhancedTable = () => {
     setPage(0);
   };
 
-  //   const handleChangeDense = (event) => {
-  //     setDense(event.target.checked);
-  //   };
-
   const isSelected = (name) =>
     selected.findIndex((r) => r.name === name) !== -1;
 
@@ -485,13 +194,9 @@ const EnhancedTable = () => {
 
   return (
     <Box sx={{ width: "100%" }}>
-      {/* <Paper sx={{ width: "100%", mb: 2 }}> */}
-      <EnhancedTableToolbar numSelected={selected.length} selected={selected} />
-
+      <DataTableToolbar numSelected={selected.length} selected={selected} />
       <TableContainer>
         <Table
-          //sx={{ minWidth: 750 }}
-          //table-layout="auto"
           aria-labelledby="tableTitle"
           //size={dense ? "small" : "medium"}
           size="medium"
@@ -503,11 +208,12 @@ const EnhancedTable = () => {
             onSelectAllClick={handleSelectAllClick}
             onRequestSort={handleRequestSort}
             rowCount={rows.length}
+            headCells={headCells}
           />
           <TableBody>
-            {/* if you don't need to support IE11, you can replace the `stableSort` call with:
-                 rows.slice().sort(getComparator(order, orderBy)) */}
-            {stableSort(rows, getComparator(order, orderBy))
+            {rows
+              .slice()
+              .sort(getComparator(order, orderBy))
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row, index) => {
                 const isItemSelected = isSelected(row.name);
@@ -543,8 +249,6 @@ const EnhancedTable = () => {
                         maxWidth: { xs: 145, md: "100%", lg: "100%" },
                         width: "20%",
                         padding: 0,
-                        //maxWidth: 145,
-                        //width: 155,
                       }}
                       onClick={(event) =>
                         dispatch(handleAssetDialog(true, row.ticker))
@@ -568,7 +272,6 @@ const EnhancedTable = () => {
                       align="right"
                       sx={{
                         padding: { xs: "0px 8px", lg: 2 },
-                        //paddingRight: { xs: 1, lg: 2 },
                       }}
                     >
                       <Chip label={row.currentPrice} variant="outlined"></Chip>
@@ -577,8 +280,6 @@ const EnhancedTable = () => {
                       align="right"
                       sx={{
                         width: "5%",
-                        //padding: { xs: "0 1", lg: 2 },
-                        //paddingRight: { xs: 1, lg: 2 },
                       }}
                     >
                       <Chip
@@ -587,7 +288,6 @@ const EnhancedTable = () => {
                           color:
                             row.dailyChange > 0 ? "secondary.main" : "error",
                           width: "100%",
-                          // fontWeight: 600,
                         }}
                         label={`${row.dailyChange} %`}
                         variant="outlined"
@@ -700,7 +400,6 @@ const EnhancedTable = () => {
             {emptyRows > 0 && (
               <TableRow
                 style={{
-                  //height: (dense ? 33 : 53) * emptyRows,
                   height: 53 * emptyRows,
                 }}
               >

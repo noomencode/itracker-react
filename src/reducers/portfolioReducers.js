@@ -77,7 +77,12 @@ export const portfolioAssetCUDReducer = (state = {}, action) => {
 // };
 
 export const portfolioPerformanceReducer = (
-  state = { totalWorth: 0, totalSpent: 0 },
+  state = {
+    totalWorth: 0,
+    totalSpent: 0,
+    totalWorthWithCrypto: 0,
+    totalSpentWithCrypto: 0,
+  },
   action
 ) => {
   switch (action.type) {
@@ -85,6 +90,8 @@ export const portfolioPerformanceReducer = (
       return {
         totalWorth: action.payload.totalWorth,
         totalSpent: action.payload.totalSpent,
+        totalWorthWithCrypto: action.payload.totalWorthWithCrypto,
+        totalSpentWithCrypto: action.payload.totalSpentWithCrypto,
       };
     default:
       return state;

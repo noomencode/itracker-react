@@ -12,7 +12,6 @@ import { getTopAssets } from "../actions/assetActions";
 import PortfolioEmpty from "../components/Portfolio/PortfolioEmpty";
 import StockScroller from "../components/StockScroller";
 import WatchListCompact from "../components/WatchListCompact";
-import Graphs from "../components/Graphs";
 import Message from "../components/Message";
 
 const Dashboard = () => {

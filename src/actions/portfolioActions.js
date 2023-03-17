@@ -153,17 +153,34 @@ export const editPortfolioAsset = (body) => async (dispatch, getState) => {
 export const calculatePortfolioPerformance = (data) => async (dispatch) => {
   const { assets } = data[0];
   const totalWorth = assets.reduce((acc, myAsset) => {
-    acc += myAsset.sharesAmount * myAsset.asset.price;
+    if (myAsset.asset.type !== "Cryptocurrency") {
+      acc += myAsset.sharesAmount * myAsset.asset.price;
+    }
     return acc;
   }, 0);
   const totalSpent = assets.reduce((acc, myAsset) => {
+    if (myAsset.asset.type !== "Cryptocurrency") {
+      acc += myAsset.spent;
+    }
+    return acc;
+  }, 0);
+  const totalWorthWithCrypto = assets.reduce((acc, myAsset) => {
+    acc += myAsset.sharesAmount * myAsset.asset.price;
+    return acc;
+  }, 0);
+  const totalSpentWithCrypto = assets.reduce((acc, myAsset) => {
     acc += myAsset.spent;
     return acc;
   }, 0);
   try {
     dispatch({
       type: CALC_PORTFOLIO,
-      payload: { totalWorth: totalWorth, totalSpent: totalSpent },
+      payload: {
+        totalWorth: totalWorth,
+        totalSpent: totalSpent,
+        totalWorthWithCrypto: totalWorthWithCrypto,
+        totalSpentWithCrypto: totalSpentWithCrypto,
+      },
     });
   } catch (error) {
     dispatch({

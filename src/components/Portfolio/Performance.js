@@ -1,40 +1,48 @@
-import React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useState } from "react";
 import { Card, CardContent, Typography, Divider } from "@mui/material";
-import Graphs from "../Graphs";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import CardTravelIcon from "@mui/icons-material/CardTravel";
-import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import PercentIcon from "@mui/icons-material/Percent";
-import AccessTimeIcon from "@mui/icons-material/AccessTime";
-import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
-import History from "./History";
+import FormGroup from "@mui/material/FormGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Switch from "@mui/material/Switch";
 
 const Performance = (props) => {
-  // const { totalWorth, totalSpent } = useSelector((state) => state.portfolio);
-  // const { history } = useSelector(
-  //   (state) => state.portfolioList.portfolioAssets[0]
-  // );
-  const { totalWorth, totalSpent } = props.portfolio;
-  const history = props.history;
-  const profit = (totalWorth - totalSpent).toFixed(2);
-  const portfolioYield = (
-    ((totalWorth - totalSpent) / totalWorth) *
-    100
-  ).toFixed(2);
+  const { totalWorth, totalSpent, totalWorthWithCrypto, totalSpentWithCrypto } =
+    props.portfolio;
+  const [showCrypto, setShowCrypto] = useState(false);
 
-  const annualYield = history?.length
+  const history = props.history;
+  const profit = showCrypto
+    ? (totalWorthWithCrypto - totalSpentWithCrypto).toFixed(2)
+    : (totalWorth - totalSpent).toFixed(2);
+  const portfolioYield = showCrypto
     ? (
-        ((totalWorth - history[0].worth - (totalSpent - history[0].expenses)) /
-          history[0].worth) *
+        ((totalWorthWithCrypto - totalSpentWithCrypto) / totalWorth) *
         100
       ).toFixed(2)
+    : (((totalWorth - totalSpent) / totalWorth) * 100).toFixed(2);
+
+  const annualYield = history?.length
+    ? showCrypto
+      ? (
+          ((totalWorthWithCrypto -
+            history[0].worth -
+            (totalSpentWithCrypto - history[0].expenses)) /
+            history[0].worth) *
+          100
+        ).toFixed(2)
+      : (
+          ((totalWorth -
+            history[0].worth -
+            (totalSpent - history[0].expenses)) /
+            history[0].worth) *
+          100
+        ).toFixed(2)
     : "N/A";
 
   return (
@@ -52,7 +60,11 @@ const Performance = (props) => {
               </ListItemIcon>
               <ListItemText
                 primary={"Current worth"}
-                secondary={`${totalWorth.toFixed(2)} EUR`}
+                secondary={
+                  showCrypto
+                    ? `${totalWorthWithCrypto.toFixed(2)} EUR`
+                    : `${totalWorth.toFixed(2)} EUR`
+                }
                 primaryTypographyProps={{ variant: "h6" }}
                 secondaryTypographyProps={{ variant: "h5" }}
               ></ListItemText>
@@ -63,7 +75,11 @@ const Performance = (props) => {
               </ListItemIcon>
               <ListItemText
                 primary={"Expenses"}
-                secondary={`${totalSpent.toFixed(2)} EUR`}
+                secondary={
+                  showCrypto
+                    ? `${totalSpentWithCrypto.toFixed(2)} EUR`
+                    : `${totalSpent.toFixed(2)} EUR`
+                }
                 primaryTypographyProps={{ variant: "h6" }}
                 secondaryTypographyProps={{ variant: "h5" }}
               ></ListItemText>
@@ -120,9 +136,23 @@ const Performance = (props) => {
               ></ListItemText>
             </ListItem>
           </List>
+          <FormGroup>
+            <FormControlLabel
+              control={
+                <Switch
+                  size="small"
+                  color="secondary"
+                  checked={showCrypto}
+                  onChange={() => setShowCrypto(!showCrypto)}
+                />
+              }
+              label={
+                <Typography variant="h6">Include cryptocurrency</Typography>
+              }
+            />
+          </FormGroup>
         </CardContent>
       </Card>
-      {/* <Graphs /> */}
     </React.Fragment>
   );
 };
