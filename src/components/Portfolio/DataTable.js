@@ -85,15 +85,11 @@ const EnhancedTable = () => {
   const [selected, setSelected] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(25);
-
   const { dialog } = useSelector((state) => state.assetDialog);
-
   const { totalWorth } = useSelector((state) => state.portfolio);
-
   const { assets } = useSelector(
     (state) => state.portfolioList.portfolioAssets[0]
   );
-
   const dispatch = useDispatch();
   let updatedTimestamp;
 
@@ -189,8 +185,8 @@ const EnhancedTable = () => {
     selected.findIndex((r) => r.name === name) !== -1;
 
   // Avoid a layout jump when reaching the last page with empty rows.
-  const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+  // const emptyRows =
+  //   page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
   return (
     <Box sx={{ width: "100%" }}>
@@ -397,7 +393,7 @@ const EnhancedTable = () => {
                   </TableRow>
                 );
               })}
-            {emptyRows > 0 && (
+            {/* {emptyRows > 0 && (
               <TableRow
                 style={{
                   height: 53 * emptyRows,
@@ -405,7 +401,7 @@ const EnhancedTable = () => {
               >
                 <TableCell colSpan={6} />
               </TableRow>
-            )}
+            )} */}
           </TableBody>
         </Table>
       </TableContainer>

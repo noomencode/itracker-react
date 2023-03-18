@@ -15,35 +15,53 @@ import { getComparator } from "../../utilities/sortingFunctions";
 const headCells = [
   {
     id: "asset",
+    type: "title",
     numeric: false,
     disablePadding: true,
     label: "Asset",
   },
   {
     id: "amount",
+    type: "number",
     numeric: true,
     disablePadding: false,
     label: "Amount",
   },
   {
     id: "price",
+    type: "number",
     numeric: true,
     disablePadding: false,
     label: "Price",
   },
   {
     id: "date",
+    type: "number",
     numeric: true,
     disablePadding: false,
     label: "Date",
   },
   {
     id: "type",
+    type: "number",
     numeric: true,
     disablePadding: false,
     label: "Type",
   },
 ];
+
+const TitleCell = ({ value, labelId }) => (
+  <TableCell component="th" id={labelId} scope="row" padding="none">
+    {value}
+  </TableCell>
+);
+
+const NumberCell = ({ value }) => <TableCell align="right">{value}</TableCell>;
+
+const CellMap = {
+  title: TitleCell,
+  number: NumberCell,
+};
 
 export default function TransactionsTable(props) {
   const { rows } = props;
@@ -149,18 +167,15 @@ export default function TransactionsTable(props) {
                           }}
                         />
                       </TableCell>
-                      <TableCell
-                        component="th"
-                        id={labelId}
-                        scope="row"
-                        padding="none"
-                      >
-                        {row.asset}
-                      </TableCell>
-                      <TableCell align="right">{row.amount}</TableCell>
-                      <TableCell align="right">{row.price}</TableCell>
-                      <TableCell align="right">{row.date}</TableCell>
-                      <TableCell align="right">{row.type}</TableCell>
+                      {headCells.map((cell) => {
+                        if (row[cell.id]) {
+                          const Cell = CellMap[cell.type];
+                          const value = row[cell.id];
+                          return (
+                            <Cell key={cell.id} {...cell.props} value={value} />
+                          );
+                        }
+                      })}
                     </TableRow>
                   );
                 })}
