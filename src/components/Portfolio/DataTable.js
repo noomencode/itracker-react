@@ -19,65 +19,114 @@ import DataTableToolbar from "./DataTableToolbar";
 const headCells = [
   {
     id: "name",
+    type: "title",
     numeric: false,
-    disablePadding: false,
     label: "Name",
+    cellProps: {
+      component: "th",
+      sx: {
+        fontSize: { xs: "0.7em", lg: "0.9em" },
+        fontWeight: 600,
+        maxWidth: { xs: 145, md: "100%", lg: "100%" },
+        width: "20%",
+        padding: 0,
+      },
+    },
+    chipProps: {
+      sx: {
+        fontSize: "0.9em",
+        fontWeight: 600,
+        cursor: "pointer",
+        width: "100%",
+        "&:hover": {
+          backgroundColor: "secondary.main",
+        },
+      },
+      variant: "outlined",
+    },
   },
   {
     id: "currentPrice",
-    numeric: true,
-    disablePadding: false,
+    type: "number",
     label: "Price",
   },
   {
     id: "dailyChange",
-    numeric: true,
-    disablePadding: false,
+    type: "importantNumber",
+    labelType: "percentage",
+    cellProps: {
+      sx: {
+        width: "5%",
+      },
+    },
+    assignColor: assignColor,
     label: "Change",
   },
   {
     id: "profit",
-    numeric: true,
-    disablePadding: false,
+    type: "importantNumber",
+    cellProps: {
+      sx: { width: "5%" },
+    },
+    assignColor: assignColor,
+
     label: "Profit",
   },
   {
     id: "profitEUR",
-    numeric: true,
-    disablePadding: false,
+    type: "importantNumber",
+    cellProps: {
+      sx: { width: "10%" },
+    },
+    assignColor: assignColor,
+
     label: "Profit (EUR)",
   },
   {
     id: "worth",
-    numeric: true,
-    disablePadding: false,
+    type: "number",
+    cellProps: {
+      sx: { width: "10%" },
+    },
     label: "Value",
   },
   {
     id: "spent",
-    numeric: true,
-    disablePadding: false,
+    type: "number",
+    cellProps: {
+      sx: { width: "10%" },
+    },
     label: "Expense",
   },
   {
     id: "avgPurchasePrice",
-    numeric: true,
-    disablePadding: false,
+    type: "number",
+    cellProps: {
+      sx: { width: "5%" },
+    },
     label: "Purchase price",
   },
   {
     id: "portfolioPercentage",
-    numeric: true,
-    disablePadding: false,
+    type: "number",
+    cellProps: {
+      sx: { width: "5%" },
+    },
     label: "% of portfolio",
   },
   {
-    id: "analystRating",
-    numeric: false,
-    disablePadding: false,
+    id: "averageAnalystRating",
+    type: "number",
+    cellProps: {
+      sx: { width: "15%" },
+    },
     label: "Analyst rating",
   },
 ];
+
+function assignColor(val1, val2) {
+  return val1 > val2 ? "secondary" : "error";
+}
 
 const EnhancedTable = () => {
   const [order, setOrder] = useState("desc");
@@ -184,19 +233,52 @@ const EnhancedTable = () => {
   const isSelected = (name) =>
     selected.findIndex((r) => r.name === name) !== -1;
 
-  // Avoid a layout jump when reaching the last page with empty rows.
-  // const emptyRows =
-  //   page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+  const TitleCell = ({ row, labelId, value, props, chipProps }) => (
+    <TableCell
+      {...props}
+      id={labelId}
+      scope="row"
+      padding="normal"
+      onClick={(event) => dispatch(handleAssetDialog(true, row.ticker))}
+    >
+      <Chip {...chipProps} label={value} />
+    </TableCell>
+  );
+
+  const NumberCell = ({ row, value, props, chipProps }) => (
+    <TableCell {...props} align="right" sx={{ padding: { xs: 0, lg: 2 } }}>
+      <Chip
+        {...chipProps}
+        label={value}
+        variant="outlined"
+        sx={{ width: "100%" }}
+      ></Chip>
+    </TableCell>
+  );
+
+  const ImportantNumberCell = ({ row, value, props, chipProps }) => (
+    <TableCell {...props} align="right" sx={{ padding: { xs: 0, lg: 2 } }}>
+      <Chip
+        {...chipProps}
+        sx={{ width: "100%" }}
+        color={props.assignColor(value, 0)}
+        label={`${value} %`}
+        variant="outlined"
+      ></Chip>
+    </TableCell>
+  );
+
+  const CellMap = {
+    title: TitleCell,
+    number: NumberCell,
+    importantNumber: ImportantNumberCell,
+  };
 
   return (
     <Box sx={{ width: "100%" }}>
       <DataTableToolbar numSelected={selected.length} selected={selected} />
       <TableContainer>
-        <Table
-          aria-labelledby="tableTitle"
-          //size={dense ? "small" : "medium"}
-          size="medium"
-        >
+        <Table aria-labelledby="tableTitle" size="medium">
           <EnhancedTableHead
             numSelected={selected.length}
             order={order}
@@ -214,7 +296,6 @@ const EnhancedTable = () => {
               .map((row, index) => {
                 const isItemSelected = isSelected(row.name);
                 const labelId = `enhanced-table-checkbox-${index}`;
-
                 return (
                   <TableRow
                     hover
@@ -234,7 +315,33 @@ const EnhancedTable = () => {
                         }}
                       />
                     </TableCell>
-                    <TableCell
+                    {headCells.map((cell) => {
+                      if (row[cell.id]) {
+                        const Cell = CellMap[cell.type];
+                        let value = row[cell.id];
+                        const props = { ...cell.cellProps };
+                        if (cell.type === "importantNumber") {
+                          props.assignColor = cell.assignColor;
+                        }
+                        if (cell.id === "portfolioPercentage") {
+                          value = `${parseFloat(
+                            (row.worth / totalWorth) * 100
+                          ).toFixed(0)}%`;
+                        }
+                        return (
+                          <Cell
+                            key={cell.id}
+                            props={props}
+                            chipProps={{ ...cell.chipProps }}
+                            row={row}
+                            value={value}
+                          />
+                        );
+                      } else {
+                        return null;
+                      }
+                    })}
+                    {/* <TableCell
                       component="th"
                       id={labelId}
                       scope="row"
@@ -263,16 +370,23 @@ const EnhancedTable = () => {
                         label={row.name}
                         variant="outlined"
                       ></Chip>
-                    </TableCell>
-                    <TableCell
+                    </TableCell> */}
+                    {/* <TableCell
                       align="right"
                       sx={{
                         padding: { xs: "0px 8px", lg: 2 },
                       }}
                     >
                       <Chip label={row.currentPrice} variant="outlined"></Chip>
-                    </TableCell>
-                    <TableCell
+                    </TableCell> */}
+                    {/* <Cell2
+                      row={row}
+                      value={row.dailyChange}
+                      props={{ ...headCells[2].cellProps }}
+                      chipProps={{ ...headCells[2].chipProps }}
+                      assignColor={headCells[2].assignColor}
+                    /> */}
+                    {/* <TableCell
                       align="right"
                       sx={{
                         width: "5%",
@@ -281,22 +395,23 @@ const EnhancedTable = () => {
                       <Chip
                         color={row.dailyChange > 0 ? "secondary" : "error"}
                         sx={{
-                          color:
-                            row.dailyChange > 0 ? "secondary.main" : "error",
+                          // color:
+                          //   row.dailyChange > 0 ? "secondary.main" : "error",
                           width: "100%",
                         }}
                         label={`${row.dailyChange} %`}
                         variant="outlined"
                       ></Chip>
-                    </TableCell>
-                    <TableCell
+                    </TableCell> */}
+                    {/* <TableCell
                       align="right"
                       sx={{ width: "5%", padding: { xs: 0, lg: 2 } }}
                     >
                       <Chip
                         color={row.profit > 0 ? "secondary" : "error"}
                         sx={{
-                          color: row.profit > 0 ? "secondary.main" : "error",
+                          // color:
+                          //   row.profit > 0 ? "secondary.main" : "error.main",
                           width: "100%",
                         }}
                         label={`${row.profit} %`}
@@ -389,19 +504,10 @@ const EnhancedTable = () => {
                         variant="outlined"
                         sx={{ width: "100%" }}
                       ></Chip>
-                    </TableCell>
+                    </TableCell> */}
                   </TableRow>
                 );
               })}
-            {/* {emptyRows > 0 && (
-              <TableRow
-                style={{
-                  height: 53 * emptyRows,
-                }}
-              >
-                <TableCell colSpan={6} />
-              </TableRow>
-            )} */}
           </TableBody>
         </Table>
       </TableContainer>

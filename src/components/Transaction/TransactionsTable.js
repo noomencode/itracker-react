@@ -174,6 +174,8 @@ export default function TransactionsTable(props) {
                           return (
                             <Cell key={cell.id} {...cell.props} value={value} />
                           );
+                        } else {
+                          return null;
                         }
                       })}
                     </TableRow>
