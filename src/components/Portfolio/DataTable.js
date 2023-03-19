@@ -16,6 +16,10 @@ import { getComparator } from "../../utilities/sortingFunctions";
 import EnhancedTableHead from "../EnhancedTableHead";
 import DataTableToolbar from "./DataTableToolbar";
 
+function assignColor(val1, val2) {
+  return val1 > val2 ? "secondary" : "error";
+}
+
 const headCells = [
   {
     id: "name",
@@ -65,12 +69,13 @@ const headCells = [
   {
     id: "profit",
     type: "importantNumber",
+    labelType: "percentage",
     cellProps: {
       sx: { width: "5%" },
     },
     assignColor: assignColor,
 
-    label: "Profit",
+    label: "Profit %",
   },
   {
     id: "profitEUR",
@@ -78,13 +83,14 @@ const headCells = [
     cellProps: {
       sx: { width: "10%" },
     },
+    labelType: "currency",
     assignColor: assignColor,
-
-    label: "Profit (EUR)",
+    label: "Profit",
   },
   {
     id: "worth",
     type: "number",
+    labelType: "currency",
     cellProps: {
       sx: { width: "10%" },
     },
@@ -93,6 +99,7 @@ const headCells = [
   {
     id: "spent",
     type: "number",
+    labelType: "currency",
     cellProps: {
       sx: { width: "10%" },
     },
@@ -101,6 +108,7 @@ const headCells = [
   {
     id: "avgPurchasePrice",
     type: "number",
+    labelType: "currency",
     cellProps: {
       sx: { width: "5%" },
     },
@@ -109,6 +117,7 @@ const headCells = [
   {
     id: "portfolioPercentage",
     type: "number",
+    labelType: "percentage",
     cellProps: {
       sx: { width: "5%" },
     },
@@ -123,10 +132,6 @@ const headCells = [
     label: "Analyst rating",
   },
 ];
-
-function assignColor(val1, val2) {
-  return val1 > val2 ? "secondary" : "error";
-}
 
 const EnhancedTable = () => {
   const [order, setOrder] = useState("desc");
@@ -144,7 +149,7 @@ const EnhancedTable = () => {
 
   const rows = assets.map((myAsset) => {
     const { customType, spent, sharesAmount, name, ticker, _id } = myAsset;
-    const { price, dailyChange, updatedAt, averageAnalystRating } =
+    const { price, dailyChange, updatedAt, averageAnalystRating, currency } =
       myAsset.asset;
     updatedTimestamp = updatedAt;
     return {
@@ -163,6 +168,7 @@ const EnhancedTable = () => {
       customType: customType,
       portfolioPercentage: 100,
       averageAnalystRating: averageAnalystRating || "N/A",
+      currency: currency,
       id: _id,
     };
   });
@@ -245,33 +251,37 @@ const EnhancedTable = () => {
     </TableCell>
   );
 
-  const NumberCell = ({ row, value, props, chipProps }) => (
-    <TableCell {...props} align="right" sx={{ padding: { xs: 0, lg: 2 } }}>
-      <Chip
-        {...chipProps}
-        label={value}
-        variant="outlined"
-        sx={{ width: "100%" }}
-      ></Chip>
-    </TableCell>
-  );
-
-  const ImportantNumberCell = ({ row, value, props, chipProps }) => (
-    <TableCell {...props} align="right" sx={{ padding: { xs: 0, lg: 2 } }}>
-      <Chip
-        {...chipProps}
-        sx={{ width: "100%" }}
-        color={props.assignColor(value, 0)}
-        label={`${value} %`}
-        variant="outlined"
-      ></Chip>
-    </TableCell>
-  );
+  const NumberCell = ({ row, value, props, chipProps }) => {
+    const percentage = "%";
+    let currency = row.currency;
+    if (currency === "SEK" || currency === "EUR") {
+      currency = "€";
+    } else {
+      currency = "$";
+    }
+    return (
+      <TableCell {...props} align="right" sx={{ padding: { xs: 0, lg: 2 } }}>
+        <Chip
+          {...chipProps}
+          label={
+            props.labelType === "percentage"
+              ? `${value} ${percentage}`
+              : props.labelType === "currency"
+              ? `${value} ${currency}`
+              : `${value}`
+          }
+          variant="outlined"
+          sx={{ width: "100%" }}
+          color={props.assignColor ? props.assignColor(value, 0) : "default"}
+        ></Chip>
+      </TableCell>
+    );
+  };
 
   const CellMap = {
     title: TitleCell,
     number: NumberCell,
-    importantNumber: ImportantNumberCell,
+    importantNumber: NumberCell,
   };
 
   return (
@@ -315,7 +325,10 @@ const EnhancedTable = () => {
                         }}
                       />
                     </TableCell>
+
                     {headCells.map((cell) => {
+                      console.log(row.currency);
+
                       if (row[cell.id]) {
                         const Cell = CellMap[cell.type];
                         let value = row[cell.id];
@@ -323,10 +336,13 @@ const EnhancedTable = () => {
                         if (cell.type === "importantNumber") {
                           props.assignColor = cell.assignColor;
                         }
+                        if (cell.labelType) {
+                          props.labelType = cell.labelType;
+                        }
                         if (cell.id === "portfolioPercentage") {
                           value = `${parseFloat(
                             (row.worth / totalWorth) * 100
-                          ).toFixed(0)}%`;
+                          ).toFixed(0)}`;
                         }
                         return (
                           <Cell
@@ -341,170 +357,6 @@ const EnhancedTable = () => {
                         return null;
                       }
                     })}
-                    {/* <TableCell
-                      component="th"
-                      id={labelId}
-                      scope="row"
-                      padding="normal"
-                      sx={{
-                        fontSize: { xs: "0.7em", lg: "0.9em" },
-                        fontWeight: 600,
-                        maxWidth: { xs: 145, md: "100%", lg: "100%" },
-                        width: "20%",
-                        padding: 0,
-                      }}
-                      onClick={(event) =>
-                        dispatch(handleAssetDialog(true, row.ticker))
-                      }
-                    >
-                      <Chip
-                        sx={{
-                          fontSize: "0.9em",
-                          fontWeight: 600,
-                          cursor: "pointer",
-                          width: "100%",
-                          "&:hover": {
-                            backgroundColor: "secondary.main",
-                          },
-                        }}
-                        label={row.name}
-                        variant="outlined"
-                      ></Chip>
-                    </TableCell> */}
-                    {/* <TableCell
-                      align="right"
-                      sx={{
-                        padding: { xs: "0px 8px", lg: 2 },
-                      }}
-                    >
-                      <Chip label={row.currentPrice} variant="outlined"></Chip>
-                    </TableCell> */}
-                    {/* <Cell2
-                      row={row}
-                      value={row.dailyChange}
-                      props={{ ...headCells[2].cellProps }}
-                      chipProps={{ ...headCells[2].chipProps }}
-                      assignColor={headCells[2].assignColor}
-                    /> */}
-                    {/* <TableCell
-                      align="right"
-                      sx={{
-                        width: "5%",
-                      }}
-                    >
-                      <Chip
-                        color={row.dailyChange > 0 ? "secondary" : "error"}
-                        sx={{
-                          // color:
-                          //   row.dailyChange > 0 ? "secondary.main" : "error",
-                          width: "100%",
-                        }}
-                        label={`${row.dailyChange} %`}
-                        variant="outlined"
-                      ></Chip>
-                    </TableCell> */}
-                    {/* <TableCell
-                      align="right"
-                      sx={{ width: "5%", padding: { xs: 0, lg: 2 } }}
-                    >
-                      <Chip
-                        color={row.profit > 0 ? "secondary" : "error"}
-                        sx={{
-                          // color:
-                          //   row.profit > 0 ? "secondary.main" : "error.main",
-                          width: "100%",
-                        }}
-                        label={`${row.profit} %`}
-                        variant="outlined"
-                      ></Chip>
-                    </TableCell>
-                    <TableCell
-                      align="right"
-                      sx={{ width: "10%", padding: { xs: 0, lg: 2 } }}
-                    >
-                      <Chip
-                        color={row.profitEUR > 0 ? "secondary" : "error"}
-                        sx={{
-                          color: row.profitEUR > 0 ? "secondary.main" : "error",
-                          width: "100%",
-                        }}
-                        label={`${row.profitEUR} €`}
-                        variant="outlined"
-                      ></Chip>
-                    </TableCell>
-                    <TableCell
-                      sx={{
-                        color: "text.secondary",
-                        padding: { xs: 0, lg: 2 },
-                        width: "10%",
-                      }}
-                      align="right"
-                    >
-                      <Chip
-                        label={`${row.worth} €`}
-                        variant="outlined"
-                        sx={{ width: "100%" }}
-                      ></Chip>
-                    </TableCell>
-                    <TableCell
-                      sx={{
-                        color: "text.secondary",
-                        padding: { xs: 0, lg: 2 },
-                        width: "10%",
-                      }}
-                      align="right"
-                    >
-                      <Chip
-                        label={`${row.spent} €`}
-                        variant="outlined"
-                        sx={{ width: "100%" }}
-                      ></Chip>
-                    </TableCell>
-                    <TableCell
-                      sx={{
-                        color: "text.secondary",
-                        padding: { xs: 0, lg: 2 },
-                        width: "5%",
-                      }}
-                      align="right"
-                    >
-                      <Chip
-                        label={row.avgPurchasePrice}
-                        variant="outlined"
-                        sx={{ width: "100%" }}
-                      ></Chip>
-                    </TableCell>
-
-                    <TableCell
-                      align="right"
-                      sx={{
-                        color: "text.secondary",
-                        padding: { xs: 0, lg: 2 },
-                        width: "5%",
-                      }}
-                    >
-                      <Chip
-                        label={`${parseFloat(
-                          (row.worth / totalWorth) * 100
-                        ).toFixed(0)}%`}
-                        variant="outlined"
-                        sx={{ width: "100%" }}
-                      ></Chip>
-                    </TableCell>
-                    <TableCell
-                      sx={{
-                        color: "text.secondary",
-                        padding: { xs: 0, lg: 2 },
-                        width: "15%",
-                      }}
-                      align="right"
-                    >
-                      <Chip
-                        label={row.averageAnalystRating}
-                        variant="outlined"
-                        sx={{ width: "100%" }}
-                      ></Chip>
-                    </TableCell> */}
                   </TableRow>
                 );
               })}
