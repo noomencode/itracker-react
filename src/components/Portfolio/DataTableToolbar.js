@@ -15,10 +15,15 @@ import ConfirmationDialog from "../ConfirmationDialog";
 import AssetForm from "../Asset/AssetForm";
 import Message from "../Message";
 import { deletePortfolioAssets } from "../../actions/portfolioActions";
+import Switch from "@mui/material/Switch";
+import FormGroup from "@mui/material/FormGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Typography from "@mui/material/Typography";
 
 const DataTableToolbar = (props) => {
-  const { numSelected, selected } = props;
+  const { numSelected, selected, handleLayout } = props;
   const [assetForm, setAssetForm] = useState({ open: false, mode: "" });
+  const [layoutSwitch, setLayoutSwitch] = useState(false);
   const [confirmationDialogVisible, setConfirmationDialogVisible] =
     useState(false);
   const [error, setError] = useState({ isError: false, message: "" });
@@ -134,26 +139,6 @@ const DataTableToolbar = (props) => {
             <ModeEditIcon />
           </IconButton>
         </Tooltip>
-        {/* {numSelected > 0 ? (
-            <Typography
-              sx={{ flex: "1 1 100%" }}
-              color="inherit"
-              variant="subtitle1"
-              component="div"
-            >
-              {numSelected} selected
-            </Typography>
-          ) : (
-            <Typography
-              sx={{ flex: "1 1 100%" }}
-              variant="h6"
-              id="tableTitle"
-              component="div"
-            >
-              Nutrition
-            </Typography>
-          )} */}
-
         {numSelected > 0 ? (
           <Tooltip title="Delete">
             <IconButton
@@ -170,6 +155,22 @@ const DataTableToolbar = (props) => {
             </IconButton>
           </Tooltip>
         )}
+        <FormGroup sx={{ ml: 2 }}>
+          <FormControlLabel
+            control={
+              <Switch
+                size="small"
+                color="secondary"
+                checked={layoutSwitch}
+                onChange={() => {
+                  setLayoutSwitch(!layoutSwitch);
+                  handleLayout(!layoutSwitch);
+                }}
+              />
+            }
+            label={<Typography variant="h6">Small layout</Typography>}
+          />
+        </FormGroup>
       </Toolbar>
       {assetForm.open ? (
         <AssetForm

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
@@ -24,7 +24,7 @@ const headCells = [
   {
     id: "name",
     type: "title",
-    numeric: false,
+    specification: "main",
     label: "Name",
     cellProps: {
       component: "th",
@@ -51,11 +51,13 @@ const headCells = [
   },
   {
     id: "currentPrice",
+    specification: "main",
     type: "number",
     label: "Price",
   },
   {
     id: "dailyChange",
+    specification: "main",
     type: "importantNumber",
     labelType: "percentage",
     cellProps: {
@@ -69,6 +71,7 @@ const headCells = [
   {
     id: "profit",
     type: "importantNumber",
+    specification: "main",
     labelType: "percentage",
     cellProps: {
       sx: { width: "5%" },
@@ -79,6 +82,7 @@ const headCells = [
   },
   {
     id: "profitEUR",
+    specification: "main",
     type: "importantNumber",
     cellProps: {
       sx: { width: "10%" },
@@ -90,6 +94,7 @@ const headCells = [
   {
     id: "worth",
     type: "number",
+    specification: "extra",
     labelType: "currency",
     cellProps: {
       sx: { width: "10%" },
@@ -99,6 +104,7 @@ const headCells = [
   {
     id: "spent",
     type: "number",
+    specification: "extra",
     labelType: "currency",
     cellProps: {
       sx: { width: "10%" },
@@ -108,6 +114,7 @@ const headCells = [
   {
     id: "avgPurchasePrice",
     type: "number",
+    specification: "extra",
     labelType: "currency",
     cellProps: {
       sx: { width: "5%" },
@@ -117,6 +124,7 @@ const headCells = [
   {
     id: "portfolioPercentage",
     type: "number",
+    specification: "extra",
     labelType: "percentage",
     cellProps: {
       sx: { width: "5%" },
@@ -126,6 +134,7 @@ const headCells = [
   {
     id: "averageAnalystRating",
     type: "number",
+    specification: "extra",
     cellProps: {
       sx: { width: "15%" },
     },
@@ -137,6 +146,8 @@ const EnhancedTable = () => {
   const [order, setOrder] = useState("desc");
   const [orderBy, setOrderBy] = useState("worth");
   const [selected, setSelected] = useState([]);
+  const [layout, setLayout] = useState("full");
+  const [cells, setCells] = useState(headCells);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(25);
   const { dialog } = useSelector((state) => state.assetDialog);
@@ -146,6 +157,23 @@ const EnhancedTable = () => {
   );
   const dispatch = useDispatch();
   let updatedTimestamp;
+
+  useEffect(() => {
+    if (layout === "small") {
+      const minifiedCells = headCells.filter((i) => i.specification === "main");
+      setCells(minifiedCells);
+    } else {
+      setCells(headCells);
+    }
+  }, [layout]);
+
+  const handleLayout = (layoutSwitch) => {
+    if (layoutSwitch) {
+      setLayout("small");
+    } else {
+      setLayout("full");
+    }
+  };
 
   const rows = assets.map((myAsset) => {
     const { customType, spent, sharesAmount, name, ticker, _id } = myAsset;
@@ -286,7 +314,11 @@ const EnhancedTable = () => {
 
   return (
     <Box sx={{ width: "100%" }}>
-      <DataTableToolbar numSelected={selected.length} selected={selected} />
+      <DataTableToolbar
+        numSelected={selected.length}
+        selected={selected}
+        handleLayout={handleLayout}
+      />
       <TableContainer>
         <Table aria-labelledby="tableTitle" size="medium">
           <EnhancedTableHead
@@ -296,7 +328,7 @@ const EnhancedTable = () => {
             onSelectAllClick={handleSelectAllClick}
             onRequestSort={handleRequestSort}
             rowCount={rows.length}
-            headCells={headCells}
+            headCells={cells}
           />
           <TableBody>
             {rows
@@ -325,8 +357,7 @@ const EnhancedTable = () => {
                         }}
                       />
                     </TableCell>
-
-                    {headCells.map((cell) => {
+                    {cells.map((cell) => {
                       console.log(row.currency);
 
                       if (row[cell.id]) {
