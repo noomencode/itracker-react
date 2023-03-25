@@ -11,7 +11,6 @@ import TrendingDownIcon from "@mui/icons-material/TrendingDown";
 import Typography from "@mui/material/Typography";
 import ListItemText from "@mui/material/ListItemText";
 import { styled, keyframes } from "@mui/material/styles";
-import { fontSize } from "@mui/system";
 import Marquee from "react-fast-marquee";
 
 const Item = styled(Chip)(({ theme }) => ({
@@ -82,7 +81,11 @@ const StockScroller = (props) => {
                 label={
                   <ListItem sx={{ padding: 0 }} key={index}>
                     <ListItemIcon sx={{ minWidth: 0, color: "secondary.main" }}>
-                      <MovingIcon />
+                      {asset.dailyChange > 0 ? (
+                        <MovingIcon />
+                      ) : (
+                        <TrendingDownIcon />
+                      )}
                     </ListItemIcon>
                     <MuiListItemText
                       primary={asset.name}

@@ -13,6 +13,7 @@ import PortfolioEmpty from "../components/Portfolio/PortfolioEmpty";
 import StockScroller from "../components/StockScroller";
 import WatchListCompact from "../components/WatchListCompact";
 import Message from "../components/Message";
+import AssetChip from "../components/Asset/AssetChip";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
@@ -70,6 +71,11 @@ const Dashboard = () => {
                   ? renderMessage(CUDtype)
                   : null}
                 {CUDerror ? renderMessage("error") : null}
+                {/* <AssetChip
+                  assetName={portfolioAssets[0].assets[0].name}
+                  dailyChange={portfolioAssets[0].assets[0].asset.dailyChange}
+                  currentPrice={portfolioAssets[0].assets[0].asset.price}
+                /> */}
                 {!loading && !error && portfolioAssets?.length ? (
                   <AssetList />
                 ) : (
