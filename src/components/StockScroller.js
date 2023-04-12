@@ -15,14 +15,11 @@ import { fontSize } from "@mui/system";
 import Marquee from "react-fast-marquee";
 
 const Item = styled(Chip)(({ theme }) => ({
-  // backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
   ...theme.typography.body2,
-  //   opacity: 0,
   position: "relative",
-  // borderRadius: 0,
   padding: theme.spacing(1),
-  //textAlign: "center",
   height: "3em",
+  overflow: "hidden",
   //color: theme.palette.secondary,
   // animationName: myAnimation,
   // animationDuration: "3s",
