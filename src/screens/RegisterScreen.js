@@ -26,17 +26,14 @@ export default function SignUp() {
     const email = formData.get("email");
 
     try {
-      const response = await axios.post(
-        "https://investenzo-api.onrender.com/api/users",
-        {
-          name: name,
-          email: email,
-          password: password,
-          headers: { "Content-Type": "application/json" },
-        }
-      );
+      const response = await axios.post("/api/users", {
+        name: name,
+        email: email,
+        password: password,
+        headers: { "Content-Type": "application/json" },
+      });
       const userId = response.data._id;
-      await axios.post("https://investenzo-api.onrender.com/api/portfolio", {
+      await axios.post("/api/portfolio", {
         user: userId,
       });
 

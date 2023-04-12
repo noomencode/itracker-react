@@ -59,51 +59,38 @@ const Dashboard = () => {
   } = useSelector((state) => state.portfolioAssetCUD);
   const portfolio = useSelector((state) => state.portfolio);
   const { history } = portfolioAssets?.length ? portfolioAssets[0] : [];
+
+  if (loading) {
+    return <Loading open={loading} />;
+  }
+
+  if (error || !portfolioAssets || !portfolioAssets.length) {
+    return <PortfolioEmpty component={"AssetList"} />;
+  }
+
   return (
     <>
-      {!loading && portfolioAssets?.length ? (
-        <>
-          <StockScroller />
-          <Box sx={{ margin: 2 }}>
-            <Grid container spacing={1}>
-              <Grid item lg={9} xs={12}>
-                {CUDloading === false && !CUDerror
-                  ? renderMessage(CUDtype)
-                  : null}
-                {CUDerror ? renderMessage("error") : null}
-                {/* <AssetChip
+      <StockScroller />
+      <Box sx={{ margin: 2 }}>
+        <Grid container spacing={1}>
+          <Grid item lg={9} xs={12}>
+            {CUDloading === false && !CUDerror ? renderMessage(CUDtype) : null}
+            {CUDerror ? renderMessage("error") : null}
+            {/* <AssetChip
                   assetName={portfolioAssets[0].assets[0].name}
                   dailyChange={portfolioAssets[0].assets[0].asset.dailyChange}
                   currentPrice={portfolioAssets[0].assets[0].asset.price}
                 /> */}
-                {!loading && !error && portfolioAssets?.length ? (
-                  <AssetList />
-                ) : (
-                  <PortfolioEmpty component={"AssetList"} />
-                )}
-              </Grid>
-              <Grid item lg={3} xs={12}>
-                {!loading && !error && portfolioAssets?.length ? (
-                  <>
-                    <Performance portfolio={portfolio} history={history} />
-                    {history?.length ? <History history={history} /> : null}
-                    <Allocation
-                      portfolio={portfolio}
-                      assets={portfolioAssets}
-                    />
-                    <WatchListCompact />
-                    {/* <Graphs /> */}
-                  </>
-                ) : (
-                  <PortfolioEmpty component={"Graphs"} />
-                )}
-              </Grid>
-            </Grid>
-          </Box>
-        </>
-      ) : (
-        <Loading open={loading} />
-      )}
+            <AssetList />
+          </Grid>
+          <Grid item lg={3} xs={12}>
+            <Performance portfolio={portfolio} history={history} />
+            {history?.length ? <History history={history} /> : null}
+            <Allocation portfolio={portfolio} assets={portfolioAssets} />
+            <WatchListCompact />
+          </Grid>
+        </Grid>
+      </Box>
     </>
   );
 };

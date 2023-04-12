@@ -15,8 +15,7 @@ const PortfolioEmpty = ({ component }) => {
               fontWeight={800}
               gutterBottom
             >
-              It looks like that there is no data to display in the portfolio
-              right now. Add some assets to your portfolio.
+              First step: Add some assets to your portfolio.
             </Typography>
             <Divider />
             <AssetForm />

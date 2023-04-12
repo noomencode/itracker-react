@@ -11,6 +11,7 @@ import RegisterScreen from "./screens/RegisterScreen";
 import WatchlistScreen from "./screens/WatchlistScreen";
 import TransactionsScreen from "./screens/TransactionsScreen";
 import PrivateRoute from "./components/PrivateRoute";
+import ProfileScreen from "./screens/ProfileScreen";
 
 const theme = createTheme({
   palette: {
@@ -113,6 +114,14 @@ function App() {
             element={
               <PrivateRoute>
                 <TransactionsScreen />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <PrivateRoute>
+                <ProfileScreen />
               </PrivateRoute>
             }
           />
