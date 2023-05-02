@@ -36,8 +36,8 @@ const EditAsset = (props) => {
     const body = {
       name: name,
       customType: customType,
-      spent: spent,
-      sharesAmount: shares,
+      spent: parseFloat(spent).toFixed(2),
+      sharesAmount: parseFloat(shares).toFixed(2),
       id: selected[0]?.id,
     };
     if (selected.length) {
@@ -115,10 +115,10 @@ const EditAsset = (props) => {
               label="Number of shares"
               variant="outlined"
               onChange={(e) => {
-                setShares(parseFloat(e.currentTarget.value));
+                setShares(e.currentTarget.value);
               }}
               required
-              value={parseFloat(shares).toFixed(2)}
+              value={shares}
               id="sharesAmount"
               name="sharesAmount"
             ></TextField>
@@ -131,9 +131,9 @@ const EditAsset = (props) => {
               size="small"
               label="Amount invested"
               variant="outlined"
-              value={parseFloat(spent).toFixed(2)}
+              value={spent}
               onChange={(e) => {
-                setSpent(parseFloat(e.currentTarget.value));
+                setSpent(e.currentTarget.value);
               }}
               required
               id="spent"
