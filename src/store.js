@@ -12,7 +12,7 @@ import {
   portfolioAssetDeleteReducer,
   portfolioAssetCUDReducer,
 } from "./reducers/portfolioReducers";
-import { userLoginReducer } from "./reducers/userReducers";
+import { userLoginReducer, changePwReducer } from "./reducers/userReducers";
 import { transactionReducer } from "./reducers/transactionReducers";
 
 const reducer = combineReducers({
@@ -23,6 +23,7 @@ const reducer = combineReducers({
   portfolioAssetCUD: portfolioAssetCUDReducer,
   // portfolioAssetDelete: portfolioAssetDeleteReducer,
   userLogin: userLoginReducer,
+  userChangePw: changePwReducer,
   portfolioList: portfolioAssetReducer,
   transactionsList: transactionReducer,
 });

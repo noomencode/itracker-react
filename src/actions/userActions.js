@@ -4,6 +4,9 @@ import {
   USER_LOGIN_SUCCESS,
   USER_LOGIN_FAIL,
   USER_LOGOUT,
+  USER_CHANGEPW_REQUEST,
+  USER_CHANGEPW_SUCCESS,
+  USER_CHANGEPW_FAIL,
 } from "../constants/userConstants";
 
 export const login = (email, password) => async (dispatch) => {
@@ -36,6 +39,45 @@ export const login = (email, password) => async (dispatch) => {
     });
   }
 };
+
+export const changePassword =
+  (oldPassword, newPassword) => async (dispatch, getState) => {
+    const {
+      userLogin: { userInfo },
+    } = getState();
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+    try {
+      dispatch({
+        type: USER_CHANGEPW_REQUEST,
+      });
+
+      const { data } = await axios.post(
+        "/api/users/changePassword",
+        {
+          oldPassword,
+          newPassword,
+        },
+        config
+      );
+
+      dispatch({
+        type: USER_CHANGEPW_SUCCESS,
+        payload: data,
+      });
+    } catch (error) {
+      dispatch({
+        type: USER_CHANGEPW_FAIL,
+        payload:
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message,
+      });
+    }
+  };
 
 export const logOut = () => (dispatch) => {
   dispatch({
