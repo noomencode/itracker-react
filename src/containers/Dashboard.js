@@ -13,7 +13,7 @@ import PortfolioEmpty from "../components/Portfolio/PortfolioEmpty";
 import StockScroller from "../components/StockScroller";
 import WatchListCompact from "../components/WatchListCompact";
 import Message from "../components/Message";
-import AssetChip from "../components/Asset/AssetChip";
+import TopAssets from "../components/Asset/TopAssets";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
@@ -76,11 +76,30 @@ const Dashboard = () => {
           <Grid item lg={9} xs={12}>
             {CUDloading === false && !CUDerror ? renderMessage(CUDtype) : null}
             {CUDerror ? renderMessage("error") : null}
-            {/* <AssetChip
-                  assetName={portfolioAssets[0].assets[0].name}
-                  dailyChange={portfolioAssets[0].assets[0].asset.dailyChange}
-                  currentPrice={portfolioAssets[0].assets[0].asset.price}
-                /> */}
+            <Grid container spacing={1}>
+              <Grid item lg={4} xs={12}>
+                <TopAssets
+                  assets={portfolioAssets}
+                  title="Top winners"
+                  filter="winners"
+                />
+              </Grid>
+              <Grid item lg={4} xs={12}>
+                <TopAssets
+                  assets={portfolioAssets}
+                  title="Top losers"
+                  filter="losers"
+                />
+              </Grid>
+              <Grid item lg={4} xs={12}>
+                <TopAssets
+                  assets={portfolioAssets}
+                  title="Portfolio top"
+                  filter="top"
+                />
+              </Grid>
+            </Grid>
+
             <AssetList />
           </Grid>
           <Grid item lg={3} xs={12}>

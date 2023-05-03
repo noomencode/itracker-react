@@ -5,9 +5,15 @@ import { styled, keyframes } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 
 const Item = styled(Chip)(({ theme }) => ({
-  position: "relative",
+  //position: "relative",
   padding: theme.spacing(1),
+  margin: theme.spacing(0.5),
   height: "5em",
+  display: "flex",
+  justifyContent: "space-between",
+  "& .MuiChip-label": {
+    width: "100%",
+  },
 }));
 
 const PrimaryText = (props) => {
@@ -53,7 +59,17 @@ const AssetChip = (props) => {
       <Item
         variant="outlined"
         label={
-          <Grid container>
+          // <Grid container sx={{ justifyContent: "space-between" }}>
+          //   <Grid item sx={{ display: "flex", flexDirection: "column" }}>
+          //     <span>Hello</span>
+          //     <span>Bye</span>
+          //   </Grid>
+          //   <Grid item>
+          //     <span>yo</span>
+          //   </Grid>
+          // </Grid>
+
+          <Grid container sx={{ justifyContent: "space-between" }}>
             <Grid item>
               <PrimaryText assetName={assetName}></PrimaryText>
               <SecondaryText

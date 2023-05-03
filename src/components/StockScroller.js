@@ -56,7 +56,7 @@ const secondary = (currentprice, changeprice, change) => {
         component="span"
         color={changeprice > 0 ? "secondary.main" : "error.main"}
       >
-        {` ${changeprice > 0 ? "+" : ""}${changeprice} (${change})`}
+        {` ${changeprice > 0 ? "+" : ""}${changeprice} (${change}%)`}
       </Typography>
     </>
     //</Stack>

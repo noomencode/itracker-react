@@ -2,7 +2,7 @@ import { Card, CardContent, Typography, Divider } from "@mui/material";
 import EnhancedTable from "./DataTable";
 import React from "react";
 
-const AssetList = () => {
+const AssetList = (props) => {
   return (
     <>
       <Card>
