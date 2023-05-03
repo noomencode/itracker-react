@@ -358,8 +358,6 @@ const EnhancedTable = () => {
                       />
                     </TableCell>
                     {cells.map((cell) => {
-                      console.log(row.currency);
-
                       if (row[cell.id]) {
                         const Cell = CellMap[cell.type];
                         let value = row[cell.id];

@@ -12,6 +12,7 @@ import Typography from "@mui/material/Typography";
 import ListItemText from "@mui/material/ListItemText";
 import { styled, keyframes } from "@mui/material/styles";
 import Marquee from "react-fast-marquee";
+import AssetChip from "./Asset/AssetChip";
 
 const Item = styled(Chip)(({ theme }) => ({
   ...theme.typography.body2,
@@ -45,7 +46,6 @@ const MuiListItemText = styled(ListItemText)(({ theme }) => ({
 
 const secondary = (currentprice, changeprice, change) => {
   return (
-    //<Stack direction="row">
     <>
       <Typography variant="h6" component="span" color="text.primary">
         {`${currentprice} `}
@@ -59,7 +59,6 @@ const secondary = (currentprice, changeprice, change) => {
         {` ${changeprice > 0 ? "+" : ""}${changeprice} (${change}%)`}
       </Typography>
     </>
-    //</Stack>
   );
 };
 
@@ -69,32 +68,42 @@ const StockScroller = (props) => {
   return (
     <Box sx={{ maxWidth: "100%", marginTop: 2 }}>
       <Marquee speed={75} gradient={false} style={{ overflow: "hidden" }}>
-        <Stack direction="row" spacing={2} sx={{ justifyContent: "center" }}>
+        <Stack direction="row" sx={{ justifyContent: "center" }}>
           {topAssets.map((asset, index) => {
             return (
-              <Item
-                key={index}
-                variant="outlined"
-                label={
-                  <ListItem sx={{ padding: 0 }} key={index}>
-                    <ListItemIcon sx={{ minWidth: 0, color: "secondary.main" }}>
-                      {asset.dailyChange > 0 ? (
-                        <MovingIcon />
-                      ) : (
-                        <TrendingDownIcon />
-                      )}
-                    </ListItemIcon>
-                    <MuiListItemText
-                      primary={asset.name}
-                      secondary={secondary(
-                        asset.price.toFixed(2),
-                        (asset.price * (asset.dailyChange / 100)).toFixed(2),
-                        asset.dailyChange
-                      )}
-                    />
-                  </ListItem>
-                }
-              ></Item>
+              <AssetChip
+                width="250px"
+                assetName={asset.name}
+                dailyChange={asset.dailyChange}
+                currentPrice={asset.price}
+                height={"4em"}
+                percentageHeight={"3em"}
+                percentageWidth={"5em"}
+              />
+              // <Item
+              //   key={index}
+              //   sx={{ ml: 1, mr: 1 }}
+              //   variant="outlined"
+              //   label={
+              //     <ListItem sx={{ padding: 0 }} key={index}>
+              //       <ListItemIcon sx={{ minWidth: 0, color: "secondary.main" }}>
+              //         {asset.dailyChange > 0 ? (
+              //           <MovingIcon />
+              //         ) : (
+              //           <TrendingDownIcon />
+              //         )}
+              //       </ListItemIcon>
+              //       <MuiListItemText
+              //         primary={asset.name}
+              //         secondary={secondary(
+              //           asset.price.toFixed(2),
+              //           (asset.price * (asset.dailyChange / 100)).toFixed(2),
+              //           asset.dailyChange
+              //         )}
+              //       />
+              //     </ListItem>
+              //   }
+              // ></Item>
             );
           })}
         </Stack>
