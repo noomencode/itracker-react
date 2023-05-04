@@ -121,6 +121,7 @@ const EditAsset = (props) => {
               value={shares}
               id="sharesAmount"
               name="sharesAmount"
+              inputMode="decimal"
             ></TextField>
           </Grid>
           <Grid item lg={2} xs={12}>
