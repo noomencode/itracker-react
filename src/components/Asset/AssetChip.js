@@ -8,11 +8,13 @@ const Item = styled(Chip)(({ theme }) => ({
   //position: "relative",
   padding: theme.spacing(1),
   margin: theme.spacing(0.5),
-  height: "5em",
+  // height: "5em",
   display: "flex",
   justifyContent: "space-between",
   "& .MuiChip-label": {
     width: "100%",
+    display: "flex",
+    justifyContent: "center",
   },
 }));
 
@@ -37,13 +39,13 @@ const SecondaryText = (props) => {
 };
 
 const PercentageChip = (props) => {
-  const { dailyChange } = props;
+  const { dailyChange, height, width } = props;
   return (
     <Chip
       sx={{
-        ml: 2,
         borderRadius: "10px",
-        height: "3em",
+        height: height ? height : "3em",
+        width: width ? width : "6em",
       }}
       color={dailyChange > 0 ? "secondary" : "error"}
       variant="outlined"
@@ -53,22 +55,24 @@ const PercentageChip = (props) => {
 };
 
 const AssetChip = (props) => {
-  const { currentPrice, dailyChange, assetName } = props;
+  const {
+    currentPrice,
+    dailyChange,
+    assetName,
+    height,
+    width,
+    percentageHeight,
+    percentageWidth,
+  } = props;
   return (
     <>
       <Item
         variant="outlined"
+        sx={{
+          height: height ? height : "5em",
+          width: width ? width : null,
+        }}
         label={
-          // <Grid container sx={{ justifyContent: "space-between" }}>
-          //   <Grid item sx={{ display: "flex", flexDirection: "column" }}>
-          //     <span>Hello</span>
-          //     <span>Bye</span>
-          //   </Grid>
-          //   <Grid item>
-          //     <span>yo</span>
-          //   </Grid>
-          // </Grid>
-
           <Grid container sx={{ justifyContent: "space-between" }}>
             <Grid item>
               <PrimaryText assetName={assetName}></PrimaryText>
@@ -78,7 +82,11 @@ const AssetChip = (props) => {
               ></SecondaryText>
             </Grid>
             <Grid item>
-              <PercentageChip dailyChange={dailyChange} />
+              <PercentageChip
+                dailyChange={dailyChange}
+                height={percentageHeight}
+                width={percentageWidth}
+              />
             </Grid>
           </Grid>
         }
