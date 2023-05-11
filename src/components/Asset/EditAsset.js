@@ -27,8 +27,12 @@ const EditAsset = (props) => {
   const [customType, setCustomType] = React.useState(
     selected[0]?.customType ? selected[0]?.customType : "N/A"
   );
-  const [spent, setSpent] = React.useState(selected[0]?.spent);
-  const [shares, setShares] = React.useState(selected[0]?.sharesAmount);
+  const [spent, setSpent] = React.useState(
+    parseFloat(selected[0]?.spent).toFixed(2)
+  );
+  const [shares, setShares] = React.useState(
+    parseFloat(selected[0]?.sharesAmount).toFixed(2)
+  );
 
   const handleSubmit = async (event) => {
     event.preventDefault();

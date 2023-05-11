@@ -20,8 +20,8 @@ import { createAsset } from "../../actions/assetActions";
 const AddAsset = (props) => {
   const { handleClose } = props;
   const dispatch = useDispatch();
-  const [spent, setSpent] = React.useState(0);
-  const [shares, setShares] = React.useState(0);
+  const [spent, setSpent] = React.useState(0.0);
+  const [shares, setShares] = React.useState(0.0);
   const [newAsset, setNewAsset] = React.useState(null);
   const [customType, setCustomType] = React.useState("N/A");
 
@@ -31,8 +31,8 @@ const AddAsset = (props) => {
     const body = {
       name: newAsset.shortname,
       ticker: newAsset.symbol,
-      spent: spent,
-      sharesAmount: shares,
+      spent: parseFloat(spent),
+      sharesAmount: parseFloat(shares),
       customType: customType,
     };
     dispatch(createAsset(body));
@@ -103,10 +103,10 @@ const AddAsset = (props) => {
               label="Number of shares"
               variant="outlined"
               onChange={(e) => {
-                setShares(parseFloat(e.currentTarget.value));
+                setShares(e.currentTarget.value);
               }}
               required
-              value={parseFloat(shares)}
+              value={shares}
               id="sharesAmount"
               name="sharesAmount"
             ></TextField>
@@ -119,9 +119,9 @@ const AddAsset = (props) => {
               size="small"
               label="Amount invested"
               variant="outlined"
-              value={parseFloat(spent)}
+              value={spent}
               onChange={(e) => {
-                setSpent(parseFloat(e.currentTarget.value));
+                setSpent(e.currentTarget.value);
               }}
               required
               id="spent"

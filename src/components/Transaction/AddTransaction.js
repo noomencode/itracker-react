@@ -31,11 +31,11 @@ const AddTransaction = (props) => {
   });
 
   const [date, setDate] = React.useState(new Date());
-  const amount = selected?.length ? parseFloat(selected[0].sharesAmount) : 0;
-  const [transactionAmount, setTransactionAmount] = React.useState(0);
-  const spent = selected?.length ? parseFloat(selected[0].spent) : 0;
-  const [transactionExpense, setTransactionExpense] = React.useState(0);
-  const [transactionPrice, setTransactionPrice] = React.useState(0);
+  const amount = selected?.length ? parseFloat(selected[0].sharesAmount) : 0.0;
+  const [transactionAmount, setTransactionAmount] = React.useState(0.0);
+  const spent = selected?.length ? parseFloat(selected[0].spent) : 0.0;
+  const [transactionExpense, setTransactionExpense] = React.useState(0.0);
+  const [transactionPrice, setTransactionPrice] = React.useState(0.0);
   const [type, setType] = React.useState("Buy");
 
   React.useEffect(() => {
@@ -52,15 +52,15 @@ const AddTransaction = (props) => {
       ticker: selected[0]?.ticker,
       sharesAmount:
         type === "Buy"
-          ? amount + transactionAmount
-          : amount - transactionAmount,
-      transactionAmount: transactionAmount,
+          ? parseFloat(amount) + parseFloat(transactionAmount)
+          : parseFloat(amount) - parseFloat(transactionAmount),
+      transactionAmount: parseFloat(transactionAmount),
       spent:
         type === "Buy"
-          ? spent + transactionExpense
-          : spent - transactionExpense,
-      transactionExpense: transactionExpense,
-      price: transactionPrice,
+          ? parseFloat(spent) + parseFloat(transactionExpense)
+          : parseFloat(spent) - parseFloat(transactionExpense),
+      transactionExpense: parseFloat(transactionExpense),
+      price: parseFloat(transactionPrice),
       type: type,
       date: date,
       id: selected[0]?.id,
@@ -135,10 +135,10 @@ const AddTransaction = (props) => {
                   : parseFloat(amount).toFixed(2)
               } shares`}
               onChange={(e) => {
-                setTransactionAmount(parseFloat(e.currentTarget.value));
+                setTransactionAmount(e.currentTarget.value);
               }}
               required
-              value={parseFloat(transactionAmount)}
+              value={transactionAmount}
               id="sharesAmount"
               name="sharesAmount"
             ></TextField>
@@ -163,9 +163,9 @@ const AddTransaction = (props) => {
                   : parseFloat(spent).toFixed(2)
               } €`}
               variant="outlined"
-              value={parseFloat(transactionExpense)}
+              value={transactionExpense}
               onChange={(e) => {
-                setTransactionExpense(parseFloat(e.currentTarget.value));
+                setTransactionExpense(e.currentTarget.value);
               }}
               required
               id="spent"
