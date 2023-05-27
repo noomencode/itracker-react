@@ -79,6 +79,7 @@ export const portfolioAssetCUDReducer = (state = {}, action) => {
 export const portfolioPerformanceReducer = (
   state = {
     totalWorth: 0,
+    totalWorthOnMarketOpen: 0,
     totalSpent: 0,
     totalWorthWithCrypto: 0,
     totalSpentWithCrypto: 0,
@@ -89,6 +90,7 @@ export const portfolioPerformanceReducer = (
     case CALC_PORTFOLIO:
       return {
         totalWorth: action.payload.totalWorth,
+        totalWorthOnMarketOpen: action.payload.totalWorthOnMarketOpen,
         totalSpent: action.payload.totalSpent,
         totalWorthWithCrypto: action.payload.totalWorthWithCrypto,
         totalSpentWithCrypto: action.payload.totalSpentWithCrypto,

@@ -14,6 +14,7 @@ import StockScroller from "../components/StockScroller";
 import WatchListCompact from "../components/WatchListCompact";
 import Message from "../components/Message";
 import TopAssets from "../components/Asset/TopAssets";
+import DailyPortfolioPerformance from "../components/Portfolio/DailyPortfolioPerformance";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
@@ -76,6 +77,7 @@ const Dashboard = () => {
           <Grid item lg={9} xs={12}>
             {CUDloading === false && !CUDerror ? renderMessage(CUDtype) : null}
             {CUDerror ? renderMessage("error") : null}
+
             <Grid container spacing={1}>
               <Grid item lg={4} xs={12}>
                 <TopAssets
@@ -99,10 +101,13 @@ const Dashboard = () => {
                 />
               </Grid>
             </Grid>
-
             <AssetList />
           </Grid>
           <Grid item lg={3} xs={12}>
+            <DailyPortfolioPerformance
+              assets={portfolioAssets}
+              portfolio={portfolio}
+            />
             <Performance portfolio={portfolio} history={history} />
             {history?.length ? <History history={history} /> : null}
             <Allocation portfolio={portfolio} assets={portfolioAssets} />

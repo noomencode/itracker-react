@@ -158,6 +158,16 @@ export const calculatePortfolioPerformance = (data) => async (dispatch) => {
     }
     return acc;
   }, 0);
+  const totalWorthOnMarketOpen = assets.reduce((acc, myAsset) => {
+    if (myAsset.asset.type !== "Cryptocurrency") {
+      acc +=
+        myAsset.sharesAmount *
+        (myAsset.asset.regularMarketOpen ||
+          myAsset.asset.regularMarketPreviousClose);
+    }
+    return acc;
+  }, 0);
+  console.log(totalWorthOnMarketOpen);
   const totalSpent = assets.reduce((acc, myAsset) => {
     if (myAsset.asset.type !== "Cryptocurrency") {
       acc += myAsset.spent;
@@ -177,6 +187,7 @@ export const calculatePortfolioPerformance = (data) => async (dispatch) => {
       type: CALC_PORTFOLIO,
       payload: {
         totalWorth: totalWorth,
+        totalWorthOnMarketOpen: totalWorthOnMarketOpen,
         totalSpent: totalSpent,
         totalWorthWithCrypto: totalWorthWithCrypto,
         totalSpentWithCrypto: totalSpentWithCrypto,

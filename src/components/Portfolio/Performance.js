@@ -50,7 +50,7 @@ const Performance = (props) => {
       <Card sx={{ marginBottom: 1 }}>
         <CardContent>
           <Typography variant="h5" color="text.primary" gutterBottom>
-            Portfolio performance
+            Overall portfolio performance
           </Typography>
           <Divider />
           <List>
@@ -59,7 +59,7 @@ const Performance = (props) => {
                 <AccountBalanceWalletIcon sx={{ color: "secondary.main" }} />
               </ListItemIcon>
               <ListItemText
-                primary={"Current worth"}
+                primary={"Current value"}
                 secondary={
                   showCrypto
                     ? `${totalWorthWithCrypto.toFixed(2)} EUR`
