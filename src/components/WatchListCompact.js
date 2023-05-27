@@ -1,11 +1,18 @@
 import React from "react";
-import { Grid, Card, CardContent, Typography, Divider } from "@mui/material";
+import {
+  Grid,
+  Card,
+  CardContent,
+  Typography,
+  Divider,
+  Box,
+} from "@mui/material";
 
 const WatchListCompact = (props) => {
   const { watchlistAssets } = props;
 
   return (
-    <React.Fragment>
+    <Box sx={{ mb: 1 }}>
       <Card>
         <CardContent>
           <Typography variant="h5" component="h5" gutterBottom>
@@ -21,7 +28,7 @@ const WatchListCompact = (props) => {
           )}
         </CardContent>
       </Card>
-    </React.Fragment>
+    </Box>
   );
 };
 

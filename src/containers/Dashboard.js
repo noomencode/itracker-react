@@ -3,7 +3,7 @@ import Performance from "../components/Portfolio/Performance";
 import History from "../components/Portfolio/History";
 import Allocation from "../components/Portfolio/Allocation";
 import Loading from "../components/Loading";
-import { Grid } from "@mui/material";
+import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -108,10 +108,10 @@ const Dashboard = () => {
               assets={portfolioAssets}
               portfolio={portfolio}
             />
+            <WatchListCompact />
             <Performance portfolio={portfolio} history={history} />
             {history?.length ? <History history={history} /> : null}
             <Allocation portfolio={portfolio} assets={portfolioAssets} />
-            <WatchListCompact />
           </Grid>
         </Grid>
       </Box>
