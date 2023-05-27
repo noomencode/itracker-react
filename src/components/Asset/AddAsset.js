@@ -91,6 +91,7 @@ const AddAsset = (props) => {
               <MenuItem value="Speculation">Speculation</MenuItem>
               <MenuItem value="Dividend">Dividend</MenuItem>
               <MenuItem value="Index">Index</MenuItem>
+              <MenuItem value="Value">Value</MenuItem>
               <MenuItem value="N/A">N/A</MenuItem>
             </TextField>
           </Grid>
