@@ -72,38 +72,11 @@ const StockScroller = (props) => {
           {topAssets.map((asset, index) => {
             return (
               <AssetChip
-                width="250px"
                 assetName={asset.name}
                 dailyChange={asset.dailyChange}
                 currentPrice={asset.price}
-                height={"4em"}
-                percentageHeight={"3em"}
-                percentageWidth={"5em"}
+                miniChip
               />
-              // <Item
-              //   key={index}
-              //   sx={{ ml: 1, mr: 1 }}
-              //   variant="outlined"
-              //   label={
-              //     <ListItem sx={{ padding: 0 }} key={index}>
-              //       <ListItemIcon sx={{ minWidth: 0, color: "secondary.main" }}>
-              //         {asset.dailyChange > 0 ? (
-              //           <MovingIcon />
-              //         ) : (
-              //           <TrendingDownIcon />
-              //         )}
-              //       </ListItemIcon>
-              //       <MuiListItemText
-              //         primary={asset.name}
-              //         secondary={secondary(
-              //           asset.price.toFixed(2),
-              //           (asset.price * (asset.dailyChange / 100)).toFixed(2),
-              //           asset.dailyChange
-              //         )}
-              //       />
-              //     </ListItem>
-              //   }
-              // ></Item>
             );
           })}
         </Stack>

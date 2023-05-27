@@ -152,6 +152,17 @@ export const editPortfolioAsset = (body) => async (dispatch, getState) => {
 
 export const calculatePortfolioPerformance = (data) => async (dispatch) => {
   const { assets } = data[0];
+  const portfolioLastUpdated = assets[0].asset.updatedAt;
+  const date = new Date(portfolioLastUpdated);
+  // Get individual date components
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are zero-based
+  const day = String(date.getDate()).padStart(2, "0");
+  const hours = String(date.getHours()).padStart(2, "0");
+  const minutes = String(date.getMinutes()).padStart(2, "0");
+  // Create the formatted date string
+  const formattedDate = `${year}-${month}-${day} ${hours}:${minutes}`;
+
   const totalWorth = assets.reduce((acc, myAsset) => {
     if (myAsset.asset.type !== "Cryptocurrency") {
       acc += myAsset.sharesAmount * myAsset.asset.price;
@@ -167,7 +178,6 @@ export const calculatePortfolioPerformance = (data) => async (dispatch) => {
     }
     return acc;
   }, 0);
-  console.log(totalWorthOnMarketOpen);
   const totalSpent = assets.reduce((acc, myAsset) => {
     if (myAsset.asset.type !== "Cryptocurrency") {
       acc += myAsset.spent;
@@ -191,6 +201,7 @@ export const calculatePortfolioPerformance = (data) => async (dispatch) => {
         totalSpent: totalSpent,
         totalWorthWithCrypto: totalWorthWithCrypto,
         totalSpentWithCrypto: totalSpentWithCrypto,
+        portfolioUpdated: formattedDate,
       },
     });
   } catch (error) {

@@ -94,6 +94,7 @@ export const portfolioPerformanceReducer = (
         totalSpent: action.payload.totalSpent,
         totalWorthWithCrypto: action.payload.totalWorthWithCrypto,
         totalSpentWithCrypto: action.payload.totalSpentWithCrypto,
+        portfolioUpdated: action.payload.portfolioUpdated,
       };
     default:
       return state;

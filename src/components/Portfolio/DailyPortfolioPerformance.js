@@ -8,26 +8,7 @@ import PercentIcon from "@mui/icons-material/Percent";
 
 const DailyPortfolioPerformance = (props) => {
   const { assets, portfolio } = props;
-  //   const tradeableAssets = assets[0].assets.filter(
-  //     (ass) => ass.asset.tradeable === false
-  //   );
-  //   console.log(tradeableAssets);
-  //   const dailyChangeAmount = tradeableAssets.reduce((acc, ass) => {
-  //     return (
-  //       acc +
-  //       (ass.sharesAmount * ass.asset.price -
-  //         ass.sharesAmount *
-  //           (ass.asset.regularMarketOpen || ass.asset.regularMarketPreviousClose))
-  //     );
-  //   }, 0);
-  //   const dailyChangePercent = tradeableAssets.reduce((acc, ass) => {
-  //     return (
-  //       acc +
-  //       (ass.sharesAmount * ass.asset.price -
-  //         ass.sharesAmount *
-  //           (ass.asset.regularMarketOpen || ass.asset.regularMarketPreviousClose))
-  //     );
-  //   }, 0);
+
   const dailyChangeAmount =
     portfolio.totalWorth - portfolio.totalWorthOnMarketOpen;
   const dailyChangePercent =
@@ -83,6 +64,13 @@ const DailyPortfolioPerformance = (props) => {
               </ListItem>
             </Grid>
           </Grid>
+          <Typography
+            variant="h6"
+            color="text.primary"
+            sx={{ display: "flex", justifyContent: "end" }}
+          >
+            {`Last updated:${portfolio.portfolioUpdated}`}
+          </Typography>
         </CardContent>
       </Card>
     </Box>

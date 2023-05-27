@@ -151,12 +151,13 @@ const EnhancedTable = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(25);
   const { dialog } = useSelector((state) => state.assetDialog);
-  const { totalWorth } = useSelector((state) => state.portfolio);
+  const { totalWorth, portfolioUpdated } = useSelector(
+    (state) => state.portfolio
+  );
   const { assets } = useSelector(
     (state) => state.portfolioList.portfolioAssets[0]
   );
   const dispatch = useDispatch();
-  let updatedTimestamp;
 
   useEffect(() => {
     if (layout === "small") {
@@ -177,9 +178,8 @@ const EnhancedTable = () => {
 
   const rows = assets.map((myAsset) => {
     const { customType, spent, sharesAmount, name, ticker, _id } = myAsset;
-    const { price, dailyChange, updatedAt, averageAnalystRating, currency } =
+    const { price, dailyChange, averageAnalystRating, currency } =
       myAsset.asset;
-    updatedTimestamp = updatedAt;
     return {
       name: name,
       ticker: ticker,
@@ -398,7 +398,7 @@ const EnhancedTable = () => {
         color="text.secondary"
         sx={{ paddingTop: 2, paddingLeft: 2 }}
       >
-        Last updated: {updatedTimestamp}
+        Last updated: {portfolioUpdated}
       </Typography>
       <TablePagination
         rowsPerPageOptions={[5, 10, 25]}

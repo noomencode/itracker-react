@@ -5,10 +5,8 @@ import { styled, keyframes } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 
 const Item = styled(Chip)(({ theme }) => ({
-  //position: "relative",
   padding: theme.spacing(1),
   margin: theme.spacing(0.5),
-  // height: "5em",
   display: "flex",
   justifyContent: "space-between",
   "& .MuiChip-label": {
@@ -44,8 +42,8 @@ const PercentageChip = (props) => {
     <Chip
       sx={{
         borderRadius: "10px",
-        height: height ? height : "3em",
-        width: width ? width : "6em",
+        height: height,
+        width: width,
       }}
       color={dailyChange > 0 ? "secondary" : "error"}
       variant="outlined"
@@ -54,28 +52,37 @@ const PercentageChip = (props) => {
   );
 };
 
+const MarketClosedChip = () => {
+  return (
+    <Chip
+      sx={{
+        borderRadius: "10px",
+        height: "1.5em",
+        width: "4.5em",
+        ml: 1,
+      }}
+      color={"warning"}
+      variant="outlined"
+      label={`Closed`}
+    />
+  );
+};
+
 const AssetChip = (props) => {
-  const {
-    currentPrice,
-    dailyChange,
-    assetName,
-    height,
-    width,
-    percentageHeight,
-    percentageWidth,
-  } = props;
+  const { currentPrice, dailyChange, assetName, miniChip, tradeable } = props;
   return (
     <>
       <Item
         variant="outlined"
         sx={{
-          height: height ? height : "5em",
-          width: width ? width : null,
+          height: miniChip ? "4em" : "5em",
+          width: miniChip ? "250px" : null,
         }}
         label={
           <Grid container sx={{ justifyContent: "space-between" }}>
             <Grid item>
               <PrimaryText assetName={assetName}></PrimaryText>
+              {!miniChip && !tradeable ? <MarketClosedChip /> : null}
               <SecondaryText
                 currentPrice={currentPrice}
                 dailyChange={dailyChange}
@@ -84,8 +91,8 @@ const AssetChip = (props) => {
             <Grid item>
               <PercentageChip
                 dailyChange={dailyChange}
-                height={percentageHeight}
-                width={percentageWidth}
+                height={miniChip ? "3em" : "3em"}
+                width={miniChip ? "5em" : "6em"}
               />
             </Grid>
           </Grid>
