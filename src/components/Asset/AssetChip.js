@@ -3,6 +3,7 @@ import Chip from "@mui/material/Chip";
 import Grid from "@mui/material/Grid";
 import { styled, keyframes } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
+import LockIcon from "@mui/icons-material/Lock";
 
 const Item = styled(Chip)(({ theme }) => ({
   padding: theme.spacing(1),
@@ -19,7 +20,16 @@ const Item = styled(Chip)(({ theme }) => ({
 const PrimaryText = (props) => {
   const { assetName } = props;
   return (
-    <Typography variant="span" sx={{ fontWeight: 600 }}>
+    <Typography
+      variant="span"
+      sx={{
+        fontWeight: 600,
+        fontSize: { xs: "0.9em", sm: "1.1em" },
+        // display: { xs: "inline-flex" },
+        // maxWidth: { xs: "50%" },
+        // overflow: { xs: "hidden" },
+      }}
+    >
       {assetName}
     </Typography>
   );
@@ -54,17 +64,18 @@ const PercentageChip = (props) => {
 
 const MarketClosedChip = () => {
   return (
-    <Chip
-      sx={{
-        borderRadius: "10px",
-        height: "1.5em",
-        width: "4.5em",
-        ml: 1,
-      }}
-      color={"warning"}
-      variant="outlined"
-      label={`Closed`}
-    />
+    // <Chip
+    //   sx={{
+    //     borderRadius: "10px",
+    //     height: "1.5em",
+    //     width: "4.5em",
+    //     ml: 1,
+    //   }}
+    //   color={"warning"}
+    //   variant="outlined"
+    //   label={<LockIcon color={"warning"}/>}
+    // />
+    <LockIcon color={"warning"} sx={{ fontSize: "1em", ml: 1 }} />
   );
 };
 
