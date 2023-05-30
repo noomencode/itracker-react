@@ -177,7 +177,6 @@ export const calculatePortfolioPerformance = (data) => async (dispatch) => {
       } else {
         prevPrice = myAsset.asset.price;
       }
-      console.log(myAsset.name, prevPrice);
       acc += myAsset.sharesAmount * prevPrice;
     }
     return acc;
