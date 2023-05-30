@@ -3,6 +3,7 @@ import EnhancedTable from "./DataTable";
 import React from "react";
 
 const AssetList = (props) => {
+  const { assets } = props;
   return (
     <>
       <Card>
@@ -12,7 +13,7 @@ const AssetList = (props) => {
           </Typography>
           <Divider />
         </CardContent>
-        <EnhancedTable />
+        <EnhancedTable assets={{ assets }} />
       </Card>
     </>
   );

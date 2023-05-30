@@ -44,11 +44,12 @@ const TopAssets = (props) => {
           <Divider />
         </CardContent>
         <CardContent>
-          {filteredAssets.map((ass) => {
+          {filteredAssets.map((ass, index) => {
             return (
               <AssetChip
+                key={index}
                 assetName={ass.name}
-                dailyChange={ass.asset.dailyChange}
+                dailyChange={ass.asset.dailyChange.toFixed(2)}
                 currentPrice={ass.asset.price}
                 marketState={ass.asset.marketState}
               />

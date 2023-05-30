@@ -26,6 +26,9 @@ const Dashboard = () => {
   const { portfolioAssets, loading, error } = useSelector(
     (state) => state.portfolioList
   );
+  const { topAssets, loading: topAssetLoading } = useSelector(
+    (state) => state.topAssets
+  );
 
   const renderMessage = (type) => {
     switch (type) {
@@ -61,69 +64,74 @@ const Dashboard = () => {
   const portfolio = useSelector((state) => state.portfolio);
   const { history } = portfolioAssets?.length ? portfolioAssets[0] : [];
 
-  if (loading) {
-    return <Loading open={loading} />;
-  }
-
-  if (error || !portfolioAssets || !portfolioAssets.length) {
+  if (error && !portfolioAssets?.length) {
     return <PortfolioEmpty component={"AssetList"} />;
-  }
+  } else if (
+    loading ||
+    topAssetLoading ||
+    !portfolioAssets?.length ||
+    !topAssets?.length
+  ) {
+    return <Loading open={loading} />;
+  } else {
+    return (
+      <>
+        {topAssets.length ? <StockScroller topAssets={topAssets} /> : null}
+        <Box sx={{ margin: 2 }}>
+          <Grid container spacing={1}>
+            <Grid item lg={9} xs={12} order={{ xs: 2, lg: 1 }}>
+              {CUDloading === false && !CUDerror
+                ? renderMessage(CUDtype)
+                : null}
+              {CUDerror ? renderMessage("error") : null}
 
-  return (
-    <>
-      <StockScroller />
-      <Box sx={{ margin: 2 }}>
-        <Grid container spacing={1}>
-          <Grid item lg={9} xs={12} order={{ xs: 2, lg: 1 }}>
-            {CUDloading === false && !CUDerror ? renderMessage(CUDtype) : null}
-            {CUDerror ? renderMessage("error") : null}
-
-            <Grid container spacing={1}>
-              <Grid item lg={4} xs={12}>
-                <TopAssets
-                  assets={portfolioAssets}
-                  title="Top winners"
-                  filter="winners"
-                />
-              </Grid>
-              <Grid item lg={4} xs={12}>
-                <TopAssets
-                  assets={portfolioAssets}
-                  title="Top losers"
-                  filter="losers"
-                />
-              </Grid>
-              <Grid item lg={4} xs={12}>
-                <TopAssets
-                  assets={portfolioAssets}
-                  title="Portfolio top"
-                  filter="top"
-                />
+              <Grid container spacing={1}>
+                <Grid item lg={4} xs={12}>
+                  <TopAssets
+                    assets={portfolioAssets}
+                    title="Top winners"
+                    filter="winners"
+                  />
+                </Grid>
+                <Grid item lg={4} xs={12}>
+                  <TopAssets
+                    assets={portfolioAssets}
+                    title="Top losers"
+                    filter="losers"
+                  />
+                </Grid>
+                <Grid item lg={4} xs={12}>
+                  <TopAssets
+                    assets={portfolioAssets}
+                    title="Portfolio top"
+                    filter="top"
+                  />
+                </Grid>
               </Grid>
             </Grid>
+            <Grid item lg={3} xs={12} order={{ xs: 1, lg: 2 }}>
+              <DailyPortfolioPerformance
+                assets={portfolioAssets}
+                portfolio={portfolio}
+              />
+              <WatchListCompact />
+            </Grid>
           </Grid>
-          <Grid item lg={3} xs={12} order={{ xs: 1, lg: 2 }}>
-            <DailyPortfolioPerformance
-              assets={portfolioAssets}
-              portfolio={portfolio}
-            />
-            <WatchListCompact />
-          </Grid>
-        </Grid>
-        <Grid container spacing={1}>
-          <Grid item lg={9} xs={12}>
-            <AssetList />
-          </Grid>
-          <Grid item lg={3} xs={12}>
-            <Performance portfolio={portfolio} history={history} />
+          <Grid container spacing={1}>
+            <Grid item lg={9} xs={12}>
+              <AssetList assets={portfolioAssets} />
+            </Grid>
+            <Grid item lg={3} xs={12}>
+              <Performance portfolio={portfolio} history={history} />
 
-            {history?.length ? <History history={history} /> : null}
-            <Allocation portfolio={portfolio} assets={portfolioAssets} />
+              {history?.length ? <History history={history} /> : null}
+              <Allocation portfolio={portfolio} assets={portfolioAssets} />
+            </Grid>
           </Grid>
-        </Grid>
-      </Box>
-    </>
-  );
+        </Box>
+      </>
+    );
+  }
 };
 
 export default Dashboard;

@@ -9,7 +9,6 @@ import LatestTransactions from "../components/Transaction/LatestTransactions";
 const Transactions = () => {
   return (
     <>
-      <StockScroller />
       <Box sx={{ margin: 2 }}>
         <Grid container spacing={1}>
           <Grid item lg={9} xs={12}>

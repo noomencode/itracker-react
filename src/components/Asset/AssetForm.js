@@ -5,7 +5,6 @@ import AddTransaction from "../Transaction/AddTransaction";
 
 const AssetForm = (props) => {
   const { selected, mode, handleClose } = props;
-  console.log(mode);
 
   const formToRender = (mode) => {
     switch (mode) {
@@ -15,6 +14,8 @@ const AssetForm = (props) => {
         return <EditAsset selected={selected} handleClose={handleClose} />;
       case "transaction":
         return <AddTransaction selected={selected} handleClose={handleClose} />;
+      case "emptyPortfolio":
+        return <AddAsset type={mode} />;
       default:
         break;
     }

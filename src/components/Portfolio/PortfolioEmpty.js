@@ -9,7 +9,7 @@ const PortfolioEmpty = ({ component }) => {
         {component === "AssetList" ? (
           <CardContent>
             <Typography
-              variant="h6"
+              variant="h5"
               component="h6"
               color="text.primary"
               fontWeight={800}
@@ -18,7 +18,7 @@ const PortfolioEmpty = ({ component }) => {
               First step: Add some assets to your portfolio.
             </Typography>
             <Divider />
-            <AssetForm />
+            <AssetForm mode="emptyPortfolio" />
           </CardContent>
         ) : (
           <CardContent>

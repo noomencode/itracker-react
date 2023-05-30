@@ -18,7 +18,7 @@ import { useDispatch } from "react-redux";
 import { createAsset } from "../../actions/assetActions";
 
 const AddAsset = (props) => {
-  const { handleClose } = props;
+  const { handleClose, type } = props;
   const dispatch = useDispatch();
   const [spent, setSpent] = React.useState(0.0);
   const [shares, setShares] = React.useState(0.0);
@@ -36,7 +36,9 @@ const AddAsset = (props) => {
       customType: customType,
     };
     dispatch(createAsset(body));
-    handleClose();
+    if (type !== "emptyPortfolio") {
+      handleClose();
+    }
   };
 
   const handleNewAsset = (asset) => {
@@ -49,9 +51,11 @@ const AddAsset = (props) => {
         <Typography variant="h5" color="text.primary" gutterBottom>
           Add asset
         </Typography>
-        <IconButton onClick={() => handleClose()}>
-          <CloseIcon />
-        </IconButton>
+        {type !== "emptyPortfolio" ? (
+          <IconButton onClick={() => handleClose()}>
+            <CloseIcon />
+          </IconButton>
+        ) : null}
       </Box>
       <Box
         component="form"

@@ -59,43 +59,40 @@ const headCells = [
     id: "dailyChange",
     specification: "main",
     type: "importantNumber",
-    labelType: "percentage",
+    labeltype: "percentage",
     cellProps: {
       sx: {
         width: "5%",
       },
     },
-    assignColor: assignColor,
     label: "Change",
   },
   {
     id: "profit",
-    type: "importantNumber",
     specification: "main",
-    labelType: "percentage",
+    labeltype: "percentage",
+    type: "importantNumber",
     cellProps: {
       sx: { width: "5%" },
     },
-    assignColor: assignColor,
-
     label: "Profit %",
   },
   {
     id: "profitEUR",
     specification: "main",
+    labeltype: "currency",
     type: "importantNumber",
     cellProps: {
       sx: { width: "10%" },
     },
-    labelType: "currency",
-    assignColor: assignColor,
     label: "Profit",
   },
   {
     id: "worth",
     type: "number",
     specification: "extra",
-    labelType: "currency",
+    labeltype: "currency",
+
     cellProps: {
       sx: { width: "10%" },
     },
@@ -105,7 +102,8 @@ const headCells = [
     id: "spent",
     type: "number",
     specification: "extra",
-    labelType: "currency",
+    labeltype: "currency",
+
     cellProps: {
       sx: { width: "10%" },
     },
@@ -115,7 +113,7 @@ const headCells = [
     id: "avgPurchasePrice",
     type: "number",
     specification: "extra",
-    labelType: "currency",
+    labeltype: "currency",
     cellProps: {
       sx: { width: "5%" },
     },
@@ -125,7 +123,8 @@ const headCells = [
     id: "portfolioPercentage",
     type: "number",
     specification: "extra",
-    labelType: "percentage",
+    labeltype: "percentage",
+
     cellProps: {
       sx: { width: "5%" },
     },
@@ -142,7 +141,8 @@ const headCells = [
   },
 ];
 
-const EnhancedTable = () => {
+const EnhancedTable = (props) => {
+  const portfolioAssets = props.assets.assets[0].assets;
   const [order, setOrder] = useState("desc");
   const [orderBy, setOrderBy] = useState("worth");
   const [selected, setSelected] = useState([]);
@@ -154,9 +154,9 @@ const EnhancedTable = () => {
   const { totalWorth, portfolioUpdated } = useSelector(
     (state) => state.portfolio
   );
-  const { assets } = useSelector(
-    (state) => state.portfolioList.portfolioAssets[0]
-  );
+  // const { assets } = useSelector(
+  //   (state) => state.portfolioList.portfolioAssets[0]
+  // );
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -176,7 +176,7 @@ const EnhancedTable = () => {
     }
   };
 
-  const rows = assets.map((myAsset) => {
+  const rows = portfolioAssets.map((myAsset) => {
     const { customType, spent, sharesAmount, name, ticker, _id } = myAsset;
     const { price, dailyChange, averageAnalystRating, currency } =
       myAsset.asset;
@@ -292,15 +292,17 @@ const EnhancedTable = () => {
         <Chip
           {...chipProps}
           label={
-            props.labelType === "percentage"
+            props.labeltype === "percentage"
               ? `${value} ${percentage}`
-              : props.labelType === "currency"
+              : props.labeltype === "currency"
               ? `${value} ${currency}`
               : `${value}`
           }
           variant="outlined"
           sx={{ width: "100%" }}
-          color={props.assignColor ? props.assignColor(value, 0) : "default"}
+          color={
+            props.type === "importantNumber" ? assignColor(value, 0) : "default"
+          }
         ></Chip>
       </TableCell>
     );
@@ -363,10 +365,10 @@ const EnhancedTable = () => {
                         let value = row[cell.id];
                         const props = { ...cell.cellProps };
                         if (cell.type === "importantNumber") {
-                          props.assignColor = cell.assignColor;
+                          props.type = cell.type;
                         }
-                        if (cell.labelType) {
-                          props.labelType = cell.labelType;
+                        if (cell.labeltype) {
+                          props.labeltype = cell.labeltype;
                         }
                         if (cell.id === "portfolioPercentage") {
                           value = `${parseFloat(
