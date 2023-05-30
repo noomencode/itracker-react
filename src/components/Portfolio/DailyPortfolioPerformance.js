@@ -10,9 +10,9 @@ const DailyPortfolioPerformance = (props) => {
   const { assets, portfolio } = props;
 
   const dailyChangeAmount =
-    portfolio.totalWorth - portfolio.totalWorthOnMarketOpen;
+    portfolio.totalWorth - portfolio.totalWorthOnPreviousClose;
   const dailyChangePercent =
-    (portfolio.totalWorth - portfolio.totalWorthOnMarketOpen) /
+    (portfolio.totalWorth - portfolio.totalWorthOnPreviousClose) /
     portfolio.totalWorth;
   return (
     <Box sx={{ mb: 1 }}>
@@ -42,6 +42,7 @@ const DailyPortfolioPerformance = (props) => {
                       />
                     </ListItemIcon>
                     <ListItemText
+                      sx={{ overflow: "hidden" }}
                       primary={"Daily value change"}
                       secondary={`${dailyChangeAmount.toFixed(2)}€`}
                       primaryTypographyProps={{ variant: "h6" }}
@@ -72,6 +73,7 @@ const DailyPortfolioPerformance = (props) => {
                       />
                     </ListItemIcon>
                     <ListItemText
+                      sx={{ overflow: "hidden" }}
                       primary={"Daily yield change"}
                       secondary={`${(dailyChangePercent * 100).toFixed(2)}%`}
                       primaryTypographyProps={{ variant: "h6" }}

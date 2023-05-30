@@ -80,7 +80,7 @@ const MarketClosedChip = () => {
 };
 
 const AssetChip = (props) => {
-  const { currentPrice, dailyChange, assetName, miniChip, tradeable } = props;
+  const { currentPrice, dailyChange, assetName, miniChip, marketState } = props;
   return (
     <>
       <Item
@@ -93,7 +93,9 @@ const AssetChip = (props) => {
           <Grid container sx={{ justifyContent: "space-between" }}>
             <Grid item>
               <PrimaryText assetName={assetName}></PrimaryText>
-              {!miniChip && !tradeable ? <MarketClosedChip /> : null}
+              {!miniChip && marketState !== "REGULAR" ? (
+                <MarketClosedChip />
+              ) : null}
               <SecondaryText
                 currentPrice={currentPrice}
                 dailyChange={dailyChange}

@@ -90,7 +90,7 @@ export const portfolioPerformanceReducer = (
     case CALC_PORTFOLIO:
       return {
         totalWorth: action.payload.totalWorth,
-        totalWorthOnMarketOpen: action.payload.totalWorthOnMarketOpen,
+        totalWorthOnPreviousClose: action.payload.totalWorthOnPreviousClose,
         totalSpent: action.payload.totalSpent,
         totalWorthWithCrypto: action.payload.totalWorthWithCrypto,
         totalSpentWithCrypto: action.payload.totalSpentWithCrypto,

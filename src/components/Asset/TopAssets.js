@@ -50,7 +50,7 @@ const TopAssets = (props) => {
                 assetName={ass.name}
                 dailyChange={ass.asset.dailyChange}
                 currentPrice={ass.asset.price}
-                tradeable={ass.asset.tradeable}
+                marketState={ass.asset.marketState}
               />
             );
           })}
