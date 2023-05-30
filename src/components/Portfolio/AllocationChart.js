@@ -7,23 +7,24 @@ import {
   Legend,
   LabelList,
   ResponsiveContainer,
+  Tooltip,
 } from "recharts";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
+import { useTheme } from "@mui/material/styles";
 
-const getRandomColor = () => {
-  var colors = [
+const getRandomColor = (usedColors) => {
+  const colors = [
     "#1D639D",
     "#7BB1D3",
-    "#2468A2",
     "#3F95B5",
     "#28739E",
     "#4B9FD1",
-    "#006F9C",
+    "#7FBFD6",
+    "#00708A",
     "#7FBFD6",
     "#00708A",
     "#009DD6",
-    "#00A2D1",
     "#007AA5",
     "#009EBF",
     "#007FB5",
@@ -31,8 +32,8 @@ const getRandomColor = () => {
     "#0A2468",
     "#1068A2",
     "#3F91B5",
-    "#3F95BD",
     "#3F9DBF",
+    "#3F95BF",
     "#70B5D1",
     "#3F91A2",
     "#007B9E",
@@ -52,8 +53,8 @@ const getRandomColor = () => {
     "#0A6891",
     "#7F95A2",
     "#4F91A2",
-    "#3F95BF",
-    "#3F95A5",
+    "#3F9EBF",
+    "#3F9EA5",
     "#3F9EBF",
     "#0A6891",
     "#7FB5BF",
@@ -102,11 +103,16 @@ const getRandomColor = () => {
     "#0A70A5",
     "#3F95A5",
   ];
-  var randomIndex = Math.floor(Math.random() * colors.length);
-  return colors[randomIndex];
+  const availableColors = colors.filter((color) => !usedColors.includes(color));
+  const randomIndex = Math.floor(Math.random() * availableColors.length);
+  const randomColor = availableColors[randomIndex];
+
+  return randomColor;
 };
 
 const generateBar = (sortedArray) => {
+  let usedColors = []; // Array to store the used colors
+
   const result = sortedArray.map((dataObj, i) =>
     Object.keys(dataObj)
       .filter((propName) => {
@@ -114,48 +120,51 @@ const generateBar = (sortedArray) => {
       })
       .map((trackName) => {
         if (i === 0) {
+          const randomColor = getRandomColor(usedColors); // Get a random color
+
+          usedColors.push(randomColor); // Add the color to the used colors array
+
           return (
             <Bar
               dataKey={trackName}
               stackId="stack"
-              fill={getRandomColor()}
+              fill={randomColor}
               name={`${trackName}`}
             >
               <LabelList
                 dataKey={trackName}
                 name={trackName}
                 content={renderCustomizedLabel}
-                position="middle"
               />
             </Bar>
           );
         }
       })
   );
+
   return result;
 };
 const renderCustomizedLabel = (props) => {
   const { x, y, width, height, value, name } = props;
-
-  return (
-    <g>
-      {/* <foreignObject x={x} y={y - height / 2} width={"100%"} height={height}>
-        <Typography
-          variant="span"
-          sx={{ fontStyle: "italic" }}
-        >{`${name}`}</Typography>
-      </foreignObject> */}
-      <foreignObject x={x + 10} y={y} width={"100%"} height={height}>
-        <Typography
-          variant="span"
-          sx={{ fontWeight: 600 }}
-        >{`${value}%`}</Typography>
-      </foreignObject>
-    </g>
-  );
+  if (value > 5) {
+    return (
+      <g>
+        <foreignObject x={x + 5} y={y - 20} width={"100%"} height={height}>
+          <Typography
+            variant="span"
+            sx={{ fontWeight: 600 }}
+          >{`${value}%`}</Typography>
+        </foreignObject>
+      </g>
+    );
+  } else {
+    return null;
+  }
 };
 
 function AllocationChart(props) {
+  const theme = useTheme();
+
   const { data } = props;
   return (
     <React.Fragment>
@@ -174,6 +183,12 @@ function AllocationChart(props) {
         >
           <XAxis type="number" domain={[0, 100]} hide={true} />
           <YAxis dataKey="name" type="category" hide={true} />
+          <Tooltip
+            contentStyle={{
+              backgroundColor: theme.palette.primary.main,
+            }}
+            position={{ x: 0, y: -90 }}
+          />
           {generateBar(data)}
           <Legend />
         </BarChart>
