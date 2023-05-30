@@ -74,7 +74,7 @@ const Dashboard = () => {
       <StockScroller />
       <Box sx={{ margin: 2 }}>
         <Grid container spacing={1}>
-          <Grid item lg={9} xs={12}>
+          <Grid item lg={9} xs={12} order={{ xs: 2, lg: 1 }}>
             {CUDloading === false && !CUDerror ? renderMessage(CUDtype) : null}
             {CUDerror ? renderMessage("error") : null}
 
@@ -101,15 +101,22 @@ const Dashboard = () => {
                 />
               </Grid>
             </Grid>
-            <AssetList />
           </Grid>
-          <Grid item lg={3} xs={12}>
+          <Grid item lg={3} xs={12} order={{ xs: 1, lg: 2 }}>
             <DailyPortfolioPerformance
               assets={portfolioAssets}
               portfolio={portfolio}
             />
             <WatchListCompact />
+          </Grid>
+        </Grid>
+        <Grid container spacing={1}>
+          <Grid item lg={9} xs={12}>
+            <AssetList />
+          </Grid>
+          <Grid item lg={3} xs={12}>
             <Performance portfolio={portfolio} history={history} />
+
             {history?.length ? <History history={history} /> : null}
             <Allocation portfolio={portfolio} assets={portfolioAssets} />
           </Grid>
