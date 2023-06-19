@@ -172,11 +172,19 @@ export const calculatePortfolioPerformance = (data) => async (dispatch) => {
   const totalWorthOnPreviousClose = assets.reduce((acc, myAsset) => {
     if (myAsset.asset.type !== "Cryptocurrency") {
       let prevPrice;
-      if (myAsset.asset.marketState === "REGULAR") {
-        prevPrice = myAsset.asset.regularMarketPreviousClose;
+      const currentDate = new Date().toISOString().slice(0, 10); // Extract YYYY-MM-DD part
+      if (myAsset.asset.marketState !== "REGULAR") {
+        if (myAsset.asset.regularMarketTime.slice(0, 10) < currentDate) {
+          //If market is CLOSED and the last timestamp is not from today, then give regular price.
+          prevPrice = myAsset.asset.price;
+        } else {
+          //If market is CLOSED and the last timestamp is from today, then give previous close price.
+          prevPrice = myAsset.asset.regularMarketPreviousClose;
+        }
       } else {
-        prevPrice = myAsset.asset.price;
+        prevPrice = myAsset.asset.regularMarketPreviousClose;
       }
+
       acc += myAsset.sharesAmount * prevPrice;
     }
     return acc;
