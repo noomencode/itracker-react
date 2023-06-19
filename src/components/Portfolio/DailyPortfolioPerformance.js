@@ -35,7 +35,7 @@ const DailyPortfolioPerformance = (props) => {
                     <ListItemIcon>
                       <AccountBalanceWalletIcon
                         sx={
-                          dailyChangeAmount > 0
+                          dailyChangeAmount >= 0
                             ? { color: "secondary.main" }
                             : { color: "error.main" }
                         }
