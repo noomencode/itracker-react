@@ -15,6 +15,7 @@ import Container from "@mui/material/Container";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { login, logOut } from "../actions/userActions";
 import Loading from "../components/Loading";
+import ScaleLoader from "react-spinners/ScaleLoader";
 
 export default function SignIn() {
   const { userInfo, loading } = useSelector((state) => state.userLogin);
@@ -45,7 +46,31 @@ export default function SignIn() {
   };
 
   if (loading) {
-    return <Loading />;
+    return (
+      <Box
+        sx={{
+          marginTop: 10,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        <ScaleLoader
+          color="#00f59f"
+          // cssOverride={{
+          //   position: "fixed",
+          //   top: "50%",
+          //   left: "50%",
+          //   transform: "translate(-50%, -50%)",
+          // }}
+          cssOverride={{ marginBottom: "20px" }}
+          width={5}
+        ></ScaleLoader>
+        <Typography variant="h5">
+          Starting the server. This might take some time.
+        </Typography>
+      </Box>
+    );
   } else {
     return (
       <Container component="main" maxWidth="xs">
