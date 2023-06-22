@@ -184,10 +184,14 @@ const AddTransaction = (props) => {
               }
               size="small"
               label="Estimated price"
-              helperText={`New average: ${(
-                (transactionExpense + spent) /
-                (amount + transactionAmount)
-              ).toFixed(2)}`}
+              helperText={
+                transactionAmount && transactionExpense
+                  ? `New average: ${(
+                      (parseFloat(transactionExpense) + parseFloat(spent)) /
+                      (parseFloat(amount) + parseFloat(transactionAmount))
+                    ).toFixed(2)}`
+                  : null
+              }
               variant="outlined"
               id="price"
               name="price"
