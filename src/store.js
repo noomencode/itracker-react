@@ -12,6 +12,10 @@ import {
   portfolioAssetDeleteReducer,
   portfolioAssetCUDReducer,
 } from "./reducers/portfolioReducers";
+import {
+  watchlistAssetReducer,
+  watchlistAssetCUDReducer,
+} from "./reducers/watchlistReducers";
 import { userLoginReducer, changePwReducer } from "./reducers/userReducers";
 import { transactionReducer } from "./reducers/transactionReducers";
 
@@ -21,6 +25,8 @@ const reducer = combineReducers({
   assetAdd: assetReducer,
   portfolio: portfolioPerformanceReducer,
   portfolioAssetCUD: portfolioAssetCUDReducer,
+  watchlist: watchlistAssetReducer,
+  watchlistCUD: watchlistAssetCUDReducer,
   // portfolioAssetDelete: portfolioAssetDeleteReducer,
   userLogin: userLoginReducer,
   userChangePw: changePwReducer,

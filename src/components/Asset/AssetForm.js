@@ -4,12 +4,12 @@ import AddAsset from "./AddAsset";
 import AddTransaction from "../Transaction/AddTransaction";
 
 const AssetForm = (props) => {
-  const { selected, mode, handleClose } = props;
+  const { selected, mode, type, handleClose } = props;
 
   const formToRender = (mode) => {
     switch (mode) {
       case "add":
-        return <AddAsset handleClose={handleClose} />;
+        return <AddAsset handleClose={handleClose} type={type} />;
       case "edit":
         return <EditAsset selected={selected} handleClose={handleClose} />;
       case "transaction":
