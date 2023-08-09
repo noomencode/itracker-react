@@ -1,5 +1,6 @@
 import { Card, CardContent, Typography, Divider } from "@mui/material";
 import React, { useEffect } from "react";
+import WatchlistTable from "./WatchlistTable";
 import { useDispatch, useSelector } from "react-redux";
 import { getWatchlistAssets } from "../../actions/watchlistActions";
 
@@ -14,6 +15,15 @@ const Watchlist = (props) => {
       return {
         asset: asset.name,
         ticker: asset.ticker,
+        price: asset.price,
+        change: asset.dailyChange.toFixed(2),
+        fiftyTwoWeekLow: asset.fiftyTwoWeekLow?.toFixed(2) || "N/A",
+        fiftyTwoWeekHigh: asset.fiftyTwoWeekHigh?.toFixed(2) || "N/A",
+        forwardPE: asset.forwardPE?.toFixed(2) || "N/A",
+        trailingPE: asset.trailingPE?.toFixed(2) || "N/A",
+        priceToBook: asset.priceToBook?.toFixed(2) || "N/A",
+        trailingAnnualDividendYield:
+          (asset.trailingAnnualDividendYield * 100).toFixed(2) || "N/A",
         type: ass.customType,
         key: index,
       };
@@ -30,7 +40,7 @@ const Watchlist = (props) => {
           </Typography>
           <Divider />
         </CardContent>
-        {/* {rows?.length ? <TransactionsTable rows={rows} /> : null} */}
+        {rows?.length ? <WatchlistTable rows={rows} /> : null}
       </Card>
     </>
   );

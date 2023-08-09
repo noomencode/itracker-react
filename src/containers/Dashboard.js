@@ -11,7 +11,7 @@ import { getPortfolioAssets } from "../actions/portfolioActions";
 import { getTopAssets } from "../actions/assetActions";
 import PortfolioEmpty from "../components/Portfolio/PortfolioEmpty";
 import StockScroller from "../components/StockScroller";
-import WatchListCompact from "../components/WatchListCompact";
+import WatchListCompact from "../components/Watchlist/WatchListCompact";
 import Message from "../components/Message";
 import TopAssets from "../components/Asset/TopAssets";
 import DailyPortfolioPerformance from "../components/Portfolio/DailyPortfolioPerformance";
@@ -26,6 +26,7 @@ const Dashboard = () => {
   const { portfolioAssets, loading, error } = useSelector(
     (state) => state.portfolioList
   );
+  const { watchlistAssets } = useSelector((state) => state.watchlist);
   const { topAssets, loading: topAssetLoading } = useSelector(
     (state) => state.topAssets
   );
