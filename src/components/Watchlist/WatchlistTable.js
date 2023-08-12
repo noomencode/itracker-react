@@ -35,6 +35,27 @@ const headCells = [
     label: "Change",
   },
   {
+    id: "target",
+    type: "number",
+    numeric: true,
+    disablePadding: false,
+    label: "Target price",
+  },
+  {
+    id: "targetPercentage",
+    type: "number",
+    numeric: true,
+    disablePadding: false,
+    label: "Target %",
+  },
+  {
+    id: "comment",
+    type: "number",
+    numeric: false,
+    disablePadding: false,
+    label: "Comment",
+  },
+  {
     id: "fiftyTwoWeekLow",
     type: "number",
     numeric: true,

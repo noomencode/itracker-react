@@ -6,7 +6,9 @@ import {
   Typography,
   Divider,
   Box,
+  Container,
 } from "@mui/material";
+import AssetChip from "../Asset/AssetChip";
 
 const WatchListCompact = (props) => {
   const { watchlistAssets } = props;
@@ -19,14 +21,24 @@ const WatchListCompact = (props) => {
             Watchlist
           </Typography>
           <Divider />
+        </CardContent>
+        <Container sx={{ mb: 2 }}>
           {watchlistAssets?.length ? (
-            "list"
+            watchlistAssets[0].assets.map((ass, index) => (
+              <AssetChip
+                key={index}
+                assetName={ass.name}
+                currentPrice={ass.asset.price}
+                dailyChange={ass.asset.dailyChange?.toFixed(2)}
+                marketState={ass.asset.marketState}
+              />
+            ))
           ) : (
             <Typography variant="span" component="span" gutterBottom>
               No assets being watched
             </Typography>
           )}
-        </CardContent>
+        </Container>
       </Card>
     </Box>
   );

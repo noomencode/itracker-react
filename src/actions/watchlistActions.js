@@ -55,6 +55,8 @@ export const addAssetToWatchlist =
           ticker: body.ticker,
           customType: body.customType,
           assets: assetId,
+          targetPrice: body.targetPrice,
+          comment: body.comment,
         },
         config
       );

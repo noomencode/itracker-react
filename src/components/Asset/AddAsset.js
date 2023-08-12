@@ -24,6 +24,8 @@ const AddAsset = (props) => {
   const [shares, setShares] = React.useState(0.0);
   const [newAsset, setNewAsset] = React.useState(null);
   const [customType, setCustomType] = React.useState("N/A");
+  const [comment, setComment] = React.useState("");
+  const [targetPrice, setTargetPrice] = React.useState(0.0);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -34,6 +36,8 @@ const AddAsset = (props) => {
       spent: parseFloat(spent) || null,
       sharesAmount: parseFloat(shares) || null,
       customType: customType,
+      targetPrice: targetPrice,
+      comment: comment,
     };
     dispatch(createAsset(body, type));
     if (type !== "emptyPortfolio" && "watchlist") handleClose();
@@ -97,6 +101,33 @@ const AddAsset = (props) => {
               <MenuItem value="N/A">N/A</MenuItem>
             </TextField>
           </Grid>
+          <Grid item lg={3} xs={12}>
+            <TextField
+              color="secondary"
+              sx={{ width: { lg: "100%" } }}
+              size="small"
+              variant="outlined"
+              label="Target price"
+              id="asset-targetPrice"
+              value={targetPrice}
+              onChange={(e) => setTargetPrice(e.target.value)}
+            ></TextField>
+          </Grid>
+          <Grid item lg={3} xs={12}>
+            <TextField
+              color="secondary"
+              sx={{ width: { lg: "100%" } }}
+              size="small"
+              variant="outlined"
+              label="Comment"
+              id="asset-comment"
+              multiline
+              maxRows={3}
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
+            ></TextField>
+          </Grid>
+
           {type !== "watchlist" ? (
             <>
               <Grid item lg={2} xs={12}>

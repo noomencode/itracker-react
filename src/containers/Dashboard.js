@@ -15,12 +15,15 @@ import WatchListCompact from "../components/Watchlist/WatchListCompact";
 import Message from "../components/Message";
 import TopAssets from "../components/Asset/TopAssets";
 import DailyPortfolioPerformance from "../components/Portfolio/DailyPortfolioPerformance";
+import { getWatchlistAssets } from "../actions/watchlistActions";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getTopAssets()).then(dispatch(getPortfolioAssets()));
+    dispatch(getTopAssets()).then(
+      dispatch(getPortfolioAssets()).then(dispatch(getWatchlistAssets()))
+    );
   }, [dispatch]);
 
   const { portfolioAssets, loading, error } = useSelector(
@@ -115,7 +118,7 @@ const Dashboard = () => {
                 assets={portfolioAssets}
                 portfolio={portfolio}
               />
-              <WatchListCompact />
+              <WatchListCompact watchlistAssets={watchlistAssets} />
             </Grid>
           </Grid>
           <Grid container spacing={1}>

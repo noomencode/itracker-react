@@ -1,6 +1,12 @@
 import React from "react";
 import Box from "@mui/material/Box";
-import { Card, CardContent, Typography, Divider } from "@mui/material";
+import {
+  Card,
+  CardContent,
+  Typography,
+  Divider,
+  Container,
+} from "@mui/material";
 import AssetChip from "./AssetChip";
 
 const TopAssets = (props) => {
@@ -43,7 +49,7 @@ const TopAssets = (props) => {
           </Typography>
           <Divider />
         </CardContent>
-        <CardContent>
+        <Container sx={{ mb: 2 }}>
           {filteredAssets.map((ass, index) => {
             return (
               <AssetChip
@@ -55,7 +61,7 @@ const TopAssets = (props) => {
               />
             );
           })}
-        </CardContent>
+        </Container>
       </Card>
     </Box>
   );

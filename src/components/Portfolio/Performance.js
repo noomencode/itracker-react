@@ -1,5 +1,11 @@
 import React, { useState } from "react";
-import { Card, CardContent, Typography, Divider } from "@mui/material";
+import {
+  Card,
+  CardContent,
+  Typography,
+  Divider,
+  Container,
+} from "@mui/material";
 import List from "@mui/material/List";
 import Grid from "@mui/material/Grid";
 import ListItem from "@mui/material/ListItem";
@@ -55,7 +61,7 @@ const Performance = (props) => {
           </Typography>
           <Divider />
         </CardContent>
-        <CardContent>
+        <Container sx={{ mb: 2 }}>
           <Grid container spacing={1}>
             <Grid item lg={6} xs={6}>
               <ListItem disablePadding>
@@ -166,7 +172,7 @@ const Performance = (props) => {
               </FormGroup>
             </Grid>
           </Grid>
-        </CardContent>
+        </Container>
       </Card>
     </React.Fragment>
   );
