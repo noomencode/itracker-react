@@ -118,7 +118,7 @@ const Dashboard = () => {
                 assets={portfolioAssets}
                 portfolio={portfolio}
               />
-              <WatchListCompact watchlistAssets={watchlistAssets} />
+              <Performance portfolio={portfolio} history={history} />
             </Grid>
           </Grid>
           <Grid container spacing={1}>
@@ -126,7 +126,7 @@ const Dashboard = () => {
               <AssetList assets={portfolioAssets} />
             </Grid>
             <Grid item lg={3} xs={12}>
-              <Performance portfolio={portfolio} history={history} />
+              <WatchListCompact watchlistAssets={watchlistAssets} />
 
               {history?.length ? <History history={history} /> : null}
               <Allocation portfolio={portfolio} assets={portfolioAssets} />
