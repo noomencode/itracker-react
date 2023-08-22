@@ -1,7 +1,14 @@
 import React from "react";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
-import { Card, CardContent, Typography, Divider, Chip } from "@mui/material";
+import {
+  Card,
+  CardContent,
+  Typography,
+  Divider,
+  Chip,
+  Container,
+} from "@mui/material";
 import { List, ListItem, ListItemIcon, ListItemText } from "@mui/material";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import PercentIcon from "@mui/icons-material/Percent";
@@ -23,7 +30,7 @@ const DailyPortfolioPerformance = (props) => {
           </Typography>
           <Divider />
         </CardContent>
-        <CardContent>
+        <Container sx={{ mb: 2 }}>
           <Grid container spacing={1}>
             <Grid item lg={6} xs={6}>
               <Chip
@@ -94,7 +101,7 @@ const DailyPortfolioPerformance = (props) => {
           >
             {`Last updated:${portfolio.portfolioUpdated}`}
           </Typography>
-        </CardContent>
+        </Container>
       </Card>
     </Box>
   );

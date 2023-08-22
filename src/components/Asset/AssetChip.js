@@ -88,6 +88,7 @@ const AssetChip = (props) => {
         sx={{
           height: miniChip ? "4em" : "5em",
           width: miniChip ? "250px" : null,
+          margin: "5px",
         }}
         label={
           <Grid container sx={{ justifyContent: "space-between" }}>

@@ -9,6 +9,7 @@ import {
 } from "../constants/assetConstants";
 import axios from "axios";
 import { addAssetToPortfolio } from "./portfolioActions";
+import { addAssetToWatchlist } from "./watchlistActions";
 
 export const getTopAssets = () => async (dispatch) => {
   try {
@@ -21,7 +22,7 @@ export const getTopAssets = () => async (dispatch) => {
   }
 };
 
-export const createAsset = (body) => async (dispatch, getState) => {
+export const createAsset = (body, source) => async (dispatch, getState) => {
   const {
     userLogin: { userInfo },
   } = getState();
@@ -42,7 +43,10 @@ export const createAsset = (body) => async (dispatch, getState) => {
       config
     );
     dispatch({ type: ASSET_ADD_SUCCESS, payload: assetData });
-    dispatch(addAssetToPortfolio(body, assetData.data._id));
+    console.log(source);
+    source !== "watchlist"
+      ? dispatch(addAssetToPortfolio(body, assetData.data._id))
+      : dispatch(addAssetToWatchlist(body, assetData.data._id));
   } catch (error) {
     dispatch({ type: ASSET_ADD_FAIL });
   }

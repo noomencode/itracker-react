@@ -11,21 +11,25 @@ import { getPortfolioAssets } from "../actions/portfolioActions";
 import { getTopAssets } from "../actions/assetActions";
 import PortfolioEmpty from "../components/Portfolio/PortfolioEmpty";
 import StockScroller from "../components/StockScroller";
-import WatchListCompact from "../components/WatchListCompact";
+import WatchListCompact from "../components/Watchlist/WatchListCompact";
 import Message from "../components/Message";
 import TopAssets from "../components/Asset/TopAssets";
 import DailyPortfolioPerformance from "../components/Portfolio/DailyPortfolioPerformance";
+import { getWatchlistAssets } from "../actions/watchlistActions";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getTopAssets()).then(dispatch(getPortfolioAssets()));
+    dispatch(getTopAssets()).then(
+      dispatch(getPortfolioAssets()).then(dispatch(getWatchlistAssets()))
+    );
   }, [dispatch]);
 
   const { portfolioAssets, loading, error } = useSelector(
     (state) => state.portfolioList
   );
+  const { watchlistAssets } = useSelector((state) => state.watchlist);
   const { topAssets, loading: topAssetLoading } = useSelector(
     (state) => state.topAssets
   );
@@ -114,7 +118,7 @@ const Dashboard = () => {
                 assets={portfolioAssets}
                 portfolio={portfolio}
               />
-              <WatchListCompact />
+              <Performance portfolio={portfolio} history={history} />
             </Grid>
           </Grid>
           <Grid container spacing={1}>
@@ -122,7 +126,7 @@ const Dashboard = () => {
               <AssetList assets={portfolioAssets} />
             </Grid>
             <Grid item lg={3} xs={12}>
-              <Performance portfolio={portfolio} history={history} />
+              <WatchListCompact watchlistAssets={watchlistAssets} />
 
               {history?.length ? <History history={history} /> : null}
               <Allocation portfolio={portfolio} assets={portfolioAssets} />

@@ -24,6 +24,8 @@ const AddAsset = (props) => {
   const [shares, setShares] = React.useState(0.0);
   const [newAsset, setNewAsset] = React.useState(null);
   const [customType, setCustomType] = React.useState("N/A");
+  const [comment, setComment] = React.useState("");
+  const [targetPrice, setTargetPrice] = React.useState(0.0);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -31,14 +33,14 @@ const AddAsset = (props) => {
     const body = {
       name: newAsset.shortname,
       ticker: newAsset.symbol,
-      spent: parseFloat(spent),
-      sharesAmount: parseFloat(shares),
+      spent: parseFloat(spent) || null,
+      sharesAmount: parseFloat(shares) || null,
       customType: customType,
+      targetPrice: targetPrice,
+      comment: comment,
     };
-    dispatch(createAsset(body));
-    if (type !== "emptyPortfolio") {
-      handleClose();
-    }
+    dispatch(createAsset(body, type));
+    if (type !== "emptyPortfolio" && "watchlist") handleClose();
   };
 
   const handleNewAsset = (asset) => {
@@ -99,40 +101,71 @@ const AddAsset = (props) => {
               <MenuItem value="N/A">N/A</MenuItem>
             </TextField>
           </Grid>
-          <Grid item lg={2} xs={12}>
+          <Grid item lg={3} xs={12}>
             <TextField
               color="secondary"
+              sx={{ width: { lg: "100%" } }}
               size="small"
-              type="number"
-              min={0}
-              label="Number of shares"
               variant="outlined"
-              onChange={(e) => {
-                setShares(e.currentTarget.value);
-              }}
-              required
-              value={shares}
-              id="sharesAmount"
-              name="sharesAmount"
+              label="Target price"
+              id="asset-targetPrice"
+              value={targetPrice}
+              onChange={(e) => setTargetPrice(e.target.value)}
             ></TextField>
           </Grid>
-          <Grid item lg={2} xs={12}>
+          <Grid item lg={3} xs={12}>
             <TextField
               color="secondary"
-              type="number"
-              min={0}
+              sx={{ width: { lg: "100%" } }}
               size="small"
-              label="Amount invested"
               variant="outlined"
-              value={spent}
-              onChange={(e) => {
-                setSpent(e.currentTarget.value);
-              }}
-              required
-              id="spent"
-              name="spent"
+              label="Comment"
+              id="asset-comment"
+              multiline
+              maxRows={3}
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
             ></TextField>
           </Grid>
+
+          {type !== "watchlist" ? (
+            <>
+              <Grid item lg={2} xs={12}>
+                <TextField
+                  color="secondary"
+                  size="small"
+                  type="number"
+                  min={0}
+                  label="Number of shares"
+                  variant="outlined"
+                  onChange={(e) => {
+                    setShares(e.currentTarget.value);
+                  }}
+                  required
+                  value={shares}
+                  id="sharesAmount"
+                  name="sharesAmount"
+                ></TextField>
+              </Grid>
+              <Grid item lg={2} xs={12}>
+                <TextField
+                  color="secondary"
+                  type="number"
+                  min={0}
+                  size="small"
+                  label="Amount invested"
+                  variant="outlined"
+                  value={spent}
+                  onChange={(e) => {
+                    setSpent(e.currentTarget.value);
+                  }}
+                  required
+                  id="spent"
+                  name="spent"
+                ></TextField>
+              </Grid>
+            </>
+          ) : null}
           <Grid item lg={2} xs={12}>
             <Button
               startIcon={<AddIcon />}
