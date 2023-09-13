@@ -31,6 +31,8 @@ const WatchListCompact = (props) => {
                 currentPrice={ass.asset.price}
                 dailyChange={ass.asset.dailyChange?.toFixed(2)}
                 marketState={ass.asset.marketState}
+                watchlistChip
+                watchlistTarget={ass.targetPrice}
               />
             ))
           ) : (

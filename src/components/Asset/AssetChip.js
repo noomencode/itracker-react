@@ -25,9 +25,6 @@ const PrimaryText = (props) => {
       sx={{
         fontWeight: 600,
         fontSize: { xs: "0.9em", sm: "1.1em" },
-        // display: { xs: "inline-flex" },
-        // maxWidth: { xs: "50%" },
-        // overflow: { xs: "hidden" },
       }}
     >
       {assetName}
@@ -36,18 +33,33 @@ const PrimaryText = (props) => {
 };
 
 const SecondaryText = (props) => {
-  const { currentPrice, dailyChange } = props;
+  const { currentPrice, dailyChange, watchlistTarget, watchlistChip } = props;
   const priceDiff = ((currentPrice * dailyChange) / 100).toFixed(2);
   return (
     <Typography
       color={dailyChange > 0 ? "secondary.main" : "error.main"}
       variant="h6"
-    >{`${currentPrice} (${priceDiff})`}</Typography>
+      sx={watchlistTarget > currentPrice ? { fontWeight: 600 } : null}
+    >
+      {!watchlistChip
+        ? `${currentPrice} (${priceDiff})`
+        : `${currentPrice} / ${watchlistTarget} (${-(
+            100 -
+            (watchlistTarget / currentPrice) * 100
+          ).toFixed(2)} %)`}
+    </Typography>
   );
 };
 
 const PercentageChip = (props) => {
-  const { dailyChange, height, width } = props;
+  const {
+    dailyChange,
+    height,
+    width,
+    watchlistChip,
+    watchlistTarget,
+    currentPrice,
+  } = props;
   return (
     <Chip
       sx={{
@@ -80,7 +92,15 @@ const MarketClosedChip = () => {
 };
 
 const AssetChip = (props) => {
-  const { currentPrice, dailyChange, assetName, miniChip, marketState } = props;
+  const {
+    currentPrice,
+    dailyChange,
+    assetName,
+    miniChip,
+    marketState,
+    watchlistChip,
+    watchlistTarget,
+  } = props;
   return (
     <>
       <Item
@@ -100,11 +120,14 @@ const AssetChip = (props) => {
               <SecondaryText
                 currentPrice={currentPrice}
                 dailyChange={dailyChange}
+                watchlistChip={watchlistChip}
+                watchlistTarget={watchlistTarget}
               ></SecondaryText>
             </Grid>
             <Grid item>
               <PercentageChip
                 dailyChange={dailyChange}
+                currentPrice={currentPrice}
                 height={miniChip ? "3em" : "3em"}
                 width={miniChip ? "5em" : "6em"}
               />
