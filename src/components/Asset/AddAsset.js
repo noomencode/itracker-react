@@ -101,33 +101,37 @@ const AddAsset = (props) => {
               <MenuItem value="N/A">N/A</MenuItem>
             </TextField>
           </Grid>
-          <Grid item lg={3} xs={12}>
-            <TextField
-              color="secondary"
-              sx={{ width: { lg: "100%" } }}
-              size="small"
-              variant="outlined"
-              label="Target price"
-              id="asset-targetPrice"
-              value={targetPrice}
-              onChange={(e) => setTargetPrice(e.target.value)}
-            ></TextField>
-          </Grid>
-          <Grid item lg={3} xs={12}>
-            <TextField
-              color="secondary"
-              sx={{ width: { lg: "100%" } }}
-              size="small"
-              variant="outlined"
-              label="Comment"
-              id="asset-comment"
-              multiline
-              maxRows={3}
-              value={comment}
-              onChange={(e) => setComment(e.target.value)}
-            ></TextField>
-          </Grid>
+          {type === "watchlist" ? (
+            <>
+              <Grid item lg={3} xs={12}>
+                <TextField
+                  color="secondary"
+                  sx={{ width: { lg: "100%" } }}
+                  size="small"
+                  variant="outlined"
+                  label="Target price"
+                  id="asset-targetPrice"
+                  value={targetPrice}
+                  onChange={(e) => setTargetPrice(e.target.value)}
+                ></TextField>
+              </Grid>
 
+              <Grid item lg={3} xs={12}>
+                <TextField
+                  color="secondary"
+                  sx={{ width: { lg: "100%" } }}
+                  size="small"
+                  variant="outlined"
+                  label="Comment"
+                  id="asset-comment"
+                  multiline
+                  maxRows={3}
+                  value={comment}
+                  onChange={(e) => setComment(e.target.value)}
+                ></TextField>
+              </Grid>
+            </>
+          ) : null}
           {type !== "watchlist" ? (
             <>
               <Grid item lg={2} xs={12}>
