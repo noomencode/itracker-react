@@ -6,6 +6,8 @@ import Watchlist from "../components/Watchlist/Watchlist";
 import { getWatchlistAssets } from "../actions/watchlistActions";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
+import Form from "../components/Form";
+import { formFields } from "../utilities/formFields";
 
 const WatchlistScreen = () => {
   const dispatch = useDispatch();
@@ -22,7 +24,12 @@ const WatchlistScreen = () => {
           <Typography variant="h5" color="primary" gutterBottom>
             Watchlist
           </Typography>
-          <AssetForm mode="add" type="watchlist" />
+          <Form
+            formTitle="Add to watchlist"
+            formType="Add"
+            formContext="watchlist"
+            fields={formFields["watchlist"].add}
+          />
           {watchlistAssets?.length ? (
             <Watchlist watchlistAssets={watchlistAssets} />
           ) : null}

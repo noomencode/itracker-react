@@ -7,18 +7,16 @@ import { getWatchlistAssets } from "../../actions/watchlistActions";
 const Watchlist = (props) => {
   let rows;
   const { watchlistAssets } = props;
-  console.log(watchlistAssets);
 
   if (watchlistAssets?.length) {
     rows = watchlistAssets[0].assets.map((ass, index) => {
       const { asset } = ass;
-      console.log(asset);
       return {
-        asset: asset.name,
+        name: asset.name,
         ticker: asset.ticker,
         price: asset.price || "N/A",
         change: asset.dailyChange?.toFixed(2) || "N/A",
-        target: ass.targetPrice?.toFixed(2) || "N/A",
+        targetPrice: ass.targetPrice?.toFixed(2) || "N/A",
         targetPercentage: ass.targetPrice
           ? `${-(100 - (ass.targetPrice / asset.price) * 100).toFixed(2)} %`
           : "N/A",
@@ -31,11 +29,11 @@ const Watchlist = (props) => {
         trailingAnnualDividendYield: asset.trailingAnnualDividendYield
           ? (asset.trailingAnnualDividendYield * 100)?.toFixed(2)
           : "N/A",
-        type: ass.customType,
+        customType: ass.customType,
         key: index,
+        id: ass._id,
       };
     });
-    console.log(rows);
   }
 
   return (
@@ -45,6 +43,7 @@ const Watchlist = (props) => {
           <Typography variant="h5" color="text.primary" gutterBottom>
             Watchlist
           </Typography>
+
           <Divider />
         </CardContent>
         {rows?.length ? <WatchlistTable rows={rows} /> : null}
