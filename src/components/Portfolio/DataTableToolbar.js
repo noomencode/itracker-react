@@ -130,21 +130,19 @@ const DataTableToolbar = (props) => {
             Add new transaction
           </MenuItem>
         </Menu>
-
-        <Tooltip title="Edit list">
-          <IconButton
-            color="secondary"
-            onClick={() => handleAssetFormClick("edit")}
-          >
-            <ModeEditIcon />
-          </IconButton>
-        </Tooltip>
-        {numSelected > 0 ? (
-          <Tooltip title="Delete">
+        {numSelected === 1 ? (
+          <Tooltip title="Edit list">
             <IconButton
               color="secondary"
-              onClick={() => handleDelete(selected)}
+              onClick={() => handleAssetFormClick("edit")}
             >
+              <ModeEditIcon />
+            </IconButton>
+          </Tooltip>
+        ) : null}
+        {numSelected > 0 ? (
+          <Tooltip title="Delete">
+            <IconButton color="error" onClick={() => handleDelete(selected)}>
               <DeleteIcon />
             </IconButton>
           </Tooltip>

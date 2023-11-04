@@ -14,14 +14,14 @@ import { getComparator } from "../../utilities/sortingFunctions";
 
 const headCells = [
   {
-    id: "asset",
+    id: "name",
     type: "title",
     numeric: false,
     disablePadding: true,
     label: "Asset",
   },
   {
-    id: "amount",
+    id: "sharesAmount",
     type: "number",
     numeric: true,
     disablePadding: false,
@@ -71,6 +71,8 @@ export default function TransactionsTable(props) {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
+  console.log(selected);
+
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
@@ -79,19 +81,40 @@ export default function TransactionsTable(props) {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelected = rows.map((n) => n.name);
-      setSelected(newSelected);
+      const newSelecteds = rows.map((n) => {
+        return {
+          name: n.name,
+          ticker: n.ticker,
+          id: n.id,
+          sharesAmount: n.sharesAmount,
+          price: n.price,
+          date: n.date,
+          type: n.type,
+        };
+      });
+      setSelected(newSelecteds);
       return;
     }
     setSelected([]);
   };
 
-  const handleClick = (event, name) => {
-    const selectedIndex = selected.indexOf(name);
+  const handleClick = (event, row) => {
+    const { name, ticker, id, sharesAmount, price, date, type } = row;
+    const selectedIndex = selected.findIndex((r) => {
+      return r.name === name;
+    });
     let newSelected = [];
 
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
+      newSelected = newSelected.concat(selected, {
+        name: name,
+        ticker: ticker,
+        id: id,
+        sharesAmount: sharesAmount,
+        price: price,
+        date: date,
+        type: type,
+      });
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
     } else if (selectedIndex === selected.length - 1) {
@@ -114,7 +137,7 @@ export default function TransactionsTable(props) {
     setPage(0);
   };
 
-  const isSelected = (name) => selected.indexOf(name) !== -1;
+  const isSelected = (id) => selected.findIndex((r) => r.id === id) !== -1;
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
@@ -123,7 +146,11 @@ export default function TransactionsTable(props) {
   return (
     <Box sx={{ width: "100%" }}>
       <Paper sx={{ width: "100%", mb: 2 }}>
-        <EnhancedTableToolbar numSelected={selected.length} />
+        <EnhancedTableToolbar
+          numSelected={selected.length}
+          selected={selected}
+          source={"transactions"}
+        />
         <TableContainer>
           <Table
             sx={{ minWidth: 750 }}
@@ -145,13 +172,13 @@ export default function TransactionsTable(props) {
                 .sort(getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  const isItemSelected = isSelected(row.name);
+                  const isItemSelected = isSelected(row.id);
                   const labelId = `enhanced-table-checkbox-${index}`;
 
                   return (
                     <TableRow
                       hover
-                      onClick={(event) => handleClick(event, row.name)}
+                      onClick={(event) => handleClick(event, row)}
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
@@ -160,7 +187,7 @@ export default function TransactionsTable(props) {
                     >
                       <TableCell padding="checkbox">
                         <Checkbox
-                          color="primary"
+                          color="secondary"
                           checked={isItemSelected}
                           inputProps={{
                             "aria-labelledby": labelId,

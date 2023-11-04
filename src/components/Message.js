@@ -4,15 +4,13 @@ import Typography from "@mui/material/Typography";
 import Collapse from "@mui/material/Collapse";
 
 const Message = (props) => {
-  const { severity, message } = props;
+  const { severity, message, handleAlert } = props;
   const [open, setOpen] = React.useState(true);
   React.useEffect(() => {
     if (severity === "success") {
-      setTimeout(() => {
-        setOpen(false);
-      }, 5000);
+      setTimeout(() => setOpen(false), 5000);
     }
-  }, [open, severity]);
+  }, [severity]);
   return (
     <>
       <Collapse in={open}>

@@ -14,7 +14,7 @@ import { getComparator } from "../../utilities/sortingFunctions";
 
 const headCells = [
   {
-    id: "asset",
+    id: "name",
     type: "title",
     numeric: false,
     disablePadding: true,
@@ -35,7 +35,7 @@ const headCells = [
     label: "Change",
   },
   {
-    id: "target",
+    id: "targetPrice",
     type: "number",
     numeric: true,
     disablePadding: false,
@@ -128,19 +128,38 @@ export default function WatchlistTable(props) {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelected = rows.map((n) => n.name);
-      setSelected(newSelected);
+      const newSelecteds = rows.map((n) => {
+        return {
+          name: n.name,
+          ticker: n.ticker,
+          id: n.id,
+          customType: n.customType,
+          targetPrice: n.targetPrice,
+          comment: n.comment,
+        };
+      });
+      setSelected(newSelecteds);
       return;
     }
     setSelected([]);
   };
 
-  const handleClick = (event, name) => {
-    const selectedIndex = selected.indexOf(name);
+  const handleClick = (event, row) => {
+    const { name, ticker, id, customType, targetPrice, comment } = row;
+    const selectedIndex = selected.findIndex((r) => {
+      return r.name === name;
+    });
     let newSelected = [];
 
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
+      newSelected = newSelected.concat(selected, {
+        name: name,
+        ticker: ticker,
+        id: id,
+        customType: customType,
+        targetPrice: targetPrice,
+        comment: comment,
+      });
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
     } else if (selectedIndex === selected.length - 1) {
@@ -163,7 +182,8 @@ export default function WatchlistTable(props) {
     setPage(0);
   };
 
-  const isSelected = (name) => selected.indexOf(name) !== -1;
+  const isSelected = (name) =>
+    selected.findIndex((r) => r.name === name) !== -1;
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
@@ -172,7 +192,11 @@ export default function WatchlistTable(props) {
   return (
     <Box sx={{ width: "100%" }}>
       <Paper sx={{ width: "100%", mb: 2 }}>
-        <EnhancedTableToolbar numSelected={selected.length} />
+        <EnhancedTableToolbar
+          numSelected={selected.length}
+          selected={selected}
+          source={"watchlist"}
+        />
         <TableContainer>
           <Table
             sx={{ minWidth: 750 }}
@@ -200,7 +224,7 @@ export default function WatchlistTable(props) {
                   return (
                     <TableRow
                       hover
-                      onClick={(event) => handleClick(event, row.name)}
+                      onClick={(event) => handleClick(event, row)}
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
@@ -209,7 +233,7 @@ export default function WatchlistTable(props) {
                     >
                       <TableCell padding="checkbox">
                         <Checkbox
-                          color="primary"
+                          color="secondary"
                           checked={isItemSelected}
                           inputProps={{
                             "aria-labelledby": labelId,

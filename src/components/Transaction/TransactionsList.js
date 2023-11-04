@@ -11,18 +11,19 @@ const TransactionsList = () => {
 
   if (transactions?.length) {
     rows = transactions.map((tr, index) => {
-      const { date, type, amount, expense, price, asset } = tr;
+      const { date, type, amount, expense, price, asset, _id: id } = tr;
       return {
-        asset: asset.name,
+        name: asset.name,
+        ticker: asset.ticker,
         date: date,
         type: type,
-        amount: amount,
+        sharesAmount: amount,
         expense: expense,
         price: price,
         key: index,
+        id: id,
       };
     });
-    console.log(rows);
   }
 
   useEffect(() => {

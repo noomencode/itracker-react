@@ -20,7 +20,7 @@ const LatestTransactions = () => {
         key: index,
       };
     });
-    console.log(rows);
+    // console.log(rows);
   }
 
   return (
