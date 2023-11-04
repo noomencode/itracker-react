@@ -19,10 +19,13 @@ import Switch from "@mui/material/Switch";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Typography from "@mui/material/Typography";
+import Form from "../Form";
+import { formFields } from "../../utilities/formFields";
 
 const DataTableToolbar = (props) => {
-  const { numSelected, selected, handleLayout } = props;
+  const { numSelected, selected, handleLayout, source } = props;
   const [assetForm, setAssetForm] = useState({ open: false, mode: "" });
+  const [showForm, setShowForm] = useState(false);
   const [layoutSwitch, setLayoutSwitch] = useState(false);
   const [confirmationDialogVisible, setConfirmationDialogVisible] =
     useState(false);
@@ -69,6 +72,9 @@ const DataTableToolbar = (props) => {
         message: "You need to select an asset to edit.",
       });
     }
+  };
+  const handleShowForm = () => {
+    setShowForm(!showForm);
   };
 
   const handleDelete = (selected) => {
@@ -134,7 +140,8 @@ const DataTableToolbar = (props) => {
           <Tooltip title="Edit list">
             <IconButton
               color="secondary"
-              onClick={() => handleAssetFormClick("edit")}
+              // onClick={() => handleAssetFormClick("edit")}
+              onClick={() => handleShowForm()}
             >
               <ModeEditIcon />
             </IconButton>
@@ -170,11 +177,21 @@ const DataTableToolbar = (props) => {
           />
         </FormGroup>
       </Toolbar>
-      {assetForm.open ? (
+      {/* {assetForm.open ? (
         <AssetForm
           handleClose={handleDialogClose}
           mode={assetForm.mode}
           selected={selected}
+        />
+      ) : null} */}
+      {showForm && numSelected === 1 ? (
+        <Form
+          formType="Edit"
+          formContext={source}
+          formTitle="Edit asset"
+          selectedItem={selected}
+          fields={formFields[source].edit}
+          handleClose={handleShowForm}
         />
       ) : null}
       {confirmationDialogVisible ? (

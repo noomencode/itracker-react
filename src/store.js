@@ -17,7 +17,10 @@ import {
   watchlistAssetCUDReducer,
 } from "./reducers/watchlistReducers";
 import { userLoginReducer, changePwReducer } from "./reducers/userReducers";
-import { transactionReducer } from "./reducers/transactionReducers";
+import {
+  transactionReducer,
+  transactionCUDReducer,
+} from "./reducers/transactionReducers";
 
 const reducer = combineReducers({
   assetDialog: assetDialogReducer,
@@ -32,6 +35,7 @@ const reducer = combineReducers({
   userChangePw: changePwReducer,
   portfolioList: portfolioAssetReducer,
   transactionsList: transactionReducer,
+  transactionCUD: transactionCUDReducer,
 });
 
 const userInfoFromStorage = sessionStorage.getItem("userInfo")

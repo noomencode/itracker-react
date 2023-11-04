@@ -8,6 +8,7 @@ import {
   Typography,
   Grid,
   IconButton,
+  Chip,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import EditIcon from "@mui/icons-material/Edit";
@@ -18,10 +19,10 @@ import { editPortfolioAsset } from "../actions/portfolioActions";
 import { useDispatch } from "react-redux";
 import Message from "./Message";
 import { editWatchlistAsset } from "../actions/watchlistActions";
-import { Dayjs } from "dayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { editTransaction } from "../actions/transactionActions";
 
 const Form = (props) => {
   const {
@@ -80,7 +81,7 @@ const Form = (props) => {
       console.log("submitting edit", body);
       if (formContext === "watchlist") dispatch(editWatchlistAsset(body));
       else if (formContext === "portfolio") dispatch(editPortfolioAsset(body));
-      else if (formContext === "transactions") console.log(body);
+      else if (formContext === "transactions") dispatch(editTransaction(body));
     }
     if (formType === "Add") {
       console.log("submitting add", body);
@@ -201,9 +202,22 @@ const Form = (props) => {
         <Message severity={alert.severity} message={alert.message} />
       ) : null}
       <Box sx={{ m: 2, display: "flex", justifyContent: "space-between" }}>
-        <Typography variant="h5" color="text.primary" gutterBottom>
+        <Typography
+          sx={{ mr: 1 }}
+          variant="h5"
+          color="text.primary"
+          gutterBottom
+        >
           {formTitle}
         </Typography>
+        {formType === "Edit" ? (
+          <Chip
+            sx={{ borderRadius: "4px" }}
+            variant="outlined"
+            label={selectedItem[0]?.name || "You need to select an asset first"}
+          />
+        ) : null}
+        <Box sx={{ flexGrow: 1 }}></Box>
         <IconButton onClick={() => handleClose()}>
           <CloseIcon />
         </IconButton>

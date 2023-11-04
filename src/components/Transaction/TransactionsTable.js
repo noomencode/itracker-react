@@ -90,6 +90,7 @@ export default function TransactionsTable(props) {
           price: n.price,
           date: n.date,
           type: n.type,
+          expense: n.expense,
         };
       });
       setSelected(newSelecteds);
@@ -99,9 +100,9 @@ export default function TransactionsTable(props) {
   };
 
   const handleClick = (event, row) => {
-    const { name, ticker, id, sharesAmount, price, date, type } = row;
+    const { name, ticker, id, sharesAmount, price, date, type, expense } = row;
     const selectedIndex = selected.findIndex((r) => {
-      return r.name === name;
+      return r.id === id;
     });
     let newSelected = [];
 
@@ -114,6 +115,7 @@ export default function TransactionsTable(props) {
         price: price,
         date: date,
         type: type,
+        expense: expense,
       });
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));

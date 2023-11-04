@@ -320,6 +320,7 @@ const EnhancedTable = (props) => {
         numSelected={selected.length}
         selected={selected}
         handleLayout={handleLayout}
+        source={"portfolio"}
       />
       <TableContainer>
         <Table aria-labelledby="tableTitle" size="medium">

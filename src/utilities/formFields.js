@@ -74,14 +74,14 @@ const formFields = {
   transactions: {
     add: [],
     edit: [
-      // {
-      //   name: "name",
-      //   label: "Asset",
-      //   type: "Text",
-      //   inputType: "text",
-      //   size: "medium",
-      //   id: "name",
-      // },
+      {
+        name: "name",
+        label: "Asset",
+        type: "Text",
+        inputType: "text",
+        size: "medium",
+        id: "name",
+      },
       {
         name: "sharesAmount",
         label: "Number of shares",
@@ -122,6 +122,44 @@ const formFields = {
         inputType: "date",
         size: "medium",
         id: "date",
+      },
+    ],
+  },
+  portfolio: {
+    add: [],
+    edit: [
+      {
+        name: "name",
+        label: "Asset",
+        type: "Text",
+        inputType: "text",
+        size: "medium",
+        id: "name",
+      },
+      {
+        name: "customType",
+        label: "Describe asset",
+        type: "Dropdown",
+        inputType: "select",
+        menuItems: ["Speculation", "Dividend", "Value", "Index", "N/A"],
+        size: "small",
+        id: "customType",
+      },
+      {
+        name: "sharesAmount",
+        label: "Number of shares",
+        type: "Number",
+        inputType: "number",
+        size: "small",
+        id: "sharesAmount",
+      },
+      {
+        name: "spent",
+        label: "Amount invested",
+        type: "Number",
+        inputType: "number",
+        size: "small",
+        id: "spent",
       },
     ],
   },

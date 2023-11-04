@@ -16,6 +16,7 @@ import ConfirmationDialog from "./ConfirmationDialog";
 import { useDispatch } from "react-redux";
 import { deleteWatchlistAssets } from "../actions/watchlistActions";
 import { deletePortfolioAssets } from "../actions/portfolioActions";
+import { deleteTransaction } from "../actions/transactionActions";
 
 function EnhancedTableToolbar(props) {
   const { numSelected, selected, source } = props;
@@ -41,7 +42,7 @@ function EnhancedTableToolbar(props) {
     setConfirmationDialogVisible(false);
     if (source === "watchlist") dispatch(deleteWatchlistAssets(selected));
     else if (source === "portfolio") dispatch(deletePortfolioAssets(selected));
-    else if (source === "transactions") console.log("trying to delete");
+    else if (source === "transactions") dispatch(deleteTransaction(selected));
   };
 
   return (
