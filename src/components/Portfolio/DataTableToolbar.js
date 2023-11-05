@@ -12,7 +12,6 @@ import FilterListIcon from "@mui/icons-material/FilterList";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import ConfirmationDialog from "../ConfirmationDialog";
-import AssetForm from "../Asset/AssetForm";
 import Message from "../Message";
 import { deletePortfolioAssets } from "../../actions/portfolioActions";
 import Switch from "@mui/material/Switch";
@@ -24,8 +23,8 @@ import { formFields } from "../../utilities/formFields";
 
 const DataTableToolbar = (props) => {
   const { numSelected, selected, handleLayout, source } = props;
-  const [assetForm, setAssetForm] = useState({ open: false, mode: "" });
-  const [showForm, setShowForm] = useState(false);
+  const initialFormState = { open: false, type: "", itemType: "" };
+  const [form, setForm] = useState(initialFormState);
   const [layoutSwitch, setLayoutSwitch] = useState(false);
   const [confirmationDialogVisible, setConfirmationDialogVisible] =
     useState(false);
@@ -42,59 +41,72 @@ const DataTableToolbar = (props) => {
     setMenuAnchorEl(null);
   };
 
-  const handleMenuItemClick = (mode) => {
-    handleAssetFormClick(mode);
+  const handleMenuItemClick = (type) => {
+    setForm({ open: true, type: "Add", itemType: type });
     handleMenuClose();
   };
 
-  const handleAssetFormClick = (mode) => {
-    if (mode === "edit" && selected.length && selected.length < 2) {
-      setError({ isError: false, message: "" });
-      setAssetForm({ mode: "edit", open: !assetForm.open });
-    } else if (mode === "add") {
-      setError({ isError: false, message: "" });
-      setAssetForm({ mode: "add", open: !assetForm.open });
-    } else if (
-      mode === "transaction" &&
-      selected.length &&
-      selected.length < 2
-    ) {
-      setError({ isError: false, message: "" });
-      setAssetForm({ mode: "transaction", open: !assetForm.open });
-    } else if (selected.length > 1) {
-      setError({
-        isError: true,
-        message: "You can only edit one asset at once",
-      });
-    } else {
-      setError({
-        isError: true,
-        message: "You need to select an asset to edit.",
-      });
-    }
-  };
   const handleShowForm = () => {
-    setShowForm(!showForm);
+    // if (form.open && form.type === "Edit") {
+    if (form.open) {
+      setForm(initialFormState);
+    } else {
+      setForm({ open: true, type: "Edit" });
+    }
   };
 
-  const handleDelete = (selected) => {
-    if (selected.length) {
-      setConfirmationDialogVisible(true);
-    }
+  const handleDeleteDialog = () => {
+    setConfirmationDialogVisible(true);
   };
 
   const handleDialogClose = () => {
     if (confirmationDialogVisible) {
       setConfirmationDialogVisible(false);
     }
-    if (assetForm.open) {
-      setAssetForm({ editMode: false, open: false });
-    }
   };
 
   const handleSubmit = () => {
     setConfirmationDialogVisible(false);
     dispatch(deletePortfolioAssets(selected));
+  };
+
+  const renderForm = (form) => {
+    if (form.open) {
+      if (form.type === "Edit") {
+        return (
+          <Form
+            formType="Edit"
+            formContext={source}
+            formTitle="Edit asset"
+            selectedItem={selected}
+            fields={formFields[source].edit}
+            handleClose={handleShowForm}
+          />
+        );
+      } else if (form.type === "Add" && form.itemType === "asset") {
+        return (
+          <Form
+            formType="Add"
+            formContext={source}
+            formTitle={"Add asset"}
+            selectedItem={selected}
+            fields={formFields[source].add}
+            handleClose={handleShowForm}
+          />
+        );
+      } else if (form.type === "Add" && form.itemType === "transactions") {
+        return (
+          <Form
+            formType="Add"
+            formContext={form.itemType}
+            formTitle={"Add transaction"}
+            selectedItem={selected}
+            fields={formFields[form.itemType].add}
+            handleClose={handleShowForm}
+          />
+        );
+      }
+    }
   };
 
   return (
@@ -123,33 +135,32 @@ const DataTableToolbar = (props) => {
           open={Boolean(menuAnchorEl)}
           onClose={handleMenuClose}
         >
-          <MenuItem
-            value="Add new asset"
-            onClick={() => handleMenuItemClick("add")}
-          >
-            Add new asset
-          </MenuItem>
-          <MenuItem
-            value="Add new transaction"
-            onClick={() => handleMenuItemClick("transaction")}
-          >
-            Add new transaction
-          </MenuItem>
+          {numSelected === 1 ? (
+            <MenuItem
+              value="Add new transaction"
+              onClick={() => handleMenuItemClick("transactions")}
+            >
+              Add new transaction
+            </MenuItem>
+          ) : (
+            <MenuItem
+              value="Add new asset"
+              onClick={() => handleMenuItemClick("asset")}
+            >
+              Add new asset
+            </MenuItem>
+          )}
         </Menu>
         {numSelected === 1 ? (
           <Tooltip title="Edit list">
-            <IconButton
-              color="secondary"
-              // onClick={() => handleAssetFormClick("edit")}
-              onClick={() => handleShowForm()}
-            >
+            <IconButton color="secondary" onClick={() => handleShowForm()}>
               <ModeEditIcon />
             </IconButton>
           </Tooltip>
         ) : null}
         {numSelected > 0 ? (
           <Tooltip title="Delete">
-            <IconButton color="error" onClick={() => handleDelete(selected)}>
+            <IconButton color="error" onClick={() => handleDeleteDialog()}>
               <DeleteIcon />
             </IconButton>
           </Tooltip>
@@ -177,23 +188,7 @@ const DataTableToolbar = (props) => {
           />
         </FormGroup>
       </Toolbar>
-      {/* {assetForm.open ? (
-        <AssetForm
-          handleClose={handleDialogClose}
-          mode={assetForm.mode}
-          selected={selected}
-        />
-      ) : null} */}
-      {showForm && numSelected === 1 ? (
-        <Form
-          formType="Edit"
-          formContext={source}
-          formTitle="Edit asset"
-          selectedItem={selected}
-          fields={formFields[source].edit}
-          handleClose={handleShowForm}
-        />
-      ) : null}
+      {renderForm(form)}
       {confirmationDialogVisible ? (
         <ConfirmationDialog
           handleConfirm={handleSubmit}
