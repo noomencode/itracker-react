@@ -22,7 +22,10 @@ import { editWatchlistAsset } from "../actions/watchlistActions";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { editTransaction } from "../actions/transactionActions";
+import {
+  createTransaction,
+  editTransaction,
+} from "../actions/transactionActions";
 
 const Form = (props) => {
   const {
@@ -38,20 +41,46 @@ const Form = (props) => {
     severity: "",
     message: "",
   });
+
   const dispatch = useDispatch();
   //Creates dynamic state object from props
   const initialState = {};
   fields.forEach((field) => {
     if (field.type !== "Asset") {
-      initialState[field.name] =
-        selectedItem && formType === "Edit" ? selectedItem[0][field.name] : "";
-      initialState.ticker =
-        selectedItem && formType === "Edit" ? selectedItem[0].ticker : "";
-      initialState.id =
-        selectedItem && formType === "Edit" ? selectedItem[0].id : undefined;
+      if (
+        selectedItem.length &&
+        formType === "Edit" &&
+        field.type !== "Dropdown"
+      ) {
+        initialState[field.name] = selectedItem[0][field.name] || "";
+      } else if (field.type === "Dropdown" && field.defaultSelect !== "") {
+        initialState[field.name] = field.defaultSelect;
+      } else {
+        initialState[field.name] = "";
+      }
+      initialState.ticker = selectedItem.length ? selectedItem[0].ticker : "";
+      initialState.id = selectedItem.length ? selectedItem[0].id : undefined;
+      initialState.name = selectedItem.length
+        ? selectedItem[0].name
+        : undefined;
     }
   });
   const [formValues, setFormValues] = React.useState(initialState);
+  console.log(selectedItem);
+  console.log(formValues);
+  React.useEffect(() => {
+    setFormValues({
+      ...formValues,
+      price:
+        formValues.transactionAmount > 0 && formValues.transactionExpense > 0
+          ? parseFloat(
+              (
+                formValues.transactionExpense / formValues.transactionAmount
+              ).toFixed(2)
+            )
+          : 0.0,
+    });
+  }, [formValues.transactionAmount, formValues.transactionExpense]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -66,28 +95,69 @@ const Form = (props) => {
     });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const body = {};
-    //Check values and if value could be a number, parse it.
+  const parseData = (formValues) => {
+    const parsedData = {};
     for (const key in formValues) {
       if (!isNaN(formValues[key])) {
-        body[key] = parseFloat(formValues[key]);
+        parsedData[key] = parseFloat(formValues[key]);
       } else {
-        body[key] = formValues[key];
+        parsedData[key] = formValues[key];
       }
     }
+    return parsedData;
+  };
+
+  const dataForNewTransaction = () => {
+    const newAmount =
+      formValues.type === "Buy"
+        ? parseFloat(selectedItem[0]?.sharesAmount) +
+          parseFloat(formValues.transactionAmount).toFixed(2)
+        : parseFloat(selectedItem[0]?.sharesAmount) -
+          parseFloat(formValues.transactionAmount).toFixed(2);
+    const newSpent =
+      formValues.type === "Buy"
+        ? parseFloat(selectedItem[0]?.spent) +
+          parseFloat(formValues.transactionExpense).toFixed(2)
+        : parseFloat(selectedItem[0]?.spent) -
+          parseFloat(formValues.transactionExpense).toFixed(2);
+    const price = (
+      parseFloat(formValues.transactionExpense) /
+      parseFloat(formValues.transactionAmount)
+    ).toFixed(2);
+    const transactionBody = {
+      ...formValues,
+      sharesAmount: newAmount,
+      spent: newSpent,
+      price: price,
+    };
+    return transactionBody;
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const body = parseData(formValues);
+    //Check values and if value could be a number, parse it.
+
     if (formType === "Edit" && selectedItem.length === 1) {
       console.log("submitting edit", body);
       if (formContext === "watchlist") dispatch(editWatchlistAsset(body));
       else if (formContext === "portfolio") dispatch(editPortfolioAsset(body));
       else if (formContext === "transactions") dispatch(editTransaction(body));
-    }
-    if (formType === "Add") {
+    } else if (
+      formType === "Add" &&
+      selectedItem.length === 1 &&
+      formContext === "transactions"
+    ) {
+      //Need some function that creates data for this and need two dispatches..
+      const transactionsBody = dataForNewTransaction();
+      console.log("submitting new transaction", transactionsBody);
+      dispatch(createTransaction(transactionsBody));
+      dispatch(editPortfolioAsset(transactionsBody));
+    } else if (formType === "Add") {
       console.log("submitting add", body);
       dispatch(createAsset(body, formContext));
     }
-    //   if (type !== "emptyPortfolio" && "watchlist") handleClose();
   };
 
   const renderField = (fields) =>
@@ -191,6 +261,17 @@ const Form = (props) => {
               </LocalizationProvider>
             </Grid>
           );
+        case "Disabled":
+          return (
+            <Grid
+              key={field.name}
+              item
+              lg={field.size === "small" ? 3 : 4}
+              xs={12}
+            >
+              <TextField {...TextFieldProps} disabled />
+            </Grid>
+          );
         default:
           return null;
       }
@@ -216,6 +297,15 @@ const Form = (props) => {
             variant="outlined"
             label={selectedItem[0]?.name || "You need to select an asset first"}
           />
+        ) : formType === "Add" && formValues.ticker ? (
+          <Grid item lg={1} xs={12}>
+            <Chip
+              color="secondary"
+              sx={{ borderRadius: "4px", width: { lg: "100%" } }}
+              variant="outlined"
+              label={formValues.ticker}
+            />
+          </Grid>
         ) : null}
         <Box sx={{ flexGrow: 1 }}></Box>
         <IconButton onClick={() => handleClose()}>
