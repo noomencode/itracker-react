@@ -48,7 +48,7 @@ const Form = (props) => {
   fields.forEach((field) => {
     if (field.type !== "Asset") {
       if (
-        selectedItem.length &&
+        selectedItem?.length &&
         formType === "Edit" &&
         field.type !== "Dropdown"
       ) {
@@ -58,9 +58,9 @@ const Form = (props) => {
       } else {
         initialState[field.name] = "";
       }
-      initialState.ticker = selectedItem.length ? selectedItem[0].ticker : "";
-      initialState.id = selectedItem.length ? selectedItem[0].id : undefined;
-      initialState.name = selectedItem.length
+      initialState.ticker = selectedItem?.length ? selectedItem[0].ticker : "";
+      initialState.id = selectedItem?.length ? selectedItem[0].id : undefined;
+      initialState.name = selectedItem?.length
         ? selectedItem[0].name
         : undefined;
     }
