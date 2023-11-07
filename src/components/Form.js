@@ -47,39 +47,43 @@ const Form = (props) => {
   const initialState = {};
   fields.forEach((field) => {
     if (field.type !== "Asset") {
-      if (
-        selectedItem.length &&
-        formType === "Edit" &&
-        field.type !== "Dropdown"
-      ) {
+      if (field.type === "Dropdown") {
+        if (selectedItem?.length) {
+          if (selectedItem[0][field.name]) {
+            initialState[field.name] = selectedItem[0][field.name];
+          } else {
+            initialState[field.name] = field.defaultSelect || "";
+          }
+        } else {
+          initialState[field.name] = field.defaultSelect || "";
+        }
+      } else if (selectedItem?.length && formType === "Edit")
         initialState[field.name] = selectedItem[0][field.name] || "";
-      } else if (field.type === "Dropdown" && field.defaultSelect !== "") {
-        initialState[field.name] = field.defaultSelect;
-      } else {
-        initialState[field.name] = "";
-      }
-      initialState.ticker = selectedItem.length ? selectedItem[0].ticker : "";
-      initialState.id = selectedItem.length ? selectedItem[0].id : undefined;
-      initialState.name = selectedItem.length
+      else if (field.type === "Date" && formType === "Add") {
+        initialState[field.name] = new Date();
+      } else initialState[field.name] = "";
+      initialState.ticker = selectedItem?.length ? selectedItem[0].ticker : "";
+      initialState.id = selectedItem?.length ? selectedItem[0].id : undefined;
+      initialState.name = selectedItem?.length
         ? selectedItem[0].name
         : undefined;
     }
   });
   const [formValues, setFormValues] = React.useState(initialState);
-  console.log(selectedItem);
-  console.log(formValues);
+
   React.useEffect(() => {
-    setFormValues({
-      ...formValues,
-      price:
-        formValues.transactionAmount > 0 && formValues.transactionExpense > 0
-          ? parseFloat(
-              (
-                formValues.transactionExpense / formValues.transactionAmount
-              ).toFixed(2)
-            )
-          : 0.0,
-    });
+    if (formContext === "transactions")
+      setFormValues({
+        ...formValues,
+        price:
+          formValues.transactionAmount > 0 && formValues.transactionExpense > 0
+            ? parseFloat(
+                (
+                  formValues.transactionExpense / formValues.transactionAmount
+                ).toFixed(2)
+              )
+            : 0.0,
+      });
   }, [formValues.transactionAmount, formValues.transactionExpense]);
 
   const handleInputChange = (e) => {
@@ -139,14 +143,14 @@ const Form = (props) => {
     const body = parseData(formValues);
     //Check values and if value could be a number, parse it.
 
-    if (formType === "Edit" && selectedItem.length === 1) {
+    if (formType === "Edit" && selectedItem?.length === 1) {
       console.log("submitting edit", body);
       if (formContext === "watchlist") dispatch(editWatchlistAsset(body));
       else if (formContext === "portfolio") dispatch(editPortfolioAsset(body));
       else if (formContext === "transactions") dispatch(editTransaction(body));
     } else if (
       formType === "Add" &&
-      selectedItem.length === 1 &&
+      selectedItem?.length === 1 &&
       formContext === "transactions"
     ) {
       //Need some function that creates data for this and need two dispatches..

@@ -12,6 +12,7 @@ import {
   PORTFOLIO_DELETE_ASSETS_REQUEST,
   PORTFOLIO_DELETE_ASSETS_SUCCESS,
   PORTFOLIO_DELETE_ASSETS_FAIL,
+  REMOVE_CUD_STATE,
 } from "../constants/portfolioConstants";
 import axios from "axios";
 
@@ -225,3 +226,5 @@ export const calculatePortfolioPerformance = (data) => async (dispatch) => {
     });
   }
 };
+export const removeDataAction = () => (dispatch) =>
+  dispatch({ type: REMOVE_CUD_STATE });
