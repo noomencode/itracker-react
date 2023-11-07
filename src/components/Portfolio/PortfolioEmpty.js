@@ -1,6 +1,7 @@
 import React from "react";
-import AssetForm from "../Asset/AssetForm";
 import { Card, CardContent, Typography, Divider } from "@mui/material";
+import { formFields } from "../../utilities/formFields";
+import Form from "../Form";
 
 const PortfolioEmpty = ({ component }) => {
   return (
@@ -18,7 +19,13 @@ const PortfolioEmpty = ({ component }) => {
               First step: Add some assets to your portfolio.
             </Typography>
             <Divider />
-            <AssetForm mode="emptyPortfolio" />
+            {/* <AssetForm mode="emptyPortfolio" /> */}
+            <Form
+              formType="Add"
+              formContext="portfolio"
+              fields={formFields["portfolio"].add}
+              formTitle="Add new asset"
+            />
           </CardContent>
         ) : (
           <CardContent>

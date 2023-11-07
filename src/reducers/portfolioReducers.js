@@ -12,6 +12,7 @@ import {
   PORTFOLIO_ASSET_ADD_REQUEST,
   PORTFOLIO_ASSET_ADD_SUCCESS,
   PORTFOLIO_ASSET_ADD_FAIL,
+  REMOVE_CUD_STATE,
 } from "../constants/portfolioConstants";
 
 export const portfolioAssetReducer = (
@@ -31,6 +32,7 @@ export const portfolioAssetReducer = (
 };
 
 export const portfolioAssetCUDReducer = (state = {}, action) => {
+  console.log(action.type);
   switch (action.type) {
     case PORTFOLIO_ASSET_ADD_REQUEST:
     case PORTFOLIO_ASSET_EDIT_REQUEST:
@@ -58,23 +60,12 @@ export const portfolioAssetCUDReducer = (state = {}, action) => {
     case PORTFOLIO_ASSET_EDIT_FAIL:
     case PORTFOLIO_DELETE_ASSETS_FAIL:
       return { loading: false, error: action.payload };
+    case REMOVE_CUD_STATE:
+      return {};
     default:
       return state;
   }
 };
-
-// export const portfolioAssetDeleteReducer = (state = {}, action) => {
-//   switch (action.type) {
-//     case PORTFOLIO_DELETE_ASSETS_REQUEST:
-//       return { loading: true };
-//     case PORTFOLIO_DELETE_ASSETS_SUCCESS:
-//       return { loading: false, deletePayload: action.payload };
-//     case PORTFOLIO_DELETE_ASSETS_FAIL:
-//       return { loading: false, error: action.payload };
-//     default:
-//       return state;
-//   }
-// };
 
 export const portfolioPerformanceReducer = (
   state = {
