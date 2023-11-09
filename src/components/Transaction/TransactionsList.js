@@ -11,14 +11,25 @@ const TransactionsList = () => {
 
   if (transactions?.length) {
     rows = transactions.map((tr, index) => {
-      const { date, type, amount, expense, price, asset, _id: id } = tr;
+      const {
+        date,
+        type,
+        amount,
+        expense,
+        expenseInEur,
+        price,
+        asset,
+        _id: id,
+      } = tr;
       return {
         name: asset.name,
         ticker: asset.ticker,
+        currency: asset.currency,
         date: date,
         type: type,
         sharesAmount: amount,
         expense: expense,
+        expenseInEur: expenseInEur,
         price: price,
         key: index,
         id: id,

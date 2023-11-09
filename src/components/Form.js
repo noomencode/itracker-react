@@ -9,6 +9,7 @@ import {
   Grid,
   IconButton,
   Chip,
+  Stack,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import EditIcon from "@mui/icons-material/Edit";
@@ -26,6 +27,11 @@ import {
   createTransaction,
   editTransaction,
 } from "../actions/transactionActions";
+import ToggleButton from "@mui/material/ToggleButton";
+import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
+import InputAdornment from "@mui/material/InputAdornment";
+
+import axios from "axios";
 
 const Form = (props) => {
   const {
@@ -67,12 +73,18 @@ const Form = (props) => {
       initialState.name = selectedItem?.length
         ? selectedItem[0].name
         : undefined;
+      initialState.spentInEur = selectedItem?.length
+        ? selectedItem[0].spentInEur
+        : "";
     }
   });
   const [formValues, setFormValues] = React.useState(initialState);
+  const [quote, setQuote] = React.useState({});
+  const initialCurrency = selectedItem.length ? selectedItem[0].currency : "";
+  const [currency, setCurrency] = React.useState(initialCurrency);
 
   React.useEffect(() => {
-    if (formContext === "transactions")
+    if (formContext === "transactions") {
       setFormValues({
         ...formValues,
         price:
@@ -84,19 +96,28 @@ const Form = (props) => {
               )
             : 0.0,
       });
+    }
   }, [formValues.transactionAmount, formValues.transactionExpense]);
 
-  const handleInputChange = (e) => {
+  const handleInputChange = async (e) => {
     const { name, value } = e.target;
-    setFormValues({ ...formValues, [name]: value });
+    let spentInEur;
+    if (name === "spent") {
+      spentInEur = await calculateEur(value);
+      console.log(value);
+      console.log(spentInEur);
+    }
+    setFormValues({ ...formValues, [name]: value, spentInEur: spentInEur });
   };
 
-  const handleAssetChange = (asset) => {
+  const handleAssetChange = (asset, assetQuote) => {
     setFormValues({
       ...formValues,
       name: asset.shortname,
       ticker: asset.symbol,
     });
+    setQuote(assetQuote);
+    setCurrency(assetQuote?.currency);
   };
 
   const parseData = (formValues) => {
@@ -111,19 +132,51 @@ const Form = (props) => {
     return parsedData;
   };
 
-  const dataForNewTransaction = () => {
+  const calculateEur = async (value) => {
+    const currencyRate = await axios.get(`/api/assets/currency/EUR=X`);
+    const newValue = parseFloat(value * currencyRate.data.price).toFixed(2);
+    return newValue;
+  };
+
+  const dataForNewTransaction = async () => {
+    let transactionExpenseInEur;
     const newAmount =
       formValues.type === "Buy"
-        ? parseFloat(selectedItem[0]?.sharesAmount) +
-          parseFloat(formValues.transactionAmount).toFixed(2)
-        : parseFloat(selectedItem[0]?.sharesAmount) -
-          parseFloat(formValues.transactionAmount).toFixed(2);
+        ? (
+            parseFloat(selectedItem[0]?.sharesAmount) +
+            parseFloat(formValues.transactionAmount)
+          ).toFixed(2)
+        : (
+            parseFloat(selectedItem[0]?.sharesAmount) -
+            parseFloat(formValues.transactionAmount)
+          ).toFixed(2);
+    if (currency === "USD") {
+      transactionExpenseInEur = calculateEur(formValues.transactionExpense);
+    } else {
+      transactionExpenseInEur = formValues.transactionExpense;
+    }
+
     const newSpent =
       formValues.type === "Buy"
-        ? parseFloat(selectedItem[0]?.spent) +
-          parseFloat(formValues.transactionExpense).toFixed(2)
-        : parseFloat(selectedItem[0]?.spent) -
-          parseFloat(formValues.transactionExpense).toFixed(2);
+        ? (
+            parseFloat(selectedItem[0]?.spent) +
+            parseFloat(formValues.transactionExpense)
+          ).toFixed(2)
+        : (
+            parseFloat(selectedItem[0]?.spent) -
+            parseFloat(formValues.transactionExpense)
+          ).toFixed(2);
+    const newSpentInEur =
+      formValues.type === "Buy"
+        ? (
+            parseFloat(selectedItem[0]?.spentInEur) +
+            parseFloat(transactionExpenseInEur)
+          ).toFixed(2)
+        : (
+            parseFloat(selectedItem[0]?.spentInEur) -
+            parseFloat(transactionExpenseInEur)
+          ).toFixed(2);
+
     const price = (
       parseFloat(formValues.transactionExpense) /
       parseFloat(formValues.transactionAmount)
@@ -132,16 +185,20 @@ const Form = (props) => {
       ...formValues,
       sharesAmount: newAmount,
       spent: newSpent,
+      transactionExpenseInEur: transactionExpenseInEur,
+      spentInEur: newSpentInEur,
       price: price,
     };
     return transactionBody;
   };
 
-  const handleSubmit = (e) => {
+  console.log("formvalues", formValues);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const body = parseData(formValues);
     //Check values and if value could be a number, parse it.
+    const body = parseData(formValues);
 
     if (formType === "Edit" && selectedItem?.length === 1) {
       console.log("submitting edit", body);
@@ -154,13 +211,13 @@ const Form = (props) => {
       formContext === "transactions"
     ) {
       //Need some function that creates data for this and need two dispatches..
-      const transactionsBody = dataForNewTransaction();
-      console.log("submitting new transaction", transactionsBody);
-      dispatch(createTransaction(transactionsBody));
-      dispatch(editPortfolioAsset(transactionsBody));
+      const transactionsBody = await dataForNewTransaction();
+      console.log("submitting new transaction", parseData(transactionsBody));
+      // dispatch(createTransaction(transactionsBody));
+      // dispatch(editPortfolioAsset(transactionsBody));
     } else if (formType === "Add") {
       console.log("submitting add", body);
-      dispatch(createAsset(body, formContext));
+      // dispatch(createAsset(body, formContext));
     }
   };
 
@@ -171,7 +228,7 @@ const Form = (props) => {
         color: "secondary",
         variant: "outlined",
         size: "small",
-        type: field.inputType,
+        type: field.inputType === "number" ? field.inputType : undefined,
         label: field.label,
         onChange: handleInputChange,
         value: formValues[field.name],
@@ -274,6 +331,46 @@ const Form = (props) => {
               xs={12}
             >
               <TextField {...TextFieldProps} disabled />
+            </Grid>
+          );
+        case "Expense":
+          return (
+            <Grid
+              key={field.name}
+              item
+              lg={field.size === "small" ? 3 : 4}
+              xs={12}
+            >
+              {/* <Stack direction="row"> */}
+              <TextField
+                {...TextFieldProps}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">{currency}</InputAdornment>
+                  ),
+                }}
+              />
+              {/* <ToggleButtonGroup
+                  value={formValues[field.name]}
+                  exclusive
+                  onChange={handleCurrency}
+                  aria-label="currency pick"
+                >
+                  {field.toggleSelections.map((ts) => {
+                    return (
+                      <ToggleButton
+                        key={ts.value}
+                        size="small"
+                        value={ts.value}
+                        aria-label={ts.value}
+                        selected={ts.value === currency ? true : false}
+                      >
+                        <span>{ts.value}</span>
+                      </ToggleButton>
+                    );
+                  })}
+                </ToggleButtonGroup> */}
+              {/* </Stack> */}
             </Grid>
           );
         default:

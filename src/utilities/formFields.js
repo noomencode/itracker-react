@@ -86,8 +86,9 @@ const formFields = {
       {
         name: "transactionExpense",
         label: "Amount invested",
-        type: "Number",
-        inputType: "number",
+        type: "Expense",
+        // inputType: "expense",
+        toggleSelections: [{ value: "EUR" }, { value: "USD" }],
         size: "small",
         id: "transactionExpense",
       },
@@ -202,8 +203,8 @@ const formFields = {
       {
         name: "spent",
         label: "Amount invested",
-        type: "Number",
-        inputType: "number",
+        type: "Expense",
+        toggleSelections: [{ value: "EUR" }, { value: "USD" }],
         size: "small",
         id: "spent",
       },
@@ -238,8 +239,8 @@ const formFields = {
       {
         name: "spent",
         label: "Amount invested",
-        type: "Number",
-        inputType: "number",
+        type: "Expense",
+        toggleSelections: [{ value: "EUR" }, { value: "USD" }],
         size: "small",
         id: "spent",
       },

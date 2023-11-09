@@ -177,7 +177,8 @@ const EnhancedTable = (props) => {
   };
 
   const rows = portfolioAssets.map((myAsset) => {
-    const { customType, spent, sharesAmount, name, ticker, _id } = myAsset;
+    const { customType, spent, spentInEur, sharesAmount, name, ticker, _id } =
+      myAsset;
     const { price, dailyChange, averageAnalystRating, currency } =
       myAsset.asset;
     return {
@@ -192,6 +193,7 @@ const EnhancedTable = (props) => {
       dailyChange: parseFloat(dailyChange).toFixed(2),
       worth: parseFloat((price * sharesAmount).toFixed(2)),
       spent: parseFloat(spent),
+      spentInEur: parseFloat(spentInEur),
       sharesAmount: parseFloat(sharesAmount),
       customType: customType,
       portfolioPercentage: 100,
@@ -213,7 +215,9 @@ const EnhancedTable = (props) => {
         return {
           name: n.name,
           ticker: n.ticker,
+          currency: n.currency,
           spent: n.spent,
+          spentInEur: n.spentInEur,
           sharesAmount: n.sharesAmount,
           customType: n.customType,
           id: n.id,
@@ -226,7 +230,16 @@ const EnhancedTable = (props) => {
   };
 
   const handleClick = (event, row) => {
-    const { name, ticker, id, spent, sharesAmount, customType } = row;
+    const {
+      name,
+      ticker,
+      id,
+      spent,
+      currency,
+      spentInEur,
+      sharesAmount,
+      customType,
+    } = row;
     const selectedIndex = selected.findIndex((r) => {
       return r.name === name;
     });
@@ -237,8 +250,10 @@ const EnhancedTable = (props) => {
         name: name,
         ticker: ticker,
         id: id,
+        currency: currency,
         sharesAmount: sharesAmount,
         spent: spent,
+        spentInEur: spentInEur,
         customType: customType,
       });
     } else if (selectedIndex === 0) {

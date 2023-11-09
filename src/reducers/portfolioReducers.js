@@ -32,7 +32,6 @@ export const portfolioAssetReducer = (
 };
 
 export const portfolioAssetCUDReducer = (state = {}, action) => {
-  console.log(action.type);
   switch (action.type) {
     case PORTFOLIO_ASSET_ADD_REQUEST:
     case PORTFOLIO_ASSET_EDIT_REQUEST:

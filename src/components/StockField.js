@@ -49,10 +49,13 @@ export default function StockField(props) {
       onInputChange={(event, newInputValue) => {
         setInputValue(newInputValue);
       }}
-      onChange={(event, newValue) => {
+      onChange={async (event, newValue) => {
         setOptions(newValue ? [newValue, ...options] : options);
         setValue(newValue);
-        handleNewAsset(newValue);
+        const quoteData = await axios.get(
+          `/api/assets/quote/${newValue.symbol}`
+        );
+        handleNewAsset(newValue, quoteData.data);
       }}
       isOptionEqualToValue={(option, value) =>
         option.shortname === value.shortname

@@ -166,7 +166,9 @@ export const calculatePortfolioPerformance = (data) => async (dispatch) => {
 
   const totalWorth = assets.reduce((acc, myAsset) => {
     if (myAsset.asset.type !== "Cryptocurrency") {
-      acc += myAsset.sharesAmount * myAsset.asset.price;
+      if (myAsset.asset.currency === "USD")
+        acc += myAsset.sharesAmount * myAsset.asset.priceInEur;
+      else acc += myAsset.sharesAmount * myAsset.asset.price;
     }
     return acc;
   }, 0);
@@ -177,13 +179,25 @@ export const calculatePortfolioPerformance = (data) => async (dispatch) => {
       if (myAsset.asset.marketState !== "REGULAR") {
         if (myAsset.asset.regularMarketTime.slice(0, 10) < currentDate) {
           //If market is CLOSED and the last timestamp is not from today, then give regular price.
-          prevPrice = myAsset.asset.price;
+          prevPrice = myAsset.asset.priceInEur;
+          // prevPrice =
+          //   myAsset.asset.currency === "USD"
+          //     ? myAsset.asset.priceInEur
+          //     : myAsset.asset.price;
         } else {
           //If market is CLOSED and the last timestamp is from today, then give previous close price.
-          prevPrice = myAsset.asset.regularMarketPreviousClose;
+          prevPrice = myAsset.asset.regularMarketPreviousCloseInEur;
+          // prevPrice =
+          //   myAsset.asset.currency === "USD"
+          //     ? myAsset.asset.regularMarketPreviousCloseInEur
+          //     : myAsset.asset.regularMarketPreviousClose;
         }
       } else {
-        prevPrice = myAsset.asset.regularMarketPreviousClose;
+        prevPrice = myAsset.asset.regularMarketPreviousCloseInEur;
+        // prevPrice =
+        //   myAsset.asset.currency === "USD"
+        //     ? myAsset.asset.regularMarketPreviousCloseInEur
+        //     : myAsset.asset.regularMarketPreviousClose;
       }
 
       acc += myAsset.sharesAmount * prevPrice;
