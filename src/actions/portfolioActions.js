@@ -68,6 +68,7 @@ export const addAssetToPortfolio =
           customType: body.customType,
           sharesAmount: body.sharesAmount,
           spent: body.spent,
+          spentInEur: body.spentInEur,
           assets: assetId,
         },
         config
@@ -132,6 +133,7 @@ export const editPortfolioAsset = (body) => async (dispatch, getState) => {
         customType: body.customType,
         sharesAmount: body.sharesAmount,
         spent: body.spent,
+        spentInEur: body.spentInEur,
       },
       config
     );

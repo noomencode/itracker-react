@@ -35,6 +35,7 @@ export const createTransaction = (body) => async (dispatch, getState) => {
         amount: body.transactionAmount,
         price: body.price,
         expense: body.transactionExpense,
+        expenseInEur: body.transactionExpenseInEur,
       },
       config
     );
@@ -84,6 +85,7 @@ export const editTransaction = (body) => async (dispatch, getState) => {
         sharesAmount: body.sharesAmount,
         price: body.price,
         expense: body.expense,
+        expenseInEur: body.expenseInEur,
       },
       config
     );
