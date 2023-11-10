@@ -137,12 +137,13 @@ const formFields = {
         id: "sharesAmount",
       },
       {
-        name: "expense",
-        label: "Expense",
-        type: "Number",
-        inputType: "number",
+        name: "transactionExpense",
+        label: "Amount invested",
+        type: "Expense",
+        // inputType: "expense",
+        toggleSelections: [{ value: "EUR" }, { value: "USD" }],
         size: "small",
-        id: "expense",
+        id: "transactionExpense",
       },
       {
         name: "price",
