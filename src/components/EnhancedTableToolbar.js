@@ -45,6 +45,12 @@ function EnhancedTableToolbar(props) {
     else if (source === "transactions") dispatch(deleteTransaction(selected));
   };
 
+  React.useEffect(() => {
+    if (numSelected === 0) {
+      handleShowForm(false);
+    }
+  }, [numSelected]);
+
   return (
     <Box>
       {error.isError ? (

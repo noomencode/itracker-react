@@ -33,6 +33,12 @@ const DataTableToolbar = (props) => {
 
   const [menuAnchorEl, setMenuAnchorEl] = useState(null);
 
+  React.useEffect(() => {
+    if (numSelected === 0) {
+      setForm(form.open === false);
+    }
+  }, [numSelected]);
+
   const handleMenuOpen = (event) => {
     setMenuAnchorEl(event.currentTarget);
   };
@@ -42,7 +48,7 @@ const DataTableToolbar = (props) => {
   };
 
   const handleMenuItemClick = (type) => {
-    setForm({ open: true, type: "Add", itemType: type });
+    setForm({ open: !form.open, type: "Add", itemType: type });
     handleMenuClose();
   };
 
