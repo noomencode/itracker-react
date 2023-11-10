@@ -10,6 +10,14 @@ const formFields = {
         id: "name",
       },
       {
+        name: "targetPrice",
+        label: "Target price",
+        type: "TargetPrice",
+        inputType: "number",
+        size: "small",
+        id: "targetPrice",
+      },
+      {
         name: "customType",
         label: "Describe asset",
         type: "Dropdown",
@@ -18,14 +26,6 @@ const formFields = {
         defaultSelect: "N/A",
         size: "small",
         id: "customType",
-      },
-      {
-        name: "targetPrice",
-        label: "Target price",
-        type: "Number",
-        inputType: "number",
-        size: "small",
-        id: "targetPrice",
       },
       {
         name: "comment",
