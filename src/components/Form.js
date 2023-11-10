@@ -9,7 +9,6 @@ import {
   Grid,
   IconButton,
   Chip,
-  Stack,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import EditIcon from "@mui/icons-material/Edit";
@@ -27,8 +26,7 @@ import {
   createTransaction,
   editTransaction,
 } from "../actions/transactionActions";
-import ToggleButton from "@mui/material/ToggleButton";
-import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
+
 import InputAdornment from "@mui/material/InputAdornment";
 
 import axios from "axios";
@@ -54,33 +52,22 @@ const Form = (props) => {
   fields.forEach((field) => {
     if (field.type !== "Asset") {
       if (field.type === "Dropdown") {
-        if (selectedItem?.length) {
-          if (selectedItem[0][field.name]) {
-            initialState[field.name] = selectedItem[0][field.name];
-          } else {
-            initialState[field.name] = field.defaultSelect || "";
-          }
-        } else {
-          initialState[field.name] = field.defaultSelect || "";
-        }
-      } else if (selectedItem?.length && formType === "Edit")
-        initialState[field.name] = selectedItem[0][field.name] || "";
-      else if (field.type === "Date" && formType === "Add") {
+        initialState[field.name] =
+          selectedItem?.[0]?.[field.name] || field.defaultSelect || "";
+      } else if (formType === "Edit") {
+        initialState[field.name] = selectedItem?.[0]?.[field.name] || "";
+      } else if (field.type === "Date" && formType === "Add") {
         initialState[field.name] = new Date();
       } else initialState[field.name] = "";
-      initialState.ticker = selectedItem?.length ? selectedItem[0].ticker : "";
-      initialState.id = selectedItem?.length ? selectedItem[0].id : undefined;
-      initialState.name = selectedItem?.length
-        ? selectedItem[0].name
-        : undefined;
-      initialState.spentInEur = selectedItem?.length
-        ? selectedItem[0].spentInEur
-        : "";
+      initialState.ticker = selectedItem?.[0]?.ticker || "";
+      initialState.id = selectedItem?.[0]?.id || undefined;
+      initialState.name = selectedItem?.[0]?.name || undefined;
+      initialState.spentInEur = selectedItem?.[0]?.spentInEur | "";
     }
   });
   const [formValues, setFormValues] = React.useState(initialState);
   const [quote, setQuote] = React.useState({});
-  const initialCurrency = selectedItem.length ? selectedItem[0].currency : "";
+  const initialCurrency = selectedItem?.[0]?.currency || "";
   const [currency, setCurrency] = React.useState(initialCurrency);
 
   React.useEffect(() => {
@@ -97,7 +84,11 @@ const Form = (props) => {
             : 0.0,
       });
     }
-  }, [formValues.transactionAmount, formValues.transactionExpense]);
+  }, [
+    formValues.transactionAmount,
+    formValues.transactionExpense,
+    formContext,
+  ]);
 
   const handleInputChange = async (e) => {
     const { name, value } = e.target;
@@ -139,56 +130,43 @@ const Form = (props) => {
   };
 
   const dataForNewTransaction = async () => {
-    let transactionExpenseInEur;
-    const newAmount =
-      formValues.type === "Buy"
-        ? (
-            parseFloat(selectedItem[0]?.sharesAmount) +
-            parseFloat(formValues.transactionAmount)
-          ).toFixed(2)
-        : (
-            parseFloat(selectedItem[0]?.sharesAmount) -
-            parseFloat(formValues.transactionAmount)
-          ).toFixed(2);
-    if (currency === "USD") {
-      transactionExpenseInEur = calculateEur(formValues.transactionExpense);
-    } else {
-      transactionExpenseInEur = formValues.transactionExpense;
-    }
+    const { type, transactionAmount, transactionExpense } = formValues;
+    const { sharesAmount, spent, spentInEur } = selectedItem[0];
 
-    const newSpent =
-      formValues.type === "Buy"
-        ? (
-            parseFloat(selectedItem[0]?.spent) +
-            parseFloat(formValues.transactionExpense)
-          ).toFixed(2)
-        : (
-            parseFloat(selectedItem[0]?.spent) -
-            parseFloat(formValues.transactionExpense)
-          ).toFixed(2);
-    const newSpentInEur =
-      formValues.type === "Buy"
-        ? (
-            parseFloat(selectedItem[0]?.spentInEur) +
-            parseFloat(transactionExpenseInEur)
-          ).toFixed(2)
-        : (
-            parseFloat(selectedItem[0]?.spentInEur) -
-            parseFloat(transactionExpenseInEur)
-          ).toFixed(2);
+    //Determines whether to add or deduct
+    const multiplier = type === "Buy" ? 1 : -1;
+    const newAmount = (
+      parseFloat(sharesAmount) +
+      multiplier * parseFloat(transactionAmount)
+    ).toFixed(2);
+
+    const transactionExpenseInEur =
+      currency === "USD"
+        ? await calculateEur(transactionExpense)
+        : transactionExpense;
+
+    const newSpent = (
+      parseFloat(spent) +
+      multiplier * parseFloat(transactionExpense)
+    ).toFixed(2);
+    const newSpentInEur = (
+      parseFloat(spentInEur) +
+      multiplier * parseFloat(transactionExpenseInEur)
+    ).toFixed(2);
 
     const price = (
-      parseFloat(formValues.transactionExpense) /
-      parseFloat(formValues.transactionAmount)
+      parseFloat(transactionExpense) / parseFloat(transactionAmount)
     ).toFixed(2);
+
     const transactionBody = {
       ...formValues,
       sharesAmount: newAmount,
       spent: newSpent,
-      transactionExpenseInEur: transactionExpenseInEur,
+      transactionExpenseInEur,
       spentInEur: newSpentInEur,
-      price: price,
+      price,
     };
+
     return transactionBody;
   };
 
@@ -341,7 +319,6 @@ const Form = (props) => {
               lg={field.size === "small" ? 3 : 4}
               xs={12}
             >
-              {/* <Stack direction="row"> */}
               <TextField
                 {...TextFieldProps}
                 InputProps={{
@@ -350,27 +327,6 @@ const Form = (props) => {
                   ),
                 }}
               />
-              {/* <ToggleButtonGroup
-                  value={formValues[field.name]}
-                  exclusive
-                  onChange={handleCurrency}
-                  aria-label="currency pick"
-                >
-                  {field.toggleSelections.map((ts) => {
-                    return (
-                      <ToggleButton
-                        key={ts.value}
-                        size="small"
-                        value={ts.value}
-                        aria-label={ts.value}
-                        selected={ts.value === currency ? true : false}
-                      >
-                        <span>{ts.value}</span>
-                      </ToggleButton>
-                    );
-                  })}
-                </ToggleButtonGroup> */}
-              {/* </Stack> */}
             </Grid>
           );
         default:
