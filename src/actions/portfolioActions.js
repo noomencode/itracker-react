@@ -166,7 +166,7 @@ export const calculatePortfolioPerformance = (data) => async (dispatch) => {
 
   const totalWorth = assets.reduce((acc, myAsset) => {
     if (myAsset.asset.type !== "Cryptocurrency") {
-      acc += myAsset.sharesAmount * myAsset.asset.price;
+      acc += myAsset.sharesAmount * myAsset.asset.priceInEur;
     }
     return acc;
   }, 0);
@@ -177,13 +177,13 @@ export const calculatePortfolioPerformance = (data) => async (dispatch) => {
       if (myAsset.asset.marketState !== "REGULAR") {
         if (myAsset.asset.regularMarketTime.slice(0, 10) < currentDate) {
           //If market is CLOSED and the last timestamp is not from today, then give regular price.
-          prevPrice = myAsset.asset.price;
+          prevPrice = myAsset.asset.priceInEur;
         } else {
           //If market is CLOSED and the last timestamp is from today, then give previous close price.
-          prevPrice = myAsset.asset.regularMarketPreviousClose;
+          prevPrice = myAsset.asset.regularMarketPreviousCloseInEur;
         }
       } else {
-        prevPrice = myAsset.asset.regularMarketPreviousClose;
+        prevPrice = myAsset.asset.regularMarketPreviousCloseInEur;
       }
 
       acc += myAsset.sharesAmount * prevPrice;
@@ -192,16 +192,16 @@ export const calculatePortfolioPerformance = (data) => async (dispatch) => {
   }, 0);
   const totalSpent = assets.reduce((acc, myAsset) => {
     if (myAsset.asset.type !== "Cryptocurrency") {
-      acc += myAsset.spent;
+      acc += myAsset.spentInEur;
     }
     return acc;
   }, 0);
   const totalWorthWithCrypto = assets.reduce((acc, myAsset) => {
-    acc += myAsset.sharesAmount * myAsset.asset.price;
+    acc += myAsset.sharesAmount * myAsset.asset.priceInEur;
     return acc;
   }, 0);
   const totalSpentWithCrypto = assets.reduce((acc, myAsset) => {
-    acc += myAsset.spent;
+    acc += myAsset.spentInEur;
     return acc;
   }, 0);
   try {
