@@ -43,7 +43,6 @@ export const createAsset = (body, source) => async (dispatch, getState) => {
       config
     );
     dispatch({ type: ASSET_ADD_SUCCESS, payload: assetData });
-    console.log(source);
     source !== "watchlist"
       ? dispatch(addAssetToPortfolio(body, assetData.data._id))
       : dispatch(addAssetToWatchlist(body, assetData.data._id));

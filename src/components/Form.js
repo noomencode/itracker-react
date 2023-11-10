@@ -71,6 +71,11 @@ const Form = (props) => {
   const [quote, setQuote] = React.useState({});
   const initialCurrency = selectedItem?.[0]?.currency || "";
   const [currency, setCurrency] = React.useState(initialCurrency);
+  const [currencyRate, setCurrencyRate] = React.useState(undefined);
+
+  React.useEffect(() => {
+    getCurrencyRate();
+  }, []);
 
   React.useEffect(() => {
     if (formContext === "transactions") {
@@ -92,11 +97,11 @@ const Form = (props) => {
     formContext,
   ]);
 
-  const handleInputChange = async (e) => {
+  const handleInputChange = (e) => {
     const { name, value } = e.target;
     let spentInEur;
     if (name === "spent") {
-      spentInEur = await calculateEur(value);
+      spentInEur = value * currencyRate;
     }
     setFormValues({ ...formValues, [name]: value, spentInEur: spentInEur });
   };
@@ -123,13 +128,12 @@ const Form = (props) => {
     return parsedData;
   };
 
-  const calculateEur = async (value) => {
-    const currencyRate = await axios.get(`/api/assets/currency/EUR=X`);
-    const newValue = parseFloat(value * currencyRate.data.price).toFixed(2);
-    return newValue;
+  const getCurrencyRate = async (value) => {
+    const rate = await axios.get(`/api/assets/currency/EUR=X`);
+    setCurrencyRate(rate.data.price);
   };
 
-  const dataForNewTransaction = async () => {
+  const dataForNewTransaction = () => {
     const { type, transactionAmount, transactionExpense } = formValues;
     const { sharesAmount, spent, spentInEur } = selectedItem[0];
 
@@ -142,7 +146,7 @@ const Form = (props) => {
 
     const transactionExpenseInEur =
       currency === "USD"
-        ? await calculateEur(transactionExpense)
+        ? transactionExpense * currencyRate
         : transactionExpense;
 
     const newSpent = (

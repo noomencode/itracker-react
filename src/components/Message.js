@@ -11,7 +11,10 @@ const Message = (props) => {
   const [open, setOpen] = React.useState(true);
   React.useEffect(() => {
     // if (severity === "success") {
-    const timeId = setTimeout(() => setOpen(false), 5000);
+    const timeId = setTimeout(() => {
+      setOpen(false);
+      dispatch(removeDataAction());
+    }, 5000);
 
     return () => {
       clearTimeout(timeId);
@@ -20,7 +23,6 @@ const Message = (props) => {
   }, []);
 
   if (!open) {
-    dispatch(removeDataAction());
     return null;
   }
   return (
