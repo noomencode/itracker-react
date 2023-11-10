@@ -9,7 +9,6 @@ import {
 import {
   portfolioAssetReducer,
   portfolioPerformanceReducer,
-  portfolioCUDStateRemoveReducer,
   portfolioAssetCUDReducer,
 } from "./reducers/portfolioReducers";
 import {

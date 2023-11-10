@@ -58,7 +58,10 @@ export const portfolioAssetCUDReducer = (state = {}, action) => {
     case PORTFOLIO_ASSET_ADD_FAIL:
     case PORTFOLIO_ASSET_EDIT_FAIL:
     case PORTFOLIO_DELETE_ASSETS_FAIL:
-      return { loading: false, error: action.payload };
+      return {
+        loading: false,
+        error: "There was an error while trying to perform action on asset.",
+      };
     case REMOVE_CUD_STATE:
       return {};
     default:
