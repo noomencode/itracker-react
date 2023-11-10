@@ -101,7 +101,7 @@ const Form = (props) => {
     const { name, value } = e.target;
     let spentInEur;
     if (name === "spent") {
-      spentInEur = value * currencyRate;
+      spentInEur = currency === "USD" ? value * currencyRate : value;
     }
     setFormValues({ ...formValues, [name]: value, spentInEur: spentInEur });
   };
