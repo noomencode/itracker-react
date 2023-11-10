@@ -46,6 +46,8 @@ const Form = (props) => {
     message: "",
   });
 
+  console.log(formContext, formType);
+
   const dispatch = useDispatch();
   //Creates dynamic state object from props
   const initialState = {};
@@ -95,8 +97,6 @@ const Form = (props) => {
     let spentInEur;
     if (name === "spent") {
       spentInEur = await calculateEur(value);
-      console.log(value);
-      console.log(spentInEur);
     }
     setFormValues({ ...formValues, [name]: value, spentInEur: spentInEur });
   };
@@ -171,6 +171,7 @@ const Form = (props) => {
   };
 
   console.log("formvalues", formValues);
+  console.log("selected", selectedItem);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
