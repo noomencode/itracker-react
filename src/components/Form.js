@@ -104,11 +104,11 @@ const Form = (props) => {
   const handleAssetChange = (asset, assetQuote) => {
     setFormValues({
       ...formValues,
-      name: asset.shortname,
-      ticker: asset.symbol,
+      name: asset?.shortname || "",
+      ticker: asset?.symbol || "",
     });
-    setQuote(assetQuote);
-    setCurrency(assetQuote?.currency);
+    setQuote(assetQuote || {});
+    setCurrency(assetQuote?.currency || "");
   };
 
   const parseData = (formValues) => {
@@ -258,6 +258,24 @@ const Form = (props) => {
               xs={12}
             >
               <TextField {...TextFieldProps} />
+            </Grid>
+          );
+        case "TargetPrice":
+          return (
+            <Grid
+              key={field.name}
+              item
+              lg={field.size === "small" ? 3 : 4}
+              xs={12}
+            >
+              <TextField
+                {...TextFieldProps}
+                helperText={
+                  quote.regularMarketPrice
+                    ? `Current price: ${quote.regularMarketPrice}`
+                    : undefined
+                }
+              />
             </Grid>
           );
         case "Dropdown":

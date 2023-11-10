@@ -10,6 +10,14 @@ const formFields = {
         id: "name",
       },
       {
+        name: "targetPrice",
+        label: "Target price",
+        type: "TargetPrice",
+        inputType: "number",
+        size: "small",
+        id: "targetPrice",
+      },
+      {
         name: "customType",
         label: "Describe asset",
         type: "Dropdown",
@@ -18,14 +26,6 @@ const formFields = {
         defaultSelect: "N/A",
         size: "small",
         id: "customType",
-      },
-      {
-        name: "targetPrice",
-        label: "Target price",
-        type: "Number",
-        inputType: "number",
-        size: "small",
-        id: "targetPrice",
       },
       {
         name: "comment",
@@ -137,12 +137,13 @@ const formFields = {
         id: "sharesAmount",
       },
       {
-        name: "expense",
-        label: "Expense",
-        type: "Number",
-        inputType: "number",
+        name: "transactionExpense",
+        label: "Amount invested",
+        type: "Expense",
+        // inputType: "expense",
+        toggleSelections: [{ value: "EUR" }, { value: "USD" }],
         size: "small",
-        id: "expense",
+        id: "transactionExpense",
       },
       {
         name: "price",

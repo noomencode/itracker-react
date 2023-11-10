@@ -57,6 +57,8 @@ export default function StockField(props) {
             `/api/assets/quote/${newValue.symbol}`
           );
           handleNewAsset(newValue, quoteData.data);
+        } else {
+          handleNewAsset(undefined, undefined);
         }
       }}
       isOptionEqualToValue={(option, value) =>
