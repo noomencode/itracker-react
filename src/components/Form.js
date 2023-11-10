@@ -192,11 +192,11 @@ const Form = (props) => {
       //Need some function that creates data for this and need two dispatches..
       const transactionsBody = await dataForNewTransaction();
       console.log("submitting new transaction", parseData(transactionsBody));
-      // dispatch(createTransaction(transactionsBody));
-      // dispatch(editPortfolioAsset(transactionsBody));
+      dispatch(createTransaction(transactionsBody));
+      dispatch(editPortfolioAsset(transactionsBody));
     } else if (formType === "Add") {
       console.log("submitting add", body);
-      // dispatch(createAsset(body, formContext));
+      dispatch(createAsset(body, formContext));
     }
   };
 
