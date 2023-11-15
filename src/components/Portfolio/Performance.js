@@ -29,10 +29,10 @@ const Performance = (props) => {
     : (totalWorth - totalSpent).toFixed(2);
   const portfolioYield = showCrypto
     ? (
-        ((totalWorthWithCrypto - totalSpentWithCrypto) / totalWorth) *
+        ((totalWorthWithCrypto - totalSpentWithCrypto) / totalSpentWithCrypto) *
         100
       ).toFixed(2)
-    : (((totalWorth - totalSpent) / totalWorth) * 100).toFixed(2);
+    : (((totalWorth - totalSpent) / totalSpent) * 100).toFixed(2);
 
   const annualYield = history?.length
     ? showCrypto

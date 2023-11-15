@@ -20,7 +20,7 @@ const DailyPortfolioPerformance = (props) => {
     portfolio.totalWorth - portfolio.totalWorthOnPreviousClose;
   const dailyChangePercent =
     (portfolio.totalWorth - portfolio.totalWorthOnPreviousClose) /
-    portfolio.totalWorth;
+    portfolio.totalWorthOnPreviousClose;
   return (
     <Box sx={{ mb: 1 }}>
       <Card>
