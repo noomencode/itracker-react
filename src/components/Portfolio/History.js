@@ -14,9 +14,21 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 
 const History = (props) => {
-  const { date, worth, expenses } = props.history[0];
-  const profit = (worth - expenses).toFixed(2);
-  const portfolioYield = (((worth - expenses) / worth) * 100).toFixed(2);
+  const latestItemsByYear = Object.values(
+    props.history.reduce((acc, item) => {
+      if (
+        !acc[item.year] ||
+        new Date(item.date) > new Date(acc[item.year].date)
+      ) {
+        acc[item.year] = item;
+      }
+      return acc;
+    }, {})
+  );
+
+  const sortedHistory = latestItemsByYear.sort(
+    (a, b) => new Date(b.date) - new Date(a.date)
+  );
 
   const [open, setOpen] = useState(false);
 
@@ -46,78 +58,100 @@ const History = (props) => {
               />
             )}
           </Typography>
-          {open ? (
-            <>
-              <Divider sx={{ mb: 1 }} />
-              <ListItem disablePadding>
-                <ListItemIcon>
-                  <AccessTimeIcon />
-                </ListItemIcon>
-                <ListItemText
-                  primary={"Date"}
-                  secondary={`${date}`}
-                  primaryTypographyProps={{ variant: "h6" }}
-                  secondaryTypographyProps={{ variant: "h5" }}
-                ></ListItemText>
-              </ListItem>
-              <ListItem disablePadding>
-                <ListItemIcon>
-                  <AccountBalanceWalletIcon />
-                </ListItemIcon>
-                <ListItemText
-                  primary={"Value"}
-                  secondary={`${worth.toFixed(2)} EUR`}
-                  primaryTypographyProps={{ variant: "h6" }}
-                  secondaryTypographyProps={{ variant: "h5" }}
-                ></ListItemText>
-              </ListItem>
-              <ListItem disablePadding>
-                <ListItemIcon>
-                  <MonetizationOnIcon sx={{ color: "error.main" }} />
-                </ListItemIcon>
-                <ListItemText
-                  primary={"Expenses"}
-                  secondary={`${expenses.toFixed(2)} EUR`}
-                  primaryTypographyProps={{ variant: "h6" }}
-                  secondaryTypographyProps={{ variant: "h5" }}
-                ></ListItemText>
-              </ListItem>
-              <ListItem disablePadding>
-                <ListItemIcon>
-                  <MonetizationOnIcon
-                    sx={
-                      profit > 0
-                        ? { color: "secondary.main" }
-                        : { color: "error.main" }
-                    }
-                  />
-                </ListItemIcon>
-                <ListItemText
-                  primary={"Profit"}
-                  secondary={`${profit} EUR`}
-                  primaryTypographyProps={{ variant: "h6" }}
-                  secondaryTypographyProps={{ variant: "h5" }}
-                ></ListItemText>
-              </ListItem>
-              <ListItem disablePadding>
-                <ListItemIcon>
-                  <PercentIcon
-                    sx={
-                      portfolioYield > 0
-                        ? { color: "secondary.main" }
-                        : { color: "error.main" }
-                    }
-                  />
-                </ListItemIcon>
-                <ListItemText
-                  primary={"Total yield"}
-                  secondary={`${portfolioYield} %`}
-                  primaryTypographyProps={{ variant: "h6" }}
-                  secondaryTypographyProps={{ variant: "h5" }}
-                ></ListItemText>
-              </ListItem>
-            </>
-          ) : null}
+
+          {props.history?.length && open
+            ? sortedHistory.map((hist, i) => {
+                return (
+                  <React.Fragment key={i}>
+                    <Divider sx={{ mb: 1 }} />
+                    <ListItem disablePadding>
+                      <ListItemIcon>
+                        <AccessTimeIcon />
+                      </ListItemIcon>
+                      <ListItemText
+                        primary={"Date"}
+                        secondary={`${hist.date}`}
+                        primaryTypographyProps={{ variant: "h6" }}
+                        secondaryTypographyProps={{ variant: "h5" }}
+                      ></ListItemText>
+                    </ListItem>
+                    <ListItem disablePadding>
+                      <ListItemIcon>
+                        <AccountBalanceWalletIcon />
+                      </ListItemIcon>
+                      <ListItemText
+                        primary={"Value"}
+                        secondary={`${hist.worth} EUR`}
+                        primaryTypographyProps={{ variant: "h6" }}
+                        secondaryTypographyProps={{ variant: "h5" }}
+                      ></ListItemText>
+                    </ListItem>
+                    <ListItem disablePadding>
+                      <ListItemIcon>
+                        <MonetizationOnIcon sx={{ color: "error.main" }} />
+                      </ListItemIcon>
+                      <ListItemText
+                        primary={"Expenses"}
+                        secondary={`${hist.expenses} EUR`}
+                        primaryTypographyProps={{ variant: "h6" }}
+                        secondaryTypographyProps={{ variant: "h5" }}
+                      ></ListItemText>
+                    </ListItem>
+                    <ListItem disablePadding>
+                      <ListItemIcon>
+                        <MonetizationOnIcon
+                          sx={
+                            hist.profit > 0
+                              ? { color: "secondary.main" }
+                              : { color: "error.main" }
+                          }
+                        />
+                      </ListItemIcon>
+                      <ListItemText
+                        primary={"Profit"}
+                        secondary={`${hist.profit} EUR`}
+                        primaryTypographyProps={{ variant: "h6" }}
+                        secondaryTypographyProps={{ variant: "h5" }}
+                      ></ListItemText>
+                    </ListItem>
+                    <ListItem disablePadding>
+                      <ListItemIcon>
+                        <PercentIcon
+                          sx={
+                            hist.yield > 0
+                              ? { color: "secondary.main" }
+                              : { color: "error.main" }
+                          }
+                        />
+                      </ListItemIcon>
+                      <ListItemText
+                        primary={"Total yield"}
+                        secondary={`${hist.yield} %`}
+                        primaryTypographyProps={{ variant: "h6" }}
+                        secondaryTypographyProps={{ variant: "h5" }}
+                      ></ListItemText>
+                    </ListItem>
+                    <ListItem disablePadding>
+                      <ListItemIcon>
+                        <PercentIcon
+                          sx={
+                            hist.annualYield > 0
+                              ? { color: "secondary.main" }
+                              : { color: "error.main" }
+                          }
+                        />
+                      </ListItemIcon>
+                      <ListItemText
+                        primary={"Annual yield"}
+                        secondary={`${hist.annualYield} %`}
+                        primaryTypographyProps={{ variant: "h6" }}
+                        secondaryTypographyProps={{ variant: "h5" }}
+                      ></ListItemText>
+                    </ListItem>
+                  </React.Fragment>
+                );
+              })
+            : null}
         </CardContent>
       </Card>
     </React.Fragment>
