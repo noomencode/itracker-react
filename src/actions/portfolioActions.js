@@ -27,11 +27,8 @@ export const getPortfolioAssets = () => async (dispatch, getState) => {
   };
   try {
     dispatch({ type: PORTFOLIO_LIST_REQUEST });
-    const { data } = await axios.get(
-      // `https://weary-peplum-hare.cyclic.app/api/portfolio`,
-      "/api/portfolio",
-      config
-    );
+    axios.get("/api/assets/getQuotes");
+    const { data } = await axios.get("/api/portfolio", config);
     dispatch({
       type: PORTFOLIO_LIST_SUCCESS,
       payload: data,
