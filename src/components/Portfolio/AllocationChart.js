@@ -15,93 +15,16 @@ import { useTheme } from "@mui/material/styles";
 
 const getRandomColor = (usedColors) => {
   const colors = [
-    "#1D639D",
-    "#7BB1D3",
-    "#3F95B5",
-    "#28739E",
-    "#4B9FD1",
-    "#7FBFD6",
-    "#00708A",
-    "#7FBFD6",
-    "#00708A",
-    "#009DD6",
-    "#007AA5",
-    "#009EBF",
-    "#007FB5",
-    "#4F9CBD",
-    "#0A2468",
-    "#1068A2",
-    "#3F91B5",
-    "#3F9DBF",
-    "#3F95BF",
-    "#70B5D1",
-    "#3F91A2",
-    "#007B9E",
-    "#0A5BA5",
-    "#7F9DBF",
-    "#0A5B91",
-    "#0A7FB5",
-    "#007091",
-    "#0A5BA5",
-    "#0A70A5",
-    "#0A5B91",
-    "#7F95A5",
-    "#0A7091",
-    "#3F9EBF",
-    "#0A70A2",
-    "#0A70A5",
-    "#0A6891",
-    "#7F95A2",
-    "#4F91A2",
-    "#3F9EBF",
-    "#3F9EA5",
-    "#3F9EBF",
-    "#0A6891",
-    "#7FB5BF",
-    "#00708A",
-    "#0A5BA5",
-    "#0A7091",
-    "#7FB5A2",
-    "#4F9DA2",
-    "#3F91A2",
-    "#3F9D91",
-    "#3F95BF",
-    "#7FBF9E",
-    "#7F9E91",
-    "#0A7FBF",
-    "#0A70A2",
-    "#7FB5A5",
-    "#7FBF91",
-    "#0A70A5",
-    "#0A5BA5",
-    "#7F9E91",
-    "#0A5B91",
-    "#0A70A5",
-    "#7F9D91",
-    "#3F9D91",
-    "#3F9EBF",
-    "#0A7FBF",
-    "#0A6891",
-    "#0A7091",
-    "#7F95A5",
-    "#4F9D91",
-    "#7FBF91",
-    "#7FB5A5",
-    "#0A70A2",
-    "#7FB5BF",
-    "#7F9DA2",
-    "#7F9E91",
-    "#7FB5A2",
-    "#7F9D91",
-    "#7FBF9E",
-    "#3F95A2",
-    "#3F95BF",
-    "#7FBF91",
-    "#7FB5BF",
-    "#7F9E91",
-    "#7F9D91",
-    "#0A70A5",
-    "#3F95A5",
+    "#009c7a", // Red
+    "#009c7a", // Green
+    "#FFEB3B", // Yellow
+    "#2196F3", // Blue
+    // "#FF9800", // Orange
+    // "#9C27B0", // Purple
+    "#00BCD4", // Cyan
+    // "#8BC34A", // Light Green
+    "#FFC107", // Amber
+    "#607D8B", // Light Blue
   ];
   const availableColors = colors.filter((color) => !usedColors.includes(color));
   const randomIndex = Math.floor(Math.random() * availableColors.length);
@@ -170,15 +93,15 @@ function AllocationChart(props) {
     <React.Fragment>
       <Typography variant="h6">{props.title}</Typography>
       <Divider sx={{ mb: 2 }} />
-      <ResponsiveContainer width="100%" height={75}>
+      <ResponsiveContainer width="100%" height={80}>
         <BarChart
           data={data}
           layout="vertical"
           margin={{
             top: 20,
-            right: 25,
-            left: 25,
-            bottom: 5,
+            right: 15,
+            left: 15,
+            // bottom: 20,
           }}
         >
           <XAxis type="number" domain={[0, 100]} hide={true} />
@@ -190,7 +113,7 @@ function AllocationChart(props) {
             position={{ x: 0, y: -90 }}
           />
           {generateBar(data)}
-          <Legend />
+          <Legend wrapperStyle={{ fontSize: "0.8em" }} />
         </BarChart>
       </ResponsiveContainer>
     </React.Fragment>
