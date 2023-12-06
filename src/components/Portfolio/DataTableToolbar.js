@@ -111,6 +111,17 @@ const DataTableToolbar = (props) => {
             handleClose={handleShowForm}
           />
         );
+      } else if (form.type === "Add" && form.itemType === "dividend") {
+        return (
+          <Form
+            formType="Add"
+            formContext={form.itemType}
+            formTitle={"Add dividend"}
+            selectedItem={selected}
+            fields={formFields[form.itemType].add}
+            handleClose={handleShowForm}
+          />
+        );
       }
     }
   };
@@ -142,12 +153,20 @@ const DataTableToolbar = (props) => {
           onClose={handleMenuClose}
         >
           {numSelected === 1 ? (
-            <MenuItem
-              value="Add new transaction"
-              onClick={() => handleMenuItemClick("transactions")}
-            >
-              Add new transaction
-            </MenuItem>
+            <React.Fragment>
+              <MenuItem
+                value="Add new transaction"
+                onClick={() => handleMenuItemClick("transactions")}
+              >
+                Add new transaction
+              </MenuItem>
+              <MenuItem
+                value="Add dividend"
+                onClick={() => handleMenuItemClick("dividend")}
+              >
+                Add dividend
+              </MenuItem>
+            </React.Fragment>
           ) : (
             <MenuItem
               value="Add new asset"
