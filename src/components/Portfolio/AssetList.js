@@ -6,15 +6,15 @@ const AssetList = (props) => {
   const { assets } = props;
   return (
     <>
-      <Card>
-        <CardContent>
-          <Typography variant="h5" color="text.primary" gutterBottom>
-            Assets
-          </Typography>
-          <Divider />
-        </CardContent>
-        <EnhancedTable assets={{ assets }} />
-      </Card>
+      {/* <Card> */}
+      <CardContent sx={{ p: 1 }}>
+        <Typography variant="h5" color="text.primary" gutterBottom>
+          Assets
+        </Typography>
+        <Divider />
+      </CardContent>
+      <EnhancedTable assets={{ assets }} />
+      {/* </Card> */}
     </>
   );
 };

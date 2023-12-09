@@ -28,7 +28,7 @@ const theme = createTheme({
     },
     background: {
       default: "#0A1929",
-      paper: "#0A1929",
+      paper: "#111e31",
       //paper: "#001E3C",
     },
     divider: "rgba(194, 224, 255, 0.08)",
@@ -44,6 +44,7 @@ const theme = createTheme({
     },
     h5: {
       fontSize: "1rem",
+      fontWeight: 600,
     },
     h4: {
       fontSize: "1.4rem",

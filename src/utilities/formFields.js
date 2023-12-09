@@ -247,6 +247,26 @@ const formFields = {
       },
     ],
   },
+  dividend: {
+    add: [
+      {
+        name: "dividend",
+        label: "Dividend received",
+        type: "Expense",
+        inputType: "expense",
+        size: "small",
+        id: "dividend",
+      },
+      {
+        name: "dividendDate",
+        label: "Date",
+        type: "Date",
+        inputType: "date",
+        size: "small",
+        id: "dividendDate",
+      },
+    ],
+  },
 };
 
 export { formFields };

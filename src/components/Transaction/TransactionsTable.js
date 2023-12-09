@@ -35,6 +35,13 @@ const headCells = [
     label: "Price",
   },
   {
+    id: "profit",
+    type: "number",
+    numeric: true,
+    disablePadding: false,
+    label: "Profit",
+  },
+  {
     id: "date",
     type: "number",
     numeric: true,
@@ -162,91 +169,90 @@ export default function TransactionsTable(props) {
 
   return (
     <Box sx={{ width: "100%" }}>
-      <Paper sx={{ width: "100%", mb: 2 }}>
-        <EnhancedTableToolbar
-          numSelected={selected.length}
-          selected={selected}
-          source={"transactions"}
-        />
-        <TableContainer>
-          <Table
-            sx={{ minWidth: 750 }}
-            aria-labelledby="tableTitle"
-            size="large"
-          >
-            <EnhancedTableHead
-              numSelected={selected.length}
-              order={order}
-              orderBy={orderBy}
-              onSelectAllClick={handleSelectAllClick}
-              onRequestSort={handleRequestSort}
-              rowCount={rows.length}
-              headCells={headCells}
-            />
-            <TableBody>
-              {rows
-                .slice()
-                .sort(getComparator(order, orderBy))
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row, index) => {
-                  const isItemSelected = isSelected(row.id);
-                  const labelId = `enhanced-table-checkbox-${index}`;
+      {/* <Paper sx={{ width: "100%", mb: 2 }}> */}
+      <EnhancedTableToolbar
+        numSelected={selected.length}
+        selected={selected}
+        source={"transactions"}
+      />
+      <TableContainer>
+        <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle" size="large">
+          <EnhancedTableHead
+            numSelected={selected.length}
+            order={order}
+            orderBy={orderBy}
+            onSelectAllClick={handleSelectAllClick}
+            onRequestSort={handleRequestSort}
+            rowCount={rows.length}
+            headCells={headCells}
+          />
+          <TableBody>
+            {rows
+              .slice()
+              .sort(getComparator(order, orderBy))
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map((row, index) => {
+                const isItemSelected = isSelected(row.id);
+                const labelId = `enhanced-table-checkbox-${index}`;
 
-                  return (
-                    <TableRow
-                      hover
-                      onClick={(event) => handleClick(event, row)}
-                      role="checkbox"
-                      aria-checked={isItemSelected}
-                      tabIndex={-1}
-                      key={row.key}
-                      selected={isItemSelected}
-                    >
-                      <TableCell padding="checkbox">
-                        <Checkbox
-                          color="secondary"
-                          checked={isItemSelected}
-                          inputProps={{
-                            "aria-labelledby": labelId,
-                          }}
-                        />
-                      </TableCell>
-                      {headCells.map((cell) => {
-                        if (row[cell.id]) {
-                          const Cell = CellMap[cell.type];
-                          const value = row[cell.id];
-                          return (
-                            <Cell key={cell.id} {...cell.props} value={value} />
-                          );
-                        } else {
-                          return null;
-                        }
-                      })}
-                    </TableRow>
-                  );
-                })}
-              {emptyRows > 0 && (
-                <TableRow
-                  style={{
-                    height: 53 * emptyRows,
-                  }}
-                >
-                  <TableCell colSpan={6} />
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
-          component="div"
-          count={rows.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
-      </Paper>
+                return (
+                  <TableRow
+                    hover
+                    onClick={(event) => handleClick(event, row)}
+                    role="checkbox"
+                    aria-checked={isItemSelected}
+                    tabIndex={-1}
+                    key={row.key}
+                    selected={isItemSelected}
+                    sx={{ bgcolor: "#1d293c" }}
+                  >
+                    <TableCell padding="checkbox">
+                      <Checkbox
+                        color="secondary"
+                        checked={isItemSelected}
+                        inputProps={{
+                          "aria-labelledby": labelId,
+                        }}
+                      />
+                    </TableCell>
+                    {headCells.map((cell) => {
+                      const Cell = CellMap[cell.type];
+                      if (row[cell.id]) {
+                        const value = row[cell.id];
+                        return (
+                          <Cell key={cell.id} {...cell.props} value={value} />
+                        );
+                      } else {
+                        return (
+                          <Cell key={cell.id} {...cell.props} value={"N/A"} />
+                        );
+                      }
+                    })}
+                  </TableRow>
+                );
+              })}
+            {emptyRows > 0 && (
+              <TableRow
+                style={{
+                  height: 53 * emptyRows,
+                }}
+              >
+                <TableCell colSpan={6} />
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <TablePagination
+        rowsPerPageOptions={[5, 10, 25]}
+        component="div"
+        count={rows.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+      />
+      {/* </Paper> */}
     </Box>
   );
 }

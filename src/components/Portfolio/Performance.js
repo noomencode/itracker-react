@@ -4,6 +4,7 @@ import {
   CardContent,
   Typography,
   Divider,
+  Box,
   Container,
 } from "@mui/material";
 import List from "@mui/material/List";
@@ -53,128 +54,138 @@ const Performance = (props) => {
     : "N/A";
 
   return (
-    <React.Fragment>
-      <Card sx={{ marginBottom: 1 }}>
-        <CardContent>
-          <Typography variant="h5" color="text.primary" gutterBottom>
-            Overall portfolio performance
-          </Typography>
-          <Divider />
-        </CardContent>
-        <Container sx={{ mb: 2 }}>
-          <Grid container spacing={1}>
-            <Grid item lg={6} xs={6}>
-              <ListItem disablePadding>
-                <ListItemIcon>
-                  <AccountBalanceWalletIcon sx={{ color: "secondary.main" }} />
-                </ListItemIcon>
-                <ListItemText
-                  primary={"Current value"}
-                  secondary={
-                    showCrypto
-                      ? `${totalWorthWithCrypto.toFixed(2)} EUR`
-                      : `${totalWorth.toFixed(2)} EUR`
-                  }
-                  primaryTypographyProps={{ variant: "h6" }}
-                  secondaryTypographyProps={{ variant: "h5" }}
-                ></ListItemText>
-              </ListItem>
-            </Grid>
-            <Grid item lg={6} xs={6}>
-              <ListItem disablePadding>
-                <ListItemIcon>
-                  <MonetizationOnIcon sx={{ color: "error.main" }} />
-                </ListItemIcon>
-                <ListItemText
-                  primary={"Expenses"}
-                  secondary={
-                    showCrypto
-                      ? `${totalSpentWithCrypto.toFixed(2)} EUR`
-                      : `${totalSpent.toFixed(2)} EUR`
-                  }
-                  primaryTypographyProps={{ variant: "h6" }}
-                  secondaryTypographyProps={{ variant: "h5" }}
-                ></ListItemText>
-              </ListItem>
-            </Grid>
-            <Grid item lg={6} xs={6}>
-              <ListItem disablePadding>
-                <ListItemIcon>
-                  <MonetizationOnIcon
-                    sx={
-                      profit > 0
-                        ? { color: "secondary.main" }
-                        : { color: "error.main" }
-                    }
-                  />
-                </ListItemIcon>
-                <ListItemText
-                  primary={"Total Profit"}
-                  secondary={`${profit} EUR`}
-                  primaryTypographyProps={{ variant: "h6" }}
-                  secondaryTypographyProps={{ variant: "h5" }}
-                ></ListItemText>
-              </ListItem>
-            </Grid>
-            <Grid item lg={6} xs={6}>
-              <ListItem disablePadding>
-                <ListItemIcon>
-                  <PercentIcon
-                    sx={
-                      portfolioYield > 0
-                        ? { color: "secondary.main" }
-                        : { color: "error.main" }
-                    }
-                  />
-                </ListItemIcon>
-                <ListItemText
-                  primary={"Total yield"}
-                  secondary={`${portfolioYield} %`}
-                  primaryTypographyProps={{ variant: "h6" }}
-                  secondaryTypographyProps={{ variant: "h5" }}
-                ></ListItemText>
-              </ListItem>
-            </Grid>
-            <Grid item lg={6} xs={6}>
-              <ListItem disablePadding>
-                <ListItemIcon>
-                  <PercentIcon
-                    sx={
-                      portfolioYield > 0
-                        ? { color: "secondary.main" }
-                        : { color: "error.main" }
-                    }
-                  />
-                </ListItemIcon>
-                <ListItemText
-                  primary={"Annual yield"}
-                  secondary={`${annualYield} %`}
-                  primaryTypographyProps={{ variant: "h6" }}
-                  secondaryTypographyProps={{ variant: "h5" }}
-                ></ListItemText>
-              </ListItem>
-            </Grid>
-            <Grid item lg={6} xs={6}>
-              <FormGroup>
-                <FormControlLabel
-                  control={
-                    <Switch
-                      size="small"
-                      color="secondary"
-                      checked={showCrypto}
-                      onChange={() => setShowCrypto(!showCrypto)}
-                    />
-                  }
-                  label={
-                    <Typography variant="h6">Include cryptocurrency</Typography>
-                  }
+    <Box sx={{ margin: "5px" }}>
+      {/* <Card sx={{ marginBottom: 1 }}> */}
+      <CardContent sx={{ p: 1 }}>
+        <Typography variant="h5" color="text.primary" gutterBottom>
+          Overall portfolio performance
+        </Typography>
+        <Divider />
+      </CardContent>
+      {/* <Box sx={{ mb: 2, pl: 1, pr: 1, margin: "5px" }}> */}
+      <Grid
+        container
+        spacing={1}
+        sx={{
+          bgcolor: "#1d293c",
+          borderRadius: "5px",
+          margin: 0,
+          mt: "5px",
+          width: "100%",
+        }}
+      >
+        <Grid item lg={6} xs={6}>
+          <ListItem disablePadding>
+            <ListItemIcon>
+              <AccountBalanceWalletIcon sx={{ color: "secondary.main" }} />
+            </ListItemIcon>
+            <ListItemText
+              primary={"Current value"}
+              secondary={
+                showCrypto
+                  ? `${totalWorthWithCrypto.toFixed(2)} EUR`
+                  : `${totalWorth.toFixed(2)} EUR`
+              }
+              primaryTypographyProps={{ variant: "h6" }}
+              secondaryTypographyProps={{ variant: "h5" }}
+            ></ListItemText>
+          </ListItem>
+        </Grid>
+        <Grid item lg={6} xs={6}>
+          <ListItem disablePadding>
+            <ListItemIcon>
+              <MonetizationOnIcon sx={{ color: "error.main" }} />
+            </ListItemIcon>
+            <ListItemText
+              primary={"Expenses"}
+              secondary={
+                showCrypto
+                  ? `${totalSpentWithCrypto.toFixed(2)} EUR`
+                  : `${totalSpent.toFixed(2)} EUR`
+              }
+              primaryTypographyProps={{ variant: "h6" }}
+              secondaryTypographyProps={{ variant: "h5" }}
+            ></ListItemText>
+          </ListItem>
+        </Grid>
+        <Grid item lg={6} xs={6}>
+          <ListItem disablePadding>
+            <ListItemIcon>
+              <MonetizationOnIcon
+                sx={
+                  profit > 0
+                    ? { color: "secondary.main" }
+                    : { color: "error.main" }
+                }
+              />
+            </ListItemIcon>
+            <ListItemText
+              primary={"Total Profit"}
+              secondary={`${profit} EUR`}
+              primaryTypographyProps={{ variant: "h6" }}
+              secondaryTypographyProps={{ variant: "h5" }}
+            ></ListItemText>
+          </ListItem>
+        </Grid>
+        <Grid item lg={6} xs={6}>
+          <ListItem disablePadding>
+            <ListItemIcon>
+              <PercentIcon
+                sx={
+                  portfolioYield > 0
+                    ? { color: "secondary.main" }
+                    : { color: "error.main" }
+                }
+              />
+            </ListItemIcon>
+            <ListItemText
+              primary={"Total yield"}
+              secondary={`${portfolioYield} %`}
+              primaryTypographyProps={{ variant: "h6" }}
+              secondaryTypographyProps={{ variant: "h5" }}
+            ></ListItemText>
+          </ListItem>
+        </Grid>
+        <Grid item lg={6} xs={6}>
+          <ListItem disablePadding>
+            <ListItemIcon>
+              <PercentIcon
+                sx={
+                  portfolioYield > 0
+                    ? { color: "secondary.main" }
+                    : { color: "error.main" }
+                }
+              />
+            </ListItemIcon>
+            <ListItemText
+              primary={"Annual yield"}
+              secondary={`${annualYield} %`}
+              primaryTypographyProps={{ variant: "h6" }}
+              secondaryTypographyProps={{ variant: "h5" }}
+            ></ListItemText>
+          </ListItem>
+        </Grid>
+        <Grid item lg={6} xs={6}>
+          <FormGroup>
+            <FormControlLabel
+              control={
+                <Switch
+                  size="small"
+                  color="secondary"
+                  checked={showCrypto}
+                  onChange={() => setShowCrypto(!showCrypto)}
                 />
-              </FormGroup>
-            </Grid>
-          </Grid>
-        </Container>
-      </Card>
-    </React.Fragment>
+              }
+              label={
+                <Typography variant="h6">Include cryptocurrency</Typography>
+              }
+            />
+          </FormGroup>
+        </Grid>
+      </Grid>
+      {/* </Box> */}
+      {/* </Card> */}
+    </Box>
   );
 };
 

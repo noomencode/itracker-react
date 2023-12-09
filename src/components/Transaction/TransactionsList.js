@@ -1,4 +1,4 @@
-import { Card, CardContent, Typography, Divider } from "@mui/material";
+import { Box, Typography, Divider } from "@mui/material";
 import TransactionsTable from "./TransactionsTable";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -18,6 +18,7 @@ const TransactionsList = () => {
         expense,
         expenseInEur,
         price,
+        profit,
         asset,
         _id: id,
       } = tr;
@@ -31,6 +32,7 @@ const TransactionsList = () => {
         expense: expense,
         expenseInEur: expenseInEur,
         price: price,
+        profit: profit,
         key: index,
         id: id,
       };
@@ -43,15 +45,13 @@ const TransactionsList = () => {
 
   return (
     <>
-      <Card>
-        <CardContent>
-          <Typography variant="h5" color="text.primary" gutterBottom>
-            Transactions
-          </Typography>
-          <Divider />
-        </CardContent>
+      <Box>
+        <Typography variant="h5" color="text.primary" gutterBottom>
+          Transactions
+        </Typography>
+        <Divider />
         {rows?.length ? <TransactionsTable rows={rows} /> : null}
-      </Card>
+      </Box>
     </>
   );
 };
