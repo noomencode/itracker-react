@@ -1,11 +1,11 @@
 import React from "react";
 import Box from "@mui/material/Box";
 import {
-  Card,
+  // Card,
   CardContent,
   Typography,
   Divider,
-  Container,
+  // Container,
 } from "@mui/material";
 import AssetChip from "./AssetChip";
 
@@ -42,27 +42,27 @@ const TopAssets = (props) => {
 
   return (
     <Box sx={{ mb: 1 }}>
-      <Card>
-        <CardContent>
-          <Typography variant="h5" color="text.primary" gutterBottom>
-            {title}
-          </Typography>
-          <Divider />
-        </CardContent>
-        <Container sx={{ mb: 2 }}>
-          {filteredAssets.map((ass, index) => {
-            return (
-              <AssetChip
-                key={index}
-                assetName={ass.name}
-                dailyChange={ass.asset.dailyChange.toFixed(2)}
-                currentPrice={ass.asset.price}
-                marketState={ass.asset.marketState}
-              />
-            );
-          })}
-        </Container>
-      </Card>
+      {/* <Card> */}
+      <CardContent sx={{ p: 1 }}>
+        <Typography variant="h5" color="text.primary" gutterBottom>
+          {title}
+        </Typography>
+        <Divider />
+      </CardContent>
+      <Box sx={{ mb: 2 }}>
+        {filteredAssets.map((ass, index) => {
+          return (
+            <AssetChip
+              key={index}
+              assetName={ass.name}
+              dailyChange={ass.asset.dailyChange.toFixed(2)}
+              currentPrice={ass.asset.price}
+              marketState={ass.asset.marketState}
+            />
+          );
+        })}
+      </Box>
+      {/* </Card> */}
     </Box>
   );
 };

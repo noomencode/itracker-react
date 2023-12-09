@@ -18,22 +18,13 @@ const WatchlistScreen = () => {
   const { watchlistAssets } = useSelector((state) => state.watchlist);
   return (
     <Box sx={{ margin: 2 }}>
-      <Grid container spacing={1}>
-        <Grid item lg={12} xs={12} order={{ xs: 2, lg: 1 }}>
-          <Typography variant="h5" color="primary" gutterBottom>
-            Watchlist
-          </Typography>
-          <Form
-            formTitle="Add to watchlist"
-            formType="Add"
-            formContext="watchlist"
-            fields={formFields["watchlist"].add}
-          />
-          {watchlistAssets?.length ? (
-            <Watchlist watchlistAssets={watchlistAssets} />
-          ) : null}
-        </Grid>
-      </Grid>
+      {/* <Grid container spacing={1}>
+        <Grid item lg={12} xs={12} order={{ xs: 2, lg: 1 }}> */}
+      {watchlistAssets?.length ? (
+        <Watchlist watchlistAssets={watchlistAssets} />
+      ) : null}
+      {/* </Grid>
+      </Grid> */}
     </Box>
   );
 };

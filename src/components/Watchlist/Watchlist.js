@@ -1,4 +1,4 @@
-import { Card, CardContent, Typography, Divider } from "@mui/material";
+import { Box, CardContent, Typography, Divider } from "@mui/material";
 import React, { useEffect } from "react";
 import WatchlistTable from "./WatchlistTable";
 import { useDispatch, useSelector } from "react-redux";
@@ -38,16 +38,13 @@ const Watchlist = (props) => {
 
   return (
     <>
-      <Card>
-        <CardContent>
-          <Typography variant="h5" color="text.primary" gutterBottom>
-            Watchlist
-          </Typography>
-
-          <Divider />
-        </CardContent>
+      <Box sx={{ p: 1 }}>
+        <Typography variant="h5" color="text.primary" gutterBottom>
+          Watchlist
+        </Typography>
+        <Divider />
         {rows?.length ? <WatchlistTable rows={rows} /> : null}
-      </Card>
+      </Box>
     </>
   );
 };

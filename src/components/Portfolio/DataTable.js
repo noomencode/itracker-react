@@ -15,6 +15,7 @@ import Asset from "../Asset/Asset";
 import { getComparator } from "../../utilities/sortingFunctions";
 import EnhancedTableHead from "../EnhancedTableHead";
 import DataTableToolbar from "./DataTableToolbar";
+import SmallChip from "../SmallChip";
 
 function assignColor(val1, val2) {
   return val1 >= val2 ? "secondary" : "error";
@@ -41,6 +42,7 @@ const headCells = [
         fontSize: "0.9em",
         fontWeight: 600,
         cursor: "pointer",
+        borderRadius: "5px",
         width: "100%",
         "&:hover": {
           backgroundColor: "secondary.main",
@@ -304,6 +306,7 @@ const EnhancedTable = (props) => {
     }
     return (
       <TableCell {...props} align="right" sx={{ padding: { xs: 0, lg: 2 } }}>
+        {/* <SmallChip value={value} valueType={props.labelType} height='2em' width='4em'/> */}
         <Chip
           {...chipProps}
           label={
@@ -314,7 +317,16 @@ const EnhancedTable = (props) => {
               : `${value}`
           }
           variant="outlined"
-          sx={{ width: "100%" }}
+          sx={{
+            width: "100%",
+            borderRadius: "5px",
+            bgcolor:
+              props.type === "importantNumber"
+                ? value > 0
+                  ? "rgba(0, 245, 159, 0.25)"
+                  : "rgba(251, 93, 137, 0.25)"
+                : undefined,
+          }}
           color={
             props.type === "importantNumber" ? assignColor(value, 0) : "default"
           }
@@ -364,6 +376,7 @@ const EnhancedTable = (props) => {
                     tabIndex={-1}
                     key={row.name}
                     selected={isItemSelected}
+                    sx={{ bgcolor: "#1d293c" }}
                   >
                     <TableCell padding="checkbox" sx={{ padding: 0 }}>
                       <Checkbox
@@ -416,7 +429,7 @@ const EnhancedTable = (props) => {
         color="text.secondary"
         sx={{ paddingTop: 2, paddingLeft: 2 }}
       >
-        Last updated: {portfolioUpdated}
+        {/* Last updated: {portfolioUpdated} */}
       </Typography>
       <TablePagination
         rowsPerPageOptions={[5, 10, 25]}

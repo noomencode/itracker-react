@@ -4,11 +4,14 @@ import Grid from "@mui/material/Grid";
 import { styled, keyframes } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import LockIcon from "@mui/icons-material/Lock";
+import SmallChip from "../SmallChip";
 
 const Item = styled(Chip)(({ theme }) => ({
   padding: theme.spacing(1),
   margin: theme.spacing(0.5),
   display: "flex",
+  borderRadius: "5px",
+
   justifyContent: "space-between",
   "& .MuiChip-label": {
     width: "100%",
@@ -51,28 +54,32 @@ const SecondaryText = (props) => {
   );
 };
 
-const PercentageChip = (props) => {
-  const {
-    dailyChange,
-    height,
-    width,
-    watchlistChip,
-    watchlistTarget,
-    currentPrice,
-  } = props;
-  return (
-    <Chip
-      sx={{
-        borderRadius: "10px",
-        height: height,
-        width: width,
-      }}
-      color={dailyChange > 0 ? "secondary" : "error"}
-      variant="outlined"
-      label={`${dailyChange} %`}
-    />
-  );
-};
+// const PercentageChip = (props) => {
+//   const {
+//     dailyChange,
+//     height,
+//     width,
+//     watchlistChip,
+//     watchlistTarget,
+//     currentPrice,
+//   } = props;
+//   return (
+//     <Chip
+//       sx={{
+//         borderRadius: "5px",
+//         height: height,
+//         width: width,
+//         bgcolor:
+//           dailyChange > 0
+//             ? "rgba(0, 245, 159, 0.25)"
+//             : "rgba(251, 93, 137, 0.25)",
+//       }}
+//       color={dailyChange > 0 ? "secondary" : "error"}
+//       variant="outlined"
+//       label={`${dailyChange} %`}
+//     />
+//   );
+// };
 
 const MarketClosedChip = () => {
   return (
@@ -101,14 +108,18 @@ const AssetChip = (props) => {
     watchlistChip,
     watchlistTarget,
   } = props;
+
   return (
     <>
       <Item
-        variant="outlined"
+        variant="filled"
+        // color="primary"
+        // color={theme.palette.background.paper}
         sx={{
           height: miniChip ? "4em" : "5em",
           width: miniChip ? "250px" : null,
           margin: "5px",
+          bgcolor: "#1d293c",
         }}
         label={
           <Grid container sx={{ justifyContent: "space-between" }}>
@@ -125,9 +136,9 @@ const AssetChip = (props) => {
               ></SecondaryText>
             </Grid>
             <Grid item>
-              <PercentageChip
-                dailyChange={dailyChange}
-                currentPrice={currentPrice}
+              <SmallChip
+                value={dailyChange || currentPrice}
+                valueType="percentage"
                 height={miniChip ? "3em" : "3em"}
                 width={miniChip ? "5em" : "6em"}
               />

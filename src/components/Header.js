@@ -31,59 +31,59 @@ const Header = () => {
   return (
     <>
       <Box>
-        <AppBar position="static">
-          <Toolbar>
-            <Box
+        {/* <AppBar position="static"> */}
+        <Toolbar>
+          <Box
+            sx={{
+              display: "flex",
+              flexGrow: 1,
+              justifyContent: { xs: "left", md: "center" },
+              pl: { xs: 0, md: 15 },
+            }}
+          >
+            <AutoGraphIcon sx={{ display: "flex", mr: 1 }} />
+            <Typography
+              variant="h5"
+              noWrap
+              component="a"
+              href="/"
               sx={{
+                mr: 2,
                 display: "flex",
-                flexGrow: 1,
-                justifyContent: { xs: "left", md: "center" },
-                pl: { xs: 0, md: 15 },
+                fontWeight: 700,
+                letterSpacing: ".3rem",
+                color: "inherit",
+                textDecoration: "none",
               }}
+              //sx={{ alignContent: "center" }}
             >
-              <AutoGraphIcon sx={{ display: "flex", mr: 1 }} />
-              <Typography
-                variant="h5"
-                noWrap
-                component="a"
-                href="/"
-                sx={{
-                  mr: 2,
-                  display: "flex",
-                  fontWeight: 700,
-                  letterSpacing: ".3rem",
-                  color: "inherit",
-                  textDecoration: "none",
-                }}
-                //sx={{ alignContent: "center" }}
-              >
-                investenzo
+              investenzo
+            </Typography>
+          </Box>
+          {isAuthenticated ? (
+            <Box sx={{ flexGrow: 0 }}>
+              <Typography variant="span" component="span" fontWeight={600}>
+                {name}
               </Typography>
+              <IconButton component={Link} to="/profile" color="inherit">
+                <AccountCircleIcon />
+              </IconButton>
+              <IconButton color="inherit" onClick={() => handleLogout()}>
+                <LogoutIcon />
+              </IconButton>
             </Box>
-            {isAuthenticated ? (
-              <Box sx={{ flexGrow: 0 }}>
-                <Typography variant="span" component="span" fontWeight={600}>
-                  {name}
+          ) : (
+            <Box>
+              <Button color="inherit" component={Link} to="/login">
+                <Typography component="span" sx={{ pr: 1 }}>
+                  Sign in
                 </Typography>
-                <IconButton component={Link} to="/profile" color="inherit">
-                  <AccountCircleIcon />
-                </IconButton>
-                <IconButton color="inherit" onClick={() => handleLogout()}>
-                  <LogoutIcon />
-                </IconButton>
-              </Box>
-            ) : (
-              <Box>
-                <Button color="inherit" component={Link} to="/login">
-                  <Typography component="span" sx={{ pr: 1 }}>
-                    Sign in
-                  </Typography>
-                  <LoginIcon />
-                </Button>
-              </Box>
-            )}
-          </Toolbar>
-        </AppBar>
+                <LoginIcon />
+              </Button>
+            </Box>
+          )}
+        </Toolbar>
+        {/* </AppBar> */}
       </Box>
       <Divider />
       <NavRibbon />

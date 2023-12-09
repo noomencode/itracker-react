@@ -14,7 +14,15 @@ const NavRibbon = () => {
   };
 
   return (
-    <Box sx={{ width: "100%", bgcolor: "primary", boxShadow: 3 }}>
+    <Box
+      sx={{
+        // width: "20%",
+        // margin: "0 auto",
+        bgcolor: "primary",
+        // border: "0px solid #c2e0ff14",
+        boxShadow: 2,
+      }}
+    >
       <Tabs
         textColor="inherit"
         indicatorColor="secondary"

@@ -9,6 +9,7 @@ import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
 import Form from "./Form";
 import Message from "./Message";
 import { formFields } from "../utilities/formFields";
@@ -46,8 +47,8 @@ function EnhancedTableToolbar(props) {
   };
 
   React.useEffect(() => {
-    if (numSelected === 0) {
-      handleShowForm(false);
+    if (numSelected === 0 && showForm) {
+      handleShowForm();
     }
   }, [numSelected]);
 
@@ -69,6 +70,14 @@ function EnhancedTableToolbar(props) {
           }),
         }}
       >
+        {numSelected === 0 && source === "watchlist" ? (
+          <Tooltip>
+            <IconButton color="secondary" onClick={() => handleShowForm()}>
+              <AddCircleIcon />
+            </IconButton>
+          </Tooltip>
+        ) : null}
+
         {numSelected === 1 ? (
           <Tooltip title="Edit list">
             <IconButton color="secondary" onClick={() => handleShowForm()}>
@@ -96,6 +105,14 @@ function EnhancedTableToolbar(props) {
           formTitle="Edit asset"
           selectedItem={selected}
           fields={formFields[source].edit}
+          handleClose={handleShowForm}
+        />
+      ) : showForm && numSelected === 0 ? (
+        <Form
+          formType="Add"
+          formContext={source}
+          formTitle="Add to watchlist"
+          fields={formFields["watchlist"].add}
           handleClose={handleShowForm}
         />
       ) : null}
