@@ -18,6 +18,7 @@ const TransactionsList = () => {
         expense,
         expenseInEur,
         price,
+        profit,
         asset,
         _id: id,
       } = tr;
@@ -31,6 +32,7 @@ const TransactionsList = () => {
         expense: expense,
         expenseInEur: expenseInEur,
         price: price,
+        profit: profit,
         key: index,
         id: id,
       };

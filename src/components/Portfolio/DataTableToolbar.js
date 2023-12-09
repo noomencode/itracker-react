@@ -153,20 +153,22 @@ const DataTableToolbar = (props) => {
           onClose={handleMenuClose}
         >
           {numSelected === 1 ? (
-            <React.Fragment>
+            [
               <MenuItem
+                key={1}
                 value="Add new transaction"
                 onClick={() => handleMenuItemClick("transactions")}
               >
                 Add new transaction
-              </MenuItem>
+              </MenuItem>,
               <MenuItem
+                key={2}
                 value="Add dividend"
                 onClick={() => handleMenuItemClick("dividend")}
               >
                 Add dividend
-              </MenuItem>
-            </React.Fragment>
+              </MenuItem>,
+            ]
           ) : (
             <MenuItem
               value="Add new asset"

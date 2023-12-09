@@ -35,6 +35,13 @@ const headCells = [
     label: "Price",
   },
   {
+    id: "profit",
+    type: "number",
+    numeric: true,
+    disablePadding: false,
+    label: "Profit",
+  },
+  {
     id: "date",
     type: "number",
     numeric: true,
@@ -209,14 +216,16 @@ export default function TransactionsTable(props) {
                       />
                     </TableCell>
                     {headCells.map((cell) => {
+                      const Cell = CellMap[cell.type];
                       if (row[cell.id]) {
-                        const Cell = CellMap[cell.type];
                         const value = row[cell.id];
                         return (
                           <Cell key={cell.id} {...cell.props} value={value} />
                         );
                       } else {
-                        return null;
+                        return (
+                          <Cell key={cell.id} {...cell.props} value={"N/A"} />
+                        );
                       }
                     })}
                   </TableRow>

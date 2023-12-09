@@ -131,6 +131,7 @@ export const editPortfolioAsset = (body) => async (dispatch, getState) => {
         sharesAmount: body.sharesAmount,
         spent: body.spent,
         spentInEur: body.spentInEur,
+        profit: body.profit,
       },
       config
     );

@@ -252,8 +252,8 @@ const formFields = {
       {
         name: "dividend",
         label: "Dividend received",
-        type: "Number",
-        inputType: "number",
+        type: "Expense",
+        inputType: "expense",
         size: "small",
         id: "dividend",
       },

@@ -62,7 +62,12 @@ export default function AssetDialog({ ticker }) {
     return el.ticker === ticker;
   });
 
-  const { name, sharesAmount, spent } = selectedAsset[0];
+  const {
+    name,
+    sharesAmount,
+    spent,
+    profit: realizedProfit,
+  } = selectedAsset[0];
   const {
     price,
     trailingPE,
@@ -178,7 +183,7 @@ export default function AssetDialog({ ticker }) {
                   />
                   <Item
                     title="Realized profit"
-                    value={`${0} EUR`}
+                    value={`${realizedProfit} EUR`}
                     icon={<AccountBalanceWalletIcon sx={{ mr: 1 }} />}
                   />
                 </Grid>

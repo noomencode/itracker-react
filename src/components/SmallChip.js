@@ -9,7 +9,7 @@ const SmallChip = (props) => {
         height: height,
         width: width,
         bgcolor:
-          value > 0 ? "rgba(0, 245, 159, 0.25)" : "rgba(251, 93, 137, 0.25)",
+          value > 0 ? "rgba(0, 245, 159, 0.2)" : "rgba(251, 93, 137, 0.2)",
       }}
       color={value > 0 ? "secondary" : "error"}
       variant="outlined"

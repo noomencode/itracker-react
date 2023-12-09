@@ -323,8 +323,8 @@ const EnhancedTable = (props) => {
             bgcolor:
               props.type === "importantNumber"
                 ? value > 0
-                  ? "rgba(0, 245, 159, 0.25)"
-                  : "rgba(251, 93, 137, 0.25)"
+                  ? "rgba(0, 245, 159, 0.2)"
+                  : "rgba(251, 93, 137, 0.2)"
                 : undefined,
           }}
           color={

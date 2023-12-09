@@ -34,6 +34,7 @@ export const createTransaction = (body) => async (dispatch, getState) => {
         type: body.type,
         amount: body.transactionAmount,
         price: body.price,
+        profit: body.profit,
         expense: body.transactionExpense,
         expenseInEur: body.transactionExpenseInEur,
       },
@@ -84,6 +85,7 @@ export const editTransaction = (body) => async (dispatch, getState) => {
         type: body.type,
         sharesAmount: body.sharesAmount,
         price: body.price,
+        profit: body.profit,
         expense: body.expense,
         expenseInEur: body.expenseInEur,
       },
@@ -121,6 +123,10 @@ export const deleteTransaction = (selected) => async (dispatch, getState) => {
     const { data } = await axios.delete("/api/transactions", config);
     dispatch({
       type: TRANSACTION_DELETE_REQUEST,
+      payload: data,
+    });
+    dispatch({
+      type: TRANSACTION_DELETE_SUCCESS,
       payload: data,
     });
     dispatch(getTransactions());

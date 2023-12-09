@@ -133,6 +133,16 @@ const Form = (props) => {
     setCurrencyRate(rate.data.price);
   };
 
+  const dataForDividend = () => {
+    const { dividend, dividendDate } = formValues;
+    return {
+      ...formValues,
+      profit: dividend,
+      date: dividendDate,
+      type: "Dividend",
+    };
+  };
+
   const dataForNewTransaction = () => {
     const { type, transactionAmount, transactionExpense } = formValues;
     const { sharesAmount, spent, spentInEur } = selectedItem[0];
@@ -204,6 +214,10 @@ const Form = (props) => {
       formContext === "dividend"
     ) {
       //dispatch addDividend here / first add dividend to transactions, then to asset, pretty much like transaction works.
+      const dividendBody = dataForDividend();
+      console.log("submitting dividend", dividendBody);
+      dispatch(createTransaction(dividendBody));
+      dispatch(editPortfolioAsset(dividendBody));
     } else if (formType === "Add") {
       console.log("submitting add", body);
       dispatch(createAsset(body, formContext));
