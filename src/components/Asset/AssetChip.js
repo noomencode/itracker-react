@@ -2,6 +2,8 @@ import React from "react";
 import Chip from "@mui/material/Chip";
 import Grid from "@mui/material/Grid";
 import { styled, keyframes } from "@mui/material/styles";
+// import { useTheme } from "@mui/material/styles";
+
 import Typography from "@mui/material/Typography";
 import LockIcon from "@mui/icons-material/Lock";
 import SmallChip from "../SmallChip";
@@ -11,6 +13,7 @@ const Item = styled(Chip)(({ theme }) => ({
   margin: theme.spacing(0.5),
   display: "flex",
   borderRadius: "5px",
+  background: theme.palette.customGradientBackground,
 
   justifyContent: "space-between",
   "& .MuiChip-label": {

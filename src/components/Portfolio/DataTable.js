@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -160,6 +161,7 @@ const EnhancedTable = (props) => {
   //   (state) => state.portfolioList.portfolioAssets[0]
   // );
   const dispatch = useDispatch();
+  const theme = useTheme();
 
   useEffect(() => {
     if (layout === "small") {
@@ -349,7 +351,11 @@ const EnhancedTable = (props) => {
         handleLayout={handleLayout}
         source={"portfolio"}
       />
-      <TableContainer>
+      <TableContainer
+      // sx={{
+      //   background: theme.palette.customGradientBackground,
+      // }}
+      >
         <Table aria-labelledby="tableTitle" size="medium">
           <EnhancedTableHead
             numSelected={selected.length}
@@ -376,7 +382,9 @@ const EnhancedTable = (props) => {
                     tabIndex={-1}
                     key={row.name}
                     selected={isItemSelected}
-                    sx={{ bgcolor: "#1d293c" }}
+                    sx={{
+                      background: theme.palette.customGradientBackground,
+                    }}
                   >
                     <TableCell padding="checkbox" sx={{ padding: 0 }}>
                       <Checkbox

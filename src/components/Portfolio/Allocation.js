@@ -1,14 +1,13 @@
 import React, { useState } from "react";
-import Divider from "@mui/material/Divider";
-import Typography from "@mui/material/Typography";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
+import { Box, Divider, Typography, CardContent } from "@mui/material";
 import KeyboardDoubleArrowDownIcon from "@mui/icons-material/KeyboardDoubleArrowDown";
 import KeyboardDoubleArrowUpIcon from "@mui/icons-material/KeyboardDoubleArrowUp";
 import AllocationChart from "./AllocationChart";
+import { useTheme } from "@mui/material/styles";
 
 const Allocation = (props) => {
   const [open, setOpen] = useState(false);
+  const theme = useTheme();
   const portfolio = props.portfolio;
   const portfolioAssets = props.assets[0];
 
@@ -41,52 +40,60 @@ const Allocation = (props) => {
   };
 
   return (
-    <React.Fragment>
-      <Card sx={{ marginBottom: 1 }}>
-        <CardContent>
-          <Typography
-            variant="h5"
-            color="text.primary"
-            gutterBottom
-            sx={{ display: "flex" }}
-          >
-            Portfolio allocation
-            {open ? (
-              <KeyboardDoubleArrowUpIcon
-                sx={{ display: "flex", cursor: "pointer" }}
-                onClick={() => {
-                  setOpen(!open);
-                }}
-              />
-            ) : (
-              <KeyboardDoubleArrowDownIcon
-                sx={{ display: "flex", cursor: "pointer" }}
-                onClick={() => {
-                  setOpen(!open);
-                }}
-              />
-            )}
-          </Typography>
+    <Box sx={{ margin: "5px" }}>
+      {/* <Card sx={{ marginBottom: 1 }}> */}
+      <CardContent
+        sx={{
+          p: 1,
+          background: open ? undefined : theme.palette.customGradientBackground,
+        }}
+      >
+        <Typography
+          variant="h5"
+          color="text.primary"
+          gutterBottom
+          sx={{ display: "flex" }}
+        >
+          Portfolio allocation
           {open ? (
-            <>
-              <Divider sx={{ mb: 1 }} />
-              <AllocationChart
-                title="Region"
-                data={calculateAllocation("region")}
-              />
-              <AllocationChart
-                title="Type"
-                data={calculateAllocation("type")}
-              />
-              <AllocationChart
-                title="Characteristics"
-                data={calculateAllocation("customType")}
-              />
-            </>
-          ) : null}
-        </CardContent>
-      </Card>
-    </React.Fragment>
+            <KeyboardDoubleArrowUpIcon
+              sx={{ display: "flex", cursor: "pointer" }}
+              onClick={() => {
+                setOpen(!open);
+              }}
+            />
+          ) : (
+            <KeyboardDoubleArrowDownIcon
+              sx={{ display: "flex", cursor: "pointer" }}
+              onClick={() => {
+                setOpen(!open);
+              }}
+            />
+          )}
+        </Typography>
+        {open ? (
+          <Box
+            sx={{
+              background: theme.palette.customGradientBackground,
+              p: 2,
+              mb: "5px",
+            }}
+          >
+            {/* <Divider sx={{ mb: 1 }} /> */}
+            <AllocationChart
+              title="Region"
+              data={calculateAllocation("region")}
+            />
+            <AllocationChart title="Type" data={calculateAllocation("type")} />
+            <AllocationChart
+              title="Characteristics"
+              data={calculateAllocation("customType")}
+            />
+          </Box>
+        ) : null}
+      </CardContent>
+      {/* </Card> */}
+    </Box>
   );
 };
 
