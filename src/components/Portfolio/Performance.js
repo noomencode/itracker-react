@@ -7,6 +7,7 @@ import {
   Box,
   Container,
 } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
 import List from "@mui/material/List";
 import Grid from "@mui/material/Grid";
 import ListItem from "@mui/material/ListItem";
@@ -23,6 +24,7 @@ const Performance = (props) => {
   const { totalWorth, totalSpent, totalWorthWithCrypto, totalSpentWithCrypto } =
     props.portfolio;
   const [showCrypto, setShowCrypto] = useState(false);
+  const theme = useTheme();
 
   const history = props.history;
   const profit = showCrypto
@@ -67,9 +69,10 @@ const Performance = (props) => {
         container
         spacing={1}
         sx={{
-          bgcolor: "#1d293c",
+          background: theme.palette.customGradientBackground,
           borderRadius: "5px",
           margin: 0,
+          p: 1,
           mt: "5px",
           width: "100%",
         }}

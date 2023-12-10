@@ -11,11 +11,13 @@ import {
 } from "@mui/material";
 import { List, ListItem, ListItemIcon, ListItemText } from "@mui/material";
 import { styled, keyframes } from "@mui/material/styles";
+import { useTheme } from "@mui/material/styles";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import PercentIcon from "@mui/icons-material/Percent";
 
 const DailyPortfolioPerformance = (props) => {
   const { assets, portfolio } = props;
+  const theme = useTheme();
 
   // const Item = styled(Chip)(({ theme }) => ({
   //   padding: theme.spacing(1),
@@ -50,9 +52,10 @@ const DailyPortfolioPerformance = (props) => {
         container
         spacing={1}
         sx={{
-          bgcolor: "#1d293c",
+          background: theme.palette.customGradientBackground,
           borderRadius: "5px",
           margin: 0,
+          p: 1,
           mt: "5px",
           width: "100%",
         }}

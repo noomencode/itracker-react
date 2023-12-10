@@ -36,6 +36,7 @@ const theme = createTheme({
       primary: "#fff",
       secondary: "#B2BAC2",
     },
+    customGradientBackground: "linear-gradient(to bottom, #1d293c, #0A1929)",
   },
   typography: {
     fontFamily: "Montserrat",

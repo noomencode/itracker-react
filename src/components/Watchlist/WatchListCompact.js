@@ -8,11 +8,11 @@ import {
   Box,
   Container,
 } from "@mui/material";
+
 import AssetChip from "../Asset/AssetChip";
 
 const WatchListCompact = (props) => {
   const { watchlistAssets } = props;
-
   return (
     <Box sx={{ mb: 1 }}>
       {/* <Card> */}
