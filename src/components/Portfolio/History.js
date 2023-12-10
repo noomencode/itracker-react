@@ -43,6 +43,7 @@ const History = (props) => {
         sx={{
           p: 1,
           background: open ? undefined : theme.palette.customGradientBackground,
+          borderRadius: "5px",
         }}
       >
         <Typography variant="h5" color="text.primary" sx={{ display: "flex" }}>
@@ -79,6 +80,7 @@ const History = (props) => {
                   background: theme.palette.customGradientBackground,
                   p: 2,
                   mb: "5px",
+                  borderRadius: "5px",
                 }}
               >
                 <ListItem disablePadding>
