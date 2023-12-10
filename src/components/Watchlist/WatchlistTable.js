@@ -6,11 +6,11 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
 import Checkbox from "@mui/material/Checkbox";
 import EnhancedTableToolbar from "../EnhancedTableToolbar";
 import EnhancedTableHead from "../EnhancedTableHead";
 import { getComparator } from "../../utilities/sortingFunctions";
+import { useTheme } from "@mui/material/styles";
 
 const headCells = [
   {
@@ -119,6 +119,7 @@ export default function WatchlistTable(props) {
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const theme = useTheme();
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -225,7 +226,7 @@ export default function WatchlistTable(props) {
                     tabIndex={-1}
                     key={row.key}
                     selected={isItemSelected}
-                    sx={{ bgcolor: "#1d293c" }}
+                    sx={{ background: theme.palette.customGradientBackground }}
                   >
                     <TableCell padding="checkbox">
                       <Checkbox

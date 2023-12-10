@@ -11,6 +11,7 @@ import Checkbox from "@mui/material/Checkbox";
 import EnhancedTableToolbar from "../EnhancedTableToolbar";
 import EnhancedTableHead from "../EnhancedTableHead";
 import { getComparator } from "../../utilities/sortingFunctions";
+import { useTheme } from "@mui/material/styles";
 
 const headCells = [
   {
@@ -77,6 +78,7 @@ export default function TransactionsTable(props) {
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const theme = useTheme();
 
   console.log(selected);
 
@@ -204,7 +206,7 @@ export default function TransactionsTable(props) {
                     tabIndex={-1}
                     key={row.key}
                     selected={isItemSelected}
-                    sx={{ bgcolor: "#1d293c" }}
+                    sx={{ background: theme.palette.customGradientBackground }}
                   >
                     <TableCell padding="checkbox">
                       <Checkbox

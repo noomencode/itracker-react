@@ -3,11 +3,13 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import { Link, useLocation } from "react-router-dom";
 import React from "react";
+import { useTheme } from "@mui/material";
 
 const NavRibbon = () => {
   const location = useLocation();
   const tabValues = ["/", "/transactions", "/watchlist"];
   const [value, setValue] = React.useState(location.pathname);
+  const theme = useTheme();
 
   const handleChange = (event, newValue) => {
     setValue(newValue);

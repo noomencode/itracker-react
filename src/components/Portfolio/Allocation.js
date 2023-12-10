@@ -46,6 +46,7 @@ const Allocation = (props) => {
         sx={{
           p: 1,
           background: open ? undefined : theme.palette.customGradientBackground,
+          borderRadius: "5px",
         }}
       >
         <Typography
@@ -77,6 +78,7 @@ const Allocation = (props) => {
               background: theme.palette.customGradientBackground,
               p: 2,
               mb: "5px",
+              borderRadius: "5px",
             }}
           >
             {/* <Divider sx={{ mb: 1 }} /> */}

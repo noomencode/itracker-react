@@ -26,6 +26,7 @@ import {
   createTransaction,
   editTransaction,
 } from "../actions/transactionActions";
+import { useTheme } from "@mui/material/styles";
 
 import InputAdornment from "@mui/material/InputAdornment";
 
@@ -45,6 +46,7 @@ const Form = (props) => {
     severity: "",
     message: "",
   });
+  const theme = useTheme();
 
   console.log(formContext, formType);
 
@@ -380,11 +382,23 @@ const Form = (props) => {
     });
 
   return (
-    <Card>
+    <Box
+      sx={{
+        background: theme.palette.customGradientBackground,
+        p: 1,
+        borderRadius: "5px",
+      }}
+    >
       {message.show ? (
         <Message severity={alert.severity} message={alert.message} />
       ) : null}
-      <Box sx={{ m: 2, display: "flex", justifyContent: "space-between" }}>
+      <Box
+        sx={{
+          m: 2,
+          display: "flex",
+          justifyContent: "space-between",
+        }}
+      >
         <Typography
           sx={{ mr: 1 }}
           variant="h5"
@@ -444,7 +458,7 @@ const Form = (props) => {
           </Grid>
         </Grid>
       </Box>
-    </Card>
+    </Box>
   );
 };
 
