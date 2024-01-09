@@ -36,21 +36,26 @@ const Performance = (props) => {
         100
       ).toFixed(2)
     : (((totalWorth - totalSpent) / totalSpent) * 100).toFixed(2);
-
+  // const lastHistory = history[history.length - 2];
+  const currentYear = new Date().getFullYear();
+  const lastYearHistory = history
+    .filter((h) => h.year === currentYear - 1)
+    .slice(-1)[0];
+  //Annual yield calculation taken from https://taavi.golive.ee/investori-kasiraamat/kuidas-arvutada-tootlust/
   const annualYield = history?.length
     ? showCrypto
       ? (
           ((totalWorthWithCrypto -
-            history[0].worth -
-            (totalSpentWithCrypto - history[0].expenses)) /
-            history[0].worth) *
+            (lastYearHistory.worth +
+              (totalSpentWithCrypto - lastYearHistory.expenses))) /
+            (lastYearHistory.worth +
+              (totalSpentWithCrypto - lastYearHistory.expenses))) *
           100
         ).toFixed(2)
       : (
           ((totalWorth -
-            history[0].worth -
-            (totalSpent - history[0].expenses)) /
-            history[0].worth) *
+            (lastYearHistory.worth + (totalSpent - lastYearHistory.expenses))) /
+            (lastYearHistory.worth + (totalSpent - lastYearHistory.expenses))) *
           100
         ).toFixed(2)
     : "N/A";
