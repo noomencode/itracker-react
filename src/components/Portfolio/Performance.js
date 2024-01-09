@@ -41,6 +41,7 @@ const Performance = (props) => {
   const lastYearHistory = history
     .filter((h) => h.year === currentYear - 1)
     .slice(-1)[0];
+  //Annual yield calculation taken from https://taavi.golive.ee/investori-kasiraamat/kuidas-arvutada-tootlust/
   const annualYield = history?.length
     ? showCrypto
       ? (
