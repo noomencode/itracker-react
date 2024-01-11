@@ -66,6 +66,7 @@ const Dashboard = () => {
     type: CUDtype,
   } = useSelector((state) => state.portfolioAssetCUD);
   const portfolio = useSelector((state) => state.portfolio);
+  const { performance } = portfolioAssets?.length ? portfolioAssets[0] : {};
   const { history } = portfolioAssets?.length ? portfolioAssets[0] : [];
 
   if (error && !portfolioAssets?.length) {
@@ -116,9 +117,9 @@ const Dashboard = () => {
             <Grid item lg={3} xs={12} order={{ xs: 1, lg: 2 }}>
               <DailyPortfolioPerformance
                 assets={portfolioAssets}
-                portfolio={portfolio}
+                performance={performance}
               />
-              <Performance portfolio={portfolio} history={history} />
+              <Performance performance={performance} history={history} />
             </Grid>
           </Grid>
           <Grid container spacing={1}>
@@ -129,7 +130,7 @@ const Dashboard = () => {
               <WatchListCompact watchlistAssets={watchlistAssets} />
 
               {history?.length ? <History history={history} /> : null}
-              <Allocation portfolio={portfolio} assets={portfolioAssets} />
+              <Allocation performance={performance} assets={portfolioAssets} />
             </Grid>
           </Grid>
         </Box>

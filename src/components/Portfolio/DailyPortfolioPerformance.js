@@ -16,28 +16,22 @@ import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import PercentIcon from "@mui/icons-material/Percent";
 
 const DailyPortfolioPerformance = (props) => {
-  const { assets, portfolio } = props;
+  const { assets, performance } = props;
   const theme = useTheme();
+  const date = new Date(assets[0].updatedAt);
+  // Get individual date components
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are zero-based
+  const day = String(date.getDate()).padStart(2, "0");
+  const hours = String(date.getHours()).padStart(2, "0");
+  const minutes = String(date.getMinutes()).padStart(2, "0");
+  // Create the formatted date string
+  const updatedDate = `${year}-${month}-${day} ${hours}:${minutes}`;
 
-  // const Item = styled(Chip)(({ theme }) => ({
-  //   padding: theme.spacing(1),
-  //   margin: theme.spacing(0.5),
-  //   display: "flex",
-  //   borderRadius: "5px",
-  //   background: "#1d293c",
-  //   justifyContent: "space-between",
-  //   "& .MuiChip-label": {
-  //     width: "100%",
-  //     display: "flex",
-  //     justifyContent: "center",
-  //   },
-  // }));
-
-  const dailyChangeAmount =
-    portfolio.totalWorth - portfolio.totalWorthOnPreviousClose;
+  const dailyChangeAmount = performance.value - performance.valuePreviousClose;
   const dailyChangePercent =
-    (portfolio.totalWorth - portfolio.totalWorthOnPreviousClose) /
-    portfolio.totalWorthOnPreviousClose;
+    (performance.value - performance.valuePreviousClose) /
+    performance.valuePreviousClose;
   return (
     <Box sx={{ margin: "5px", mt: 0 }}>
       {/* <Card> */}
@@ -113,7 +107,7 @@ const DailyPortfolioPerformance = (props) => {
         color="text.primary"
         sx={{ display: "flex", justifyContent: "end", mt: 2 }}
       >
-        {`Portfolio last updated:${portfolio.portfolioUpdated}`}
+        {`Portfolio last updated:${updatedDate}`}
       </Typography>
       {/* <Divider /> */}
       {/* </Box> */}

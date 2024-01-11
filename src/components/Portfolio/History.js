@@ -167,6 +167,17 @@ const History = (props) => {
                     secondaryTypographyProps={{ variant: "h5" }}
                   ></ListItemText>
                 </ListItem>
+                <ListItem disablePadding>
+                  <ListItemIcon>
+                    <MonetizationOnIcon sx={{ color: "secondary.main" }} />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={"Dividends"}
+                    secondary={`${hist.dividends} EUR`}
+                    primaryTypographyProps={{ variant: "h6" }}
+                    secondaryTypographyProps={{ variant: "h5" }}
+                  ></ListItemText>
+                </ListItem>
               </Box>
             );
           })
