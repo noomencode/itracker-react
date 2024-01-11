@@ -34,9 +34,7 @@ const Allocation = (props) => {
     });
     Object.keys(data).forEach((key) => {
       if (key !== "name") {
-        data[key] = parseFloat(
-          Math.floor((data[key] / totalValue) * 100).toFixed(1)
-        );
+        data[key] = parseFloat(((data[key] / totalValue) * 100).toFixed(1));
       }
     });
     const dataInPercentages = [];
