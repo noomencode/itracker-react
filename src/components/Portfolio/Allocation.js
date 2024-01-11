@@ -8,16 +8,19 @@ import { useTheme } from "@mui/material/styles";
 const Allocation = (props) => {
   const [open, setOpen] = useState(false);
   const theme = useTheme();
-  const portfolio = props.portfolio;
+  const { performance } = props;
   const portfolioAssets = props.assets[0];
 
   const calculateAllocation = (category) => {
-    const assetsAmount = portfolioAssets.assets.length;
-    const totalValue = portfolio.totalWorth;
+    const totalValue = performance.valueWithCrypto;
     const data = [];
+    let totalValue2 = 0;
 
     portfolioAssets.assets.forEach((ass) => {
-      const assetValue = ass.sharesAmount * ass.asset.price;
+      const assetValue = ass.sharesAmount * ass.asset.priceInEur;
+      totalValue2 += assetValue;
+      // console.log(ass.asset.name + " " + assetValue);
+
       data.name = category;
       if (category === "customType" && data[ass[category]]) {
         data[ass[category]] += assetValue;
@@ -31,11 +34,14 @@ const Allocation = (props) => {
     });
     Object.keys(data).forEach((key) => {
       if (key !== "name") {
-        data[key] = parseFloat(((data[key] / totalValue) * 100).toFixed(1));
+        data[key] = parseFloat(
+          Math.floor((data[key] / totalValue) * 100).toFixed(1)
+        );
       }
     });
     const dataInPercentages = [];
     dataInPercentages.push({ ...data });
+    console.log(totalValue2);
     return dataInPercentages;
   };
 

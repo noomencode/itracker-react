@@ -21,21 +21,24 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
 
 const Performance = (props) => {
-  const { totalWorth, totalSpent, totalWorthWithCrypto, totalSpentWithCrypto } =
-    props.portfolio;
+  // const { totalWorth, totalSpent, totalWorthWithCrypto, totalSpentWithCrypto } =
+  //   props.portfolio;
+  const { value, expenses, valueWithCrypto, expensesWithCrypto, dividends } =
+    props.performance;
   const [showCrypto, setShowCrypto] = useState(false);
   const theme = useTheme();
 
   const history = props.history;
+  // FIND LAST OF EVERY YEAR AND TAKE DIVIDENDS AND SUM IT ALL
   const profit = showCrypto
-    ? (totalWorthWithCrypto - totalSpentWithCrypto).toFixed(2)
-    : (totalWorth - totalSpent).toFixed(2);
+    ? (valueWithCrypto - expensesWithCrypto).toFixed(2)
+    : (value - expenses).toFixed(2);
   const portfolioYield = showCrypto
     ? (
-        ((totalWorthWithCrypto - totalSpentWithCrypto) / totalSpentWithCrypto) *
+        ((valueWithCrypto - expensesWithCrypto) / expensesWithCrypto) *
         100
       ).toFixed(2)
-    : (((totalWorth - totalSpent) / totalSpent) * 100).toFixed(2);
+    : (((value - expenses) / expenses) * 100).toFixed(2);
   // const lastHistory = history[history.length - 2];
   const currentYear = new Date().getFullYear();
   const lastYearHistory = history
@@ -45,17 +48,17 @@ const Performance = (props) => {
   const annualYield = history?.length
     ? showCrypto
       ? (
-          ((totalWorthWithCrypto -
+          ((valueWithCrypto -
             (lastYearHistory.worth +
-              (totalSpentWithCrypto - lastYearHistory.expenses))) /
+              (expensesWithCrypto - lastYearHistory.expenses))) /
             (lastYearHistory.worth +
-              (totalSpentWithCrypto - lastYearHistory.expenses))) *
+              (expensesWithCrypto - lastYearHistory.expenses))) *
           100
         ).toFixed(2)
       : (
-          ((totalWorth -
-            (lastYearHistory.worth + (totalSpent - lastYearHistory.expenses))) /
-            (lastYearHistory.worth + (totalSpent - lastYearHistory.expenses))) *
+          ((value -
+            (lastYearHistory.worth + (expenses - lastYearHistory.expenses))) /
+            (lastYearHistory.worth + (expenses - lastYearHistory.expenses))) *
           100
         ).toFixed(2)
     : "N/A";
@@ -91,8 +94,8 @@ const Performance = (props) => {
               primary={"Current value"}
               secondary={
                 showCrypto
-                  ? `${totalWorthWithCrypto.toFixed(2)} EUR`
-                  : `${totalWorth.toFixed(2)} EUR`
+                  ? `${valueWithCrypto.toFixed(2)} EUR`
+                  : `${value.toFixed(2)} EUR`
               }
               primaryTypographyProps={{ variant: "h6" }}
               secondaryTypographyProps={{ variant: "h5" }}
@@ -108,8 +111,8 @@ const Performance = (props) => {
               primary={"Expenses"}
               secondary={
                 showCrypto
-                  ? `${totalSpentWithCrypto.toFixed(2)} EUR`
-                  : `${totalSpent.toFixed(2)} EUR`
+                  ? `${expensesWithCrypto.toFixed(2)} EUR`
+                  : `${expenses.toFixed(2)} EUR`
               }
               primaryTypographyProps={{ variant: "h6" }}
               secondaryTypographyProps={{ variant: "h5" }}
@@ -168,6 +171,25 @@ const Performance = (props) => {
             <ListItemText
               primary={"Annual yield"}
               secondary={`${annualYield} %`}
+              primaryTypographyProps={{ variant: "h6" }}
+              secondaryTypographyProps={{ variant: "h5" }}
+            ></ListItemText>
+          </ListItem>
+        </Grid>
+        <Grid item lg={6} xs={6}>
+          <ListItem disablePadding>
+            <ListItemIcon>
+              <PercentIcon
+                sx={
+                  portfolioYield > 0
+                    ? { color: "secondary.main" }
+                    : { color: "error.main" }
+                }
+              />
+            </ListItemIcon>
+            <ListItemText
+              primary={"Total dividends"}
+              secondary={`${dividends} EUR`}
               primaryTypographyProps={{ variant: "h6" }}
               secondaryTypographyProps={{ variant: "h5" }}
             ></ListItemText>
