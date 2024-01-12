@@ -208,8 +208,12 @@ const Form = (props) => {
       //Need some function that creates data for this and need two dispatches..
       const transactionsBody = dataForNewTransaction();
       console.log("submitting new transaction", parseData(transactionsBody));
-      dispatch(createTransaction(transactionsBody)).then(
-        dispatch(editPortfolioAsset(transactionsBody))
+      debugger;
+      await new Promise((resolve) =>
+        resolve(dispatch(createTransaction(transactionsBody)))
+      );
+      await new Promise((resolve) =>
+        resolve(dispatch(editPortfolioAsset(transactionsBody)))
       );
     } else if (
       formType === "Add" &&
@@ -219,8 +223,11 @@ const Form = (props) => {
       //dispatch addDividend here / first add dividend to transactions, then to asset, pretty much like transaction works.
       const dividendBody = dataForDividend();
       console.log("submitting dividend", dividendBody);
-      dispatch(createTransaction(dividendBody)).then(
-        dispatch(editPortfolioAsset(dividendBody))
+      await new Promise((resolve) =>
+        resolve(dispatch(createTransaction(dividendBody)))
+      );
+      await new Promise((resolve) =>
+        resolve(dispatch(editPortfolioAsset(dividendBody)))
       );
     } else if (formType === "Add") {
       console.log("submitting add", body);
