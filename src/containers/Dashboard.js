@@ -2,6 +2,7 @@ import AssetList from "../components/Portfolio/AssetList";
 import Performance from "../components/Portfolio/Performance";
 import History from "../components/Portfolio/History";
 import Allocation from "../components/Portfolio/Allocation";
+import Goals from "../components/Portfolio/Goals";
 import Loading from "../components/Loading";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
@@ -16,14 +17,27 @@ import Message from "../components/Message";
 import TopAssets from "../components/Asset/TopAssets";
 import DailyPortfolioPerformance from "../components/Portfolio/DailyPortfolioPerformance";
 import { getWatchlistAssets } from "../actions/watchlistActions";
+import { getTransactions } from "../actions/transactionActions";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getTopAssets()).then(
-      dispatch(getPortfolioAssets()).then(dispatch(getWatchlistAssets()))
-    );
+    // dispatch(getTopAssets()).then(
+    //   dispatch(getPortfolioAssets()).then(dispatch(getWatchlistAssets()))
+    // );
+    new Promise((resolve) => {
+      resolve(dispatch(getTopAssets()));
+    })
+      .then(
+        () => new Promise((resolve) => resolve(dispatch(getPortfolioAssets())))
+      )
+      .then(
+        () => new Promise((resolve) => resolve(dispatch(getWatchlistAssets())))
+      );
+    // .then(
+    //   () => new Promise((resolve) => resolve(dispatch(getTransactions())))
+    // );
   }, [dispatch]);
 
   const { portfolioAssets, loading, error } = useSelector(
@@ -33,7 +47,7 @@ const Dashboard = () => {
   const { topAssets, loading: topAssetLoading } = useSelector(
     (state) => state.topAssets
   );
-
+  // const { transactions } = useSelector((state) => state.transactionsList);
   const renderMessage = (type) => {
     switch (type) {
       case "create":
@@ -65,7 +79,7 @@ const Dashboard = () => {
     error: CUDerror,
     type: CUDtype,
   } = useSelector((state) => state.portfolioAssetCUD);
-  const portfolio = useSelector((state) => state.portfolio);
+  // const portfolio = useSelector((state) => state.portfolio);
   const { performance } = portfolioAssets?.length ? portfolioAssets[0] : {};
   const { history } = portfolioAssets?.length ? portfolioAssets[0] : [];
 
@@ -128,6 +142,7 @@ const Dashboard = () => {
             </Grid>
             <Grid item lg={3} xs={12}>
               <WatchListCompact watchlistAssets={watchlistAssets} />
+              <Goals history={history} performance={performance} />
 
               {history?.length ? <History history={history} /> : null}
               <Allocation performance={performance} assets={portfolioAssets} />
