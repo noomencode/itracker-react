@@ -193,7 +193,9 @@ const EnhancedTable = (props) => {
       ),
       profitEUR: parseFloat((price * sharesAmount - spent).toFixed(2)),
       currentPrice: parseFloat(price).toFixed(2),
-      avgPurchasePrice: parseFloat((spent / sharesAmount).toFixed(2)),
+      avgPurchasePrice: parseFloat(
+        (spent / sharesAmount).toFixed(spent / sharesAmount > 1 ? 2 : 6)
+      ),
       dailyChange: parseFloat(dailyChange).toFixed(2),
       worth: parseFloat((price * sharesAmount).toFixed(2)),
       spent: parseFloat(spent),

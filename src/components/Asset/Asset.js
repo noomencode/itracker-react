@@ -77,11 +77,12 @@ export default function AssetDialog({ ticker }) {
     fiftyTwoWeekHigh,
     trailingDividendYield,
     averageAnalystRating,
+    marketcap,
   } = selectedAsset[0].asset;
 
   const profit = (sharesAmount * price - spent).toFixed(2);
   const sharesWorth = (price * sharesAmount).toFixed(2);
-  const avgPurchasePrice = (spent / sharesAmount).toFixed(2);
+  const avgPurchasePrice = (spent / sharesAmount).toFixed(6);
 
   const handleClose = () => {
     dispatch(handleAssetDialog(false, ticker));
@@ -183,7 +184,7 @@ export default function AssetDialog({ ticker }) {
                   />
                   <Item
                     title="Realized profit"
-                    value={`${realizedProfit} EUR`}
+                    value={`${realizedProfit || 0} EUR`}
                     icon={<AccountBalanceWalletIcon sx={{ mr: 1 }} />}
                   />
                 </Grid>
@@ -227,6 +228,11 @@ export default function AssetDialog({ ticker }) {
                   <Item
                     title="Dividend yield"
                     value={`${trailingDividendYield || "N/A"}`}
+                    icon={<LeaderboardIcon sx={{ mr: 1 }} />}
+                  />
+                  <Item
+                    title="Market cap"
+                    value={`${marketcap || "N/A"}`}
                     icon={<LeaderboardIcon sx={{ mr: 1 }} />}
                   />
                 </Grid>
