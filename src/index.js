@@ -9,7 +9,7 @@ import axios from "axios";
 
 //REACT_APP_BASE_URL is Render,
 //REACT_APP_BASE_URL1 is Cyclic
-const { REACT_APP_BASE_URL1 } = process.env;
+const { REACT_APP_BASE_URL } = process.env;
 //axios.defaults.baseURL = "http://localhost:5000";
 axios.defaults.baseURL = REACT_APP_BASE_URL;
 axios.defaults.withCredentials = true;
