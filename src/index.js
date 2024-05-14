@@ -11,7 +11,7 @@ import axios from "axios";
 //REACT_APP_BASE_URL1 is Cyclic
 const { REACT_APP_BASE_URL1 } = process.env;
 //axios.defaults.baseURL = "http://localhost:5000";
-axios.defaults.baseURL = REACT_APP_BASE_URL1;
+axios.defaults.baseURL = REACT_APP_BASE_URL;
 axios.defaults.withCredentials = true;
 axios.defaults.headers.post["Content-Type"] = "application/json";
 
