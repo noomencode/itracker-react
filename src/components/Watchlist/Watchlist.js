@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getWatchlistAssets } from "../../actions/watchlistActions";
 
 const Watchlist = (props) => {
-  let rows;
+  let rows = [];
   const { watchlistAssets } = props;
 
   if (watchlistAssets?.length) {
@@ -43,7 +43,8 @@ const Watchlist = (props) => {
           Watchlist
         </Typography>
         <Divider />
-        {rows?.length ? <WatchlistTable rows={rows} /> : null}
+        {/* {rows?.length ? <WatchlistTable rows={rows} /> : null} */}
+        <WatchlistTable rows={rows} />
       </Box>
     </>
   );
