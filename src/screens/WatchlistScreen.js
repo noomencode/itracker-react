@@ -20,9 +20,10 @@ const WatchlistScreen = () => {
     <Box sx={{ margin: 2 }}>
       {/* <Grid container spacing={1}>
         <Grid item lg={12} xs={12} order={{ xs: 2, lg: 1 }}> */}
-      {watchlistAssets?.length ? (
+      {/* {watchlistAssets?.length ? (
         <Watchlist watchlistAssets={watchlistAssets} />
-      ) : null}
+      ) : null} */}
+      <Watchlist watchlistAssets={watchlistAssets || []} />
       {/* </Grid>
       </Grid> */}
     </Box>
