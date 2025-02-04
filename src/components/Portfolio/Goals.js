@@ -100,7 +100,7 @@ const Goals = (props) => {
         >
           {/* <Divider sx={{ mb: 1 }} /> */}
           <Typography variant="h6" mb={1}>
-            Portfolio value increase 2024
+            {`Portfolio value increase ${currentYear}`}
           </Typography>
           <LinearProgressWithLabel
             value={valueGoalProgress}
@@ -109,7 +109,7 @@ const Goals = (props) => {
             valueGoal
           />
           <Typography variant="h6" mb={1}>
-            Investments 2024
+            {`Investments ${currentYear}`}
           </Typography>
           <LinearProgressWithLabel
             value={investmentGoalProgress}
