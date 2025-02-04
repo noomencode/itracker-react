@@ -11,14 +11,15 @@ import LinearProgress, {
 const Goals = (props) => {
   const [open, setOpen] = useState(false);
   const theme = useTheme();
-  const { performance, history } = props;
+  const { performance, history, goals } = props;
   const currentYear = new Date().getFullYear();
+  const thisYearGoals = goals.find((g) => g.year === currentYear.toString());
 
   const lastYearHistory = history
     .filter((h) => h.year === currentYear - 1)
     .slice(-1)[0];
-  const valueGoal = 16000;
-  const investmentGoal = 12000;
+  const valueGoal = thisYearGoals.valueGrowth ?? 0;
+  const investmentGoal = thisYearGoals.investments ?? 0;
   const valueGoalProgress =
     ((performance.value - lastYearHistory.worth) / valueGoal) * 100;
   const investmentGoalProgress =
@@ -31,24 +32,33 @@ const Goals = (props) => {
     performance.expenses - lastYearHistory.expenses
   ).toFixed(2)} € / ${investmentGoal} €`;
 
-  function LinearProgressWithLabel(props) {
+  function LinearProgressWithLabel({ value, goalType }) {
+    const isValueGoal = goalType === "value";
+
     return (
       <Box sx={{ display: "flex", alignItems: "flex-start" }}>
         <Box sx={{ width: "100%", mr: 1, mb: 1 }}>
-          <LinearProgress variant="determinate" {...props} />
+          <LinearProgress
+            variant="determinate"
+            value={value}
+            color="secondary"
+            sx={{ height: "0.8em" }}
+          />
           <Typography
             mt={1}
             display="flex"
             justifyContent="center"
             variant="h6"
           >
-            {props.valueGoal ? valueGoalString : investmentGoalString}
+            {isValueGoal ? valueGoalString : investmentGoalString}
           </Typography>
         </Box>
         <Box sx={{ minWidth: 35 }}>
-          <Typography variant="body2" color="text.secondary">{`${Math.round(
-            props.valueGoal ? valueGoalProgress : investmentGoalProgress
-          )}%`}</Typography>
+          <Typography variant="body2" color="text.secondary">
+            {`${Math.round(
+              isValueGoal ? valueGoalProgress : investmentGoalProgress
+            )}%`}
+          </Typography>
         </Box>
       </Box>
     );
@@ -102,20 +112,13 @@ const Goals = (props) => {
           <Typography variant="h6" mb={1}>
             {`Portfolio value increase ${currentYear}`}
           </Typography>
-          <LinearProgressWithLabel
-            value={valueGoalProgress}
-            color="secondary"
-            sx={{ height: "0.8em" }}
-            valueGoal
-          />
+          <LinearProgressWithLabel value={valueGoalProgress} goalType="value" />
           <Typography variant="h6" mb={1}>
             {`Investments ${currentYear}`}
           </Typography>
           <LinearProgressWithLabel
             value={investmentGoalProgress}
-            color="secondary"
-            sx={{ height: "0.8em" }}
-            investmentGoal
+            goalType="investment"
           />
         </Box>
       ) : null}

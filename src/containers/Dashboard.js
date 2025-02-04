@@ -82,6 +82,7 @@ const Dashboard = () => {
   // const portfolio = useSelector((state) => state.portfolio);
   const { performance } = portfolioAssets?.length ? portfolioAssets[0] : {};
   const { history } = portfolioAssets?.length ? portfolioAssets[0] : [];
+  const { goals } = portfolioAssets?.length ? portfolioAssets[0] : [];
 
   if (error && !portfolioAssets?.length) {
     return <PortfolioEmpty component={"AssetList"} />;
@@ -142,7 +143,11 @@ const Dashboard = () => {
             </Grid>
             <Grid item lg={3} xs={12}>
               <WatchListCompact watchlistAssets={watchlistAssets} />
-              <Goals history={history} performance={performance} />
+              <Goals
+                history={history}
+                performance={performance}
+                goals={goals}
+              />
 
               {history?.length ? <History history={history} /> : null}
               <Allocation performance={performance} assets={portfolioAssets} />
